@@ -1,0 +1,28 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "bc053bcf-b8f0-b4ed-468a-332a6b8b6e91",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "num_customers": {
+              "value": "10",
+              "type": "int"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "gen_source_data",
+        "dependsOn": []
+      }
+    ]
+  }
+}
