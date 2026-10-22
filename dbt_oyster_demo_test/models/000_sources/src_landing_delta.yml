@@ -1,0 +1,15 @@
+version: 2
+
+sources:
+  - name: landing_delta
+    database: lh_oysterlake2
+    schema: oyster
+    tables:
+      - name: customer
+        identifier: ld_oys_customer
+      - name: debitcard
+        identifier: ld_oys_debitcard
+      - name: transaction
+        identifier: ld_oys_transaction_ledger
+      - name: account
+        identifier: ld_oys_account

@@ -1,0 +1,12 @@
+dbt_oyster_demo_test:
+  target: dev
+  outputs:
+    dev:
+      type: fabric
+      driver: 'ODBC Driver 18 for SQL Server'
+      server: 'xe6b73af6wce5cpkwv3dpk3vzi-un6dwkwywfiufow2zmvdcago7e.datawarehouse.fabric.microsoft.com'
+      port: 1433
+      database: 'dw_oysterlake'
+      schema: 'oystr'
+      authentication: 'CLI'
+      threads: 4

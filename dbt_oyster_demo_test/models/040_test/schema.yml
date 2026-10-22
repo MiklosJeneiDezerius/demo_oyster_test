@@ -1,0 +1,51 @@
+version: 2
+
+models:
+  - name: dim_customer
+    description: "Cleaned customer profile dimensions hosting unmasked analytics keys."
+    columns:
+      - name: CustomerSK
+        tests:
+          - unique
+          - not_null
+
+  - name: dim_card
+    description: "SCD Type 2 timeline engine detailing card historical tier metadata transitions."
+    columns:
+      - name: CardSK
+        tests:
+          - unique
+          - not_null
+
+  - name: fact_transaction
+    description: "Atomic transactional entries mapped against historical dimension surrogate indexes."
+    columns:
+      - name: TransactionSK
+        tests:
+          - unique
+          - not_null
+      - name: CardSK
+        tests:
+          - not_null
+  - name: gold_fact_periodic_spend_snapshot
+    description: "Daily periodic snapshot engine materializing rolling 30-day cardholder analytics and spend tier deviations."
+    columns:
+      - name: SpendSnapshotSK
+        description: "Primary Surrogate Key uniquely identifying an account snapshot per calendar date."
+        tests:
+          - unique
+          - not_null
+      - name: DateSK
+        description: "Foreign key linkage validating calendar dimension continuity."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_date')
+              field: DateSK
+      - name: AccountSK
+        description: "Foreign key linking directly to the enterprise account record."
+        tests:
+          - not_null
+          - relationships:
+              to: ref('dim_account')
+              field: AccountSK

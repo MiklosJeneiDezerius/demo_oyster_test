@@ -1,0 +1,163 @@
+[0m12:29:52.741625 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5AC817D50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5AC6D56D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5AC787190>]}
+
+
+============================== 12:29:52.741625 | fbfbc4b5-026a-468c-ba35-d545d1e3c9d3 ==============================
+[0m12:29:52.741625 [info ] [MainThread]: Running with dbt=1.12.6
+[0m12:29:52.741625 [debug] [MainThread]: running dbt with arguments {'maximum_seed_size_mib': '1', 'no_print': 'None', 'static_parser': 'True', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'version_check': 'True', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'profiles_dir': '.', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'invocation_command': 'dbt init dbt_oyster_demo_test --profiles-dir .', 'hints_enabled': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'indirect_selection': 'eager', 'log_path': 'logs'}
+[0m12:29:52.796804 [debug] [MainThread]: Starter project path: C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\.venv\Lib\site-packages\dbt\include\starter_project
+[0m12:29:52.852809 [info ] [MainThread]: Setting up your profile.
+[0m12:30:04.222282 [info ] [MainThread]: No sample profile found for fabric.
+[0m12:30:04.237919 [info ] [MainThread]: Running dbt debug to validate the project...
+[0m12:30:04.238252 [info ] [MainThread]: dbt version: 1.12.6
+[0m12:30:04.238252 [info ] [MainThread]: python version: 3.11.9
+[0m12:30:04.238252 [info ] [MainThread]: python path: C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\.venv\Scripts\python.exe
+[0m12:30:04.241846 [info ] [MainThread]: os info: Windows-10-10.0.26200-SP0
+[0m12:30:04.241846 [info ] [MainThread]: Using profiles dir at .
+[0m12:30:04.242761 [info ] [MainThread]: Using profiles.yml file at .\profiles.yml
+[0m12:30:04.242761 [info ] [MainThread]: Using dbt_project.yml file at C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\dbt_oyster_demo_test\dbt_project.yml
+[0m12:30:04.338446 [info ] [MainThread]: Configuration:
+[0m12:30:04.338446 [info ] [MainThread]:   profiles.yml file [[31mERROR not found[0m]
+[0m12:30:04.338446 [info ] [MainThread]:   dbt_project.yml file [[32mOK found and valid[0m]
+[0m12:30:04.338446 [info ] [MainThread]: Required dependencies:
+[0m12:30:04.338446 [debug] [MainThread]: Executing "git --help"
+[0m12:30:04.390070 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]\n           [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]\n           [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone      Clone a repository into a new directory\n   init       Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add        Add file contents to the index\n   mv         Move or rename a file, a directory, or a symlink\n   restore    Restore working tree files\n   rm         Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect     Use binary search to find the commit that introduced a bug\n   diff       Show changes between commits, commit and working tree, etc\n   grep       Print lines matching a pattern\n   log        Show commit logs\n   show       Show various types of objects\n   status     Show the working tree status\n\ngrow, mark and tweak your common history\n   backfill   Download missing objects in a partial clone\n   branch     List, create, or delete branches\n   commit     Record changes to the repository\n   history    EXPERIMENTAL: Rewrite history\n   merge      Join two or more development histories together\n   rebase     Reapply commits on top of another base tip\n   reset      Set `HEAD` or the index to a known state\n   switch     Switch branches\n   tag        Create, list, delete or verify tags\n\ncollaborate (see also: git help workflows)\n   fetch      Download objects and refs from another repository\n   pull       Fetch from and integrate with another repository or a local branch\n   push       Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m12:30:04.391069 [debug] [MainThread]: STDERR: "b''"
+[0m12:30:04.391069 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m12:30:04.392074 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m12:30:04.392074 [info ] [MainThread]: [31m1 check failed:[0m
+[0m12:30:04.392074 [info ] [MainThread]: dbt looked for a profiles.yml file in .\profiles.yml, but did
+not find one. For more information on configuring your profile, consult the
+documentation:
+
+https://docs.getdbt.com/docs/configure-your-profile
+
+
+[0m12:30:04.393154 [info ] [MainThread]: Your new dbt project "dbt_oyster_demo_test" was created!
+Initialized new project in C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\dbt_oyster_demo_test\dbt_oyster_demo_test
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m12:30:04.393154 [info ] [MainThread]: [31mYour profile may need adjustments. You can find the logs of `dbt debug` above[0m
+[0m12:30:04.394074 [debug] [MainThread]: Command `dbt init` succeeded at 12:30:04.394074 after 11.73 seconds
+[0m12:30:04.394074 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5A4A14E90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5AC830B50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001D5AC833BD0>]}
+[0m12:30:04.395108 [debug] [MainThread]: Flushing usage events
+[0m12:30:05.210329 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m12:32:41.386948 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000022086508BD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000220864565D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000022086457910>]}
+
+
+============================== 12:32:41.394306 | e560f581-52c6-43f6-bb94-b519980c44f4 ==============================
+[0m12:32:41.394306 [info ] [MainThread]: Running with dbt=1.12.6
+[0m12:32:41.394306 [debug] [MainThread]: running dbt with arguments {'maximum_seed_size_mib': '1', 'no_print': 'None', 'version_check': 'True', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'log_format': 'default', 'debug': 'False', 'fail_fast': 'False', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\MiklósJenei\\.dbt', 'invocation_command': 'dbt debug', 'hints_enabled': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'indirect_selection': 'eager', 'log_path': 'logs'}
+[0m12:32:41.422194 [info ] [MainThread]: dbt version: 1.12.6
+[0m12:32:41.423190 [info ] [MainThread]: python version: 3.11.9
+[0m12:32:41.423190 [info ] [MainThread]: python path: C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\.venv\Scripts\python.exe
+[0m12:32:41.424367 [info ] [MainThread]: os info: Windows-10-10.0.26200-SP0
+[0m12:32:41.424367 [info ] [MainThread]: Using profiles dir at C:\Users\MiklósJenei\.dbt
+[0m12:32:41.425385 [info ] [MainThread]: Using profiles.yml file at C:\Users\MiklósJenei\.dbt\profiles.yml
+[0m12:32:41.425385 [info ] [MainThread]: Using dbt_project.yml file at C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\dbt_project.yml
+[0m12:32:41.425385 [info ] [MainThread]: Configuration:
+[0m12:32:41.425385 [info ] [MainThread]:   profiles.yml file [[31mERROR not found[0m]
+[0m12:32:41.426717 [info ] [MainThread]:   dbt_project.yml file [[31mERROR not found[0m]
+[0m12:32:41.426717 [info ] [MainThread]: Required dependencies:
+[0m12:32:41.426717 [debug] [MainThread]: Executing "git --help"
+[0m12:32:41.488637 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]\n           [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]\n           [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone      Clone a repository into a new directory\n   init       Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add        Add file contents to the index\n   mv         Move or rename a file, a directory, or a symlink\n   restore    Restore working tree files\n   rm         Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect     Use binary search to find the commit that introduced a bug\n   diff       Show changes between commits, commit and working tree, etc\n   grep       Print lines matching a pattern\n   log        Show commit logs\n   show       Show various types of objects\n   status     Show the working tree status\n\ngrow, mark and tweak your common history\n   backfill   Download missing objects in a partial clone\n   branch     List, create, or delete branches\n   commit     Record changes to the repository\n   history    EXPERIMENTAL: Rewrite history\n   merge      Join two or more development histories together\n   rebase     Reapply commits on top of another base tip\n   reset      Set `HEAD` or the index to a known state\n   switch     Switch branches\n   tag        Create, list, delete or verify tags\n\ncollaborate (see also: git help workflows)\n   fetch      Download objects and refs from another repository\n   pull       Fetch from and integrate with another repository or a local branch\n   push       Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m12:32:41.488637 [debug] [MainThread]: STDERR: "b''"
+[0m12:32:41.490649 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m12:32:41.490649 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m12:32:41.490649 [info ] [MainThread]: [31m2 checks failed:[0m
+[0m12:32:41.490649 [info ] [MainThread]: dbt looked for a profiles.yml file in C:\Users\MiklósJenei\.dbt\profiles.yml, but did
+not find one. For more information on configuring your profile, consult the
+documentation:
+
+https://docs.getdbt.com/docs/configure-your-profile
+
+
+[0m12:32:41.490649 [info ] [MainThread]: Project loading failed for the following reason:
+ project path <C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\dbt_project.yml> not found
+
+[0m12:32:41.490649 [debug] [MainThread]: Command `dbt debug` failed at 12:32:41.490649 after 0.23 seconds
+[0m12:32:41.490649 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000220864E5E50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000220864576D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000022086457690>]}
+[0m12:32:41.490649 [debug] [MainThread]: Flushing usage events
+[0m12:32:42.287163 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m12:33:59.185544 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD4E088C50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD4DFD5BD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD4E088AD0>]}
+
+
+============================== 12:33:59.185544 | 0aabdac9-ebda-4e32-b2c1-a51c72c3ee50 ==============================
+[0m12:33:59.185544 [info ] [MainThread]: Running with dbt=1.12.6
+[0m12:33:59.185544 [debug] [MainThread]: running dbt with arguments {'static_parser': 'True', 'no_print': 'None', 'maximum_seed_size_mib': '1', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'version_check': 'True', 'target_path': 'None', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'None', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'partial_parse': 'True', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'profiles_dir': 'C:\\Users\\MiklósJenei\\.dbt', 'use_colors': 'True', 'hints_enabled': 'True', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'invocation_command': 'dbt debug --config-dir', 'log_path': 'logs'}
+[0m12:33:59.216192 [info ] [MainThread]: To view your profiles.yml file, run:
+
+start C:\Users\MiklósJenei\.dbt
+[0m12:33:59.217885 [debug] [MainThread]: Command `dbt debug` succeeded at 12:33:59.217308 after 0.13 seconds
+[0m12:33:59.217885 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD46264E90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD4E065F50>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001BD4DE52490>]}
+[0m12:33:59.218811 [debug] [MainThread]: Flushing usage events
+[0m12:33:59.978321 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m12:37:38.145817 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000182A1F58490>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001829D6A2810>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000182A1DF1010>]}
+
+
+============================== 12:37:38.149923 | 8e1cc58c-3b65-4bd0-b573-ae14804ce39e ==============================
+[0m12:37:38.149923 [info ] [MainThread]: Running with dbt=1.12.6
+[0m12:37:38.150924 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'maximum_seed_size_mib': '1', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'target_path': 'None', 'static_parser': 'True', 'printer_width': '80', 'write_json': 'True', 'empty': 'None', 'log_cache_events': 'False', 'introspect': 'True', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'profiles_dir': '.', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'indirect_selection': 'eager', 'hints_enabled': 'True', 'use_colors': 'True', 'use_experimental_parser': 'False', 'invocation_command': 'dbt init oyster_demo_test --profiles-dir .', 'log_path': 'logs'}
+[0m12:37:38.181002 [debug] [MainThread]: Starter project path: C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\.venv\Lib\site-packages\dbt\include\starter_project
+[0m12:37:38.328994 [info ] [MainThread]: Setting up your profile.
+[0m12:37:59.694560 [info ] [MainThread]: No sample profile found for fabric.
+[0m12:37:59.694560 [info ] [MainThread]: Running dbt debug to validate the project...
+[0m12:37:59.694560 [info ] [MainThread]: dbt version: 1.12.6
+[0m12:37:59.710727 [info ] [MainThread]: python version: 3.11.9
+[0m12:37:59.710727 [info ] [MainThread]: python path: C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\.venv\Scripts\python.exe
+[0m12:37:59.710727 [info ] [MainThread]: os info: Windows-10-10.0.26200-SP0
+[0m12:37:59.710727 [info ] [MainThread]: Using profiles dir at .
+[0m12:37:59.710727 [info ] [MainThread]: Using profiles.yml file at .\profiles.yml
+[0m12:37:59.710727 [info ] [MainThread]: Using dbt_project.yml file at C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\oyster_demo_test\dbt_project.yml
+[0m12:37:59.812557 [info ] [MainThread]: Configuration:
+[0m12:37:59.812557 [info ] [MainThread]:   profiles.yml file [[31mERROR not found[0m]
+[0m12:37:59.812557 [info ] [MainThread]:   dbt_project.yml file [[32mOK found and valid[0m]
+[0m12:37:59.812557 [info ] [MainThread]: Required dependencies:
+[0m12:37:59.812557 [debug] [MainThread]: Executing "git --help"
+[0m12:37:59.862358 [debug] [MainThread]: STDOUT: "b"usage: git [-v | --version] [-h | --help] [-C <path>] [-c <name>=<value>]\n           [--exec-path[=<path>]] [--html-path] [--man-path] [--info-path]\n           [-p | --paginate | -P | --no-pager] [--no-replace-objects] [--no-lazy-fetch]\n           [--no-optional-locks] [--no-advice] [--bare] [--git-dir=<path>]\n           [--work-tree=<path>] [--namespace=<name>] [--config-env=<name>=<envvar>]\n           <command> [<args>]\n\nThese are common Git commands used in various situations:\n\nstart a working area (see also: git help tutorial)\n   clone      Clone a repository into a new directory\n   init       Create an empty Git repository or reinitialize an existing one\n\nwork on the current change (see also: git help everyday)\n   add        Add file contents to the index\n   mv         Move or rename a file, a directory, or a symlink\n   restore    Restore working tree files\n   rm         Remove files from the working tree and from the index\n\nexamine the history and state (see also: git help revisions)\n   bisect     Use binary search to find the commit that introduced a bug\n   diff       Show changes between commits, commit and working tree, etc\n   grep       Print lines matching a pattern\n   log        Show commit logs\n   show       Show various types of objects\n   status     Show the working tree status\n\ngrow, mark and tweak your common history\n   backfill   Download missing objects in a partial clone\n   branch     List, create, or delete branches\n   commit     Record changes to the repository\n   history    EXPERIMENTAL: Rewrite history\n   merge      Join two or more development histories together\n   rebase     Reapply commits on top of another base tip\n   reset      Set `HEAD` or the index to a known state\n   switch     Switch branches\n   tag        Create, list, delete or verify tags\n\ncollaborate (see also: git help workflows)\n   fetch      Download objects and refs from another repository\n   pull       Fetch from and integrate with another repository or a local branch\n   push       Update remote refs along with associated objects\n\n'git help -a' and 'git help -g' list available subcommands and some\nconcept guides. See 'git help <command>' or 'git help <concept>'\nto read about a specific subcommand or concept.\nSee 'git help git' for an overview of the system.\n""
+[0m12:37:59.862358 [debug] [MainThread]: STDERR: "b''"
+[0m12:37:59.862358 [info ] [MainThread]:  - git [[32mOK found[0m]
+
+[0m12:37:59.862358 [info ] [MainThread]: Connection test skipped since no profile was found
+[0m12:37:59.862358 [info ] [MainThread]: [31m1 check failed:[0m
+[0m12:37:59.862358 [info ] [MainThread]: dbt looked for a profiles.yml file in .\profiles.yml, but did
+not find one. For more information on configuring your profile, consult the
+documentation:
+
+https://docs.getdbt.com/docs/configure-your-profile
+
+
+[0m12:37:59.862358 [info ] [MainThread]: Your new dbt project "oyster_demo_test" was created!
+Initialized new project in C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\oyster_demo_test\oyster_demo_test
+
+For more information on how to configure the profiles.yml file,
+please consult the dbt documentation here:
+
+  https://docs.getdbt.com/docs/configure-your-profile
+
+One more thing:
+
+Need help? Don't hesitate to reach out to us via GitHub issues or on Slack:
+
+  https://community.getdbt.com/
+
+Happy modeling!
+
+[0m12:37:59.862358 [info ] [MainThread]: [31mYour profile may need adjustments. You can find the logs of `dbt debug` above[0m
+[0m12:37:59.862358 [debug] [MainThread]: Command `dbt init` succeeded at 12:37:59.862358 after 21.85 seconds
+[0m12:37:59.862358 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001829A154E90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000182A2849090>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x00000182A1F5BC50>]}
+[0m12:37:59.862358 [debug] [MainThread]: Flushing usage events
+[0m12:38:00.680459 [debug] [MainThread]: An error was encountered while trying to flush usage events
