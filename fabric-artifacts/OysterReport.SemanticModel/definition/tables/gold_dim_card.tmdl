@@ -1,0 +1,105 @@
+table gold_dim_card
+	lineageTag: ee1e77e8-0c85-4a95-bf7d-a4f2a6c004b1
+	sourceLineageTag: [oystr_gold].[gold_dim_card]
+
+	column CardSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: ae3b1c9e-5b4e-44f6-8228-a99af461bfaf
+		sourceLineageTag: CardSK
+		summarizeBy: none
+		sourceColumn: CardSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d6e0bb7b-3b51-4fc6-aaeb-4bed947bcd86
+		sourceLineageTag: CardID
+		summarizeBy: none
+		sourceColumn: CardID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 76d58950-c6da-4ccd-b5bc-a070cb446099
+		sourceLineageTag: AccountSK
+		summarizeBy: none
+		sourceColumn: AccountSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 509f5fe1-ca23-4d6a-9658-a35f93a66925
+		sourceLineageTag: AccountID
+		summarizeBy: none
+		sourceColumn: AccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardNumber
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d98bd90a-06ba-4329-b827-0ba18fc0f083
+		sourceLineageTag: CardNumber
+		summarizeBy: none
+		sourceColumn: CardNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardTier
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5079cab5-9d2b-40c1-8f99-7761c9bc33a2
+		sourceLineageTag: CardTier
+		summarizeBy: none
+		sourceColumn: CardTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardStatus
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ea6655f8-b9e0-4b8e-acbc-7b61424fbbe5
+		sourceLineageTag: CardStatus
+		summarizeBy: none
+		sourceColumn: CardStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExpiryDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: c2da50ac-dbe1-4d8b-a376-c8e31ee0e2f5
+		sourceLineageTag: ExpiryDate
+		summarizeBy: none
+		sourceColumn: ExpiryDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsCurrentVersion
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: b4725579-7234-4e83-b65c-b0cab88586ec
+		sourceLineageTag: IsCurrentVersion
+		summarizeBy: sum
+		sourceColumn: IsCurrentVersion
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_card = entity
+		mode: directLake
+		source
+			entityName: gold_dim_card
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+
