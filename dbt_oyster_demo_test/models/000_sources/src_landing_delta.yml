@@ -7,9 +7,21 @@ sources:
     tables:
       - name: customer
         identifier: ld_oys_customer
-      - name: debitcard
-        identifier: ld_oys_debitcard
-      - name: transaction
-        identifier: ld_oys_transaction_ledger
+      - name: customertype
+        identifier: ld_oys_customertype
+      - name: customeraddress
+        identifier: ld_oys_customeraddress
       - name: account
         identifier: ld_oys_account
+      - name: accounttype
+        identifier: ld_oys_accounttype
+      - name: currency
+        identifier: ld_oys_currency
+      - name: debitcard
+        identifier: ld_oys_debitcard
+      - name: cardtier
+        identifier: ld_oys_cardtier
+      - name: transaction
+        identifier: ld_oys_transaction_ledger
+      - name: transactionstatus
+        identifier: ld_oys_transactionstatus

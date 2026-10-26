@@ -2,8 +2,8 @@ SELECT
     [CardID]
     ,[AccountID]
     ,[CardNumber]
-    ,[Tier]
+    ,[CardTierID]
     ,[Status]
-    ,[Expiry]
+    ,[ExpiryDate]
     ,CAST(GETDATE() AS DATETIME2(6)) as IngestedTS
 FROM {{ source('landing_delta', 'debitcard') }}

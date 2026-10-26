@@ -1,8 +1,7 @@
 SELECT 
     [CustomerID]
-    ,[Name]
     ,[TaxID]
-    ,[CustomerType]
+    ,[CustomerTypeID]
     ,[FirstName]
     ,[LastName]
     ,[DoB]
