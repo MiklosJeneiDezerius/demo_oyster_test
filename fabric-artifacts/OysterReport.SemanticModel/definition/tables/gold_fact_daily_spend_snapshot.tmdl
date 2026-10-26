@@ -1,0 +1,160 @@
+table gold_fact_daily_spend_snapshot
+	lineageTag: c8573053-32b8-4346-8fb2-4ea3a2da7d7f
+	sourceLineageTag: [oystr_gold].[gold_fact_daily_spend_snapshot]
+
+	column SpendSnapshotSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: e644be3e-720d-432e-98b6-e9e28c4fa642
+		sourceLineageTag: SpendSnapshotSK
+		summarizeBy: none
+		sourceColumn: SpendSnapshotSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateSK
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 75d2e1df-f865-4954-ab5f-62f93a07e2ef
+		sourceLineageTag: DateSK
+		summarizeBy: sum
+		sourceColumn: DateSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column SnapshotDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: d98d5a6f-02ec-49ec-a9b3-318732e34d67
+		sourceLineageTag: SnapshotDate
+		summarizeBy: none
+		sourceColumn: SnapshotDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 2fe5db58-23e0-4f4d-a54a-39f8ab637f3a
+		sourceLineageTag: AccountSK
+		summarizeBy: none
+		sourceColumn: AccountSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 41fc41f7-0c6b-489f-a4b1-a71dc594f79e
+		sourceLineageTag: AccountID
+		summarizeBy: none
+		sourceColumn: AccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: d1ddbec9-a925-4b24-9269-28b9ceaf1ca7
+		sourceLineageTag: CustomerSK
+		summarizeBy: none
+		sourceColumn: CustomerSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: b0ed8112-eb94-4fc0-b563-90c61492871f
+		sourceLineageTag: CardSK
+		summarizeBy: none
+		sourceColumn: CardSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualCardTier
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 92d73f2f-8892-4839-a20e-86afcfff5e85
+		sourceLineageTag: ActualCardTier
+		summarizeBy: none
+		sourceColumn: ActualCardTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rolling30DaySpend
+		dataType: double
+		sourceProviderType: decimal(38, 2)
+		lineageTag: d53c069d-b681-43ba-8534-434dd05163a7
+		sourceLineageTag: Rolling30DaySpend
+		summarizeBy: sum
+		sourceColumn: Rolling30DaySpend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CalculatedSpendingTier
+		dataType: string
+		sourceProviderType: varchar(8)
+		lineageTag: 0d8e6929-e5a9-4af0-b5f2-0e52bf9206dc
+		sourceLineageTag: CalculatedSpendingTier
+		summarizeBy: none
+		sourceColumn: CalculatedSpendingTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsUpgradeCandidate
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: d9729d4a-e0a8-4865-9b85-e804ed5dc5ca
+		sourceLineageTag: IsUpgradeCandidate
+		summarizeBy: sum
+		sourceColumn: IsUpgradeCandidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLowSpendPremiumAnomaly
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: fcc0c9e0-ee78-4a47-b74b-ad2550cd539b
+		sourceLineageTag: IsLowSpendPremiumAnomaly
+		summarizeBy: sum
+		sourceColumn: IsLowSpendPremiumAnomaly
+
+		annotation SummarizationSetBy = Automatic
+
+	column AlignmentStatusFlag
+		dataType: string
+		sourceProviderType: varchar(10)
+		lineageTag: 32a5e005-1d55-4047-91ff-2ca90f55bcb8
+		sourceLineageTag: AlignmentStatusFlag
+		summarizeBy: none
+		sourceColumn: AlignmentStatusFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column SnapshotMaterializedTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 2c4982da-3b92-4348-a525-870e5184b8bc
+		sourceLineageTag: SnapshotMaterializedTS
+		summarizeBy: none
+		sourceColumn: SnapshotMaterializedTS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_daily_spend_snapshot = entity
+		mode: directLake
+		source
+			entityName: gold_fact_daily_spend_snapshot
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

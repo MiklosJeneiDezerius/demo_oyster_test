@@ -1,0 +1,108 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "e0389d2f-a979-b615-4e75-750c408cdaf1",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "num_customers": {
+              "value": "2",
+              "type": "int"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Notebook1",
+        "dependsOn": []
+      },
+      {
+        "type": "InvokePipeline",
+        "typeProperties": {
+          "parameters": {},
+          "waitOnCompletion": true,
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "d8de3199-a6b5-87f4-4563-4ce6ecd52bfb",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "339168a1-80c8-4dfe-afc0-e1072653b1bf"
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Invoke pipeline1",
+        "dependsOn": [
+          {
+            "activity": "Notebook1",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "TridentNotebook",
+        "typeProperties": {
+          "notebookId": "a520374e-f0b1-98e4-45b4-691460ce211f",
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "parameters": {
+            "repo_url": {
+              "value": "https://github.com/MiklosJeneiDezerius/demo_oyster_test.git",
+              "type": "string"
+            },
+            "branch": {
+              "value": "main",
+              "type": "string"
+            },
+            "dbt_subfolder": {
+              "value": "dbt_oyster_demo_test",
+              "type": "string"
+            },
+            "dbt_command": {
+              "value": "build",
+              "type": "string"
+            },
+            "dbt_args": {
+              "value": "",
+              "type": "string"
+            }
+          }
+        },
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Notebook2",
+        "dependsOn": [
+          {
+            "activity": "Invoke pipeline1",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      }
+    ],
+    "parameters": {
+      "num_custmers": {
+        "type": "string",
+        "defaultValue": "0"
+      }
+    }
+  }
+}

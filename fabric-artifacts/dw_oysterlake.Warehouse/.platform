@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Warehouse",
+    "displayName": "dw_oysterlake",
+    "description": ""
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "07a5f928-d751-af71-48f8-5efee780ff5a"
+  }
+}
