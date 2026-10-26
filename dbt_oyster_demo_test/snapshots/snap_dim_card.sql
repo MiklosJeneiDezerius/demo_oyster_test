@@ -1,7 +1,7 @@
 {% snapshot snap_dim_card %}
 {{ config(
-    target_database='dw_oysterlake',
-    target_schema='snapshots',
+    target_database=var('target_snapshot_db'),
+    target_schema=var('target_snapshot_schema'),
     unique_key='CardID',
     strategy='check',
     check_cols=['CardTierID', 'Status', 'ExpiryDate'],

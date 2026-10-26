@@ -22,7 +22,11 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"
 
-
+vars:
+  # Target Env Database & Schema Parameters
+  target_snapshot_db: 'dw_oysterlake'
+  target_snapshot_schema: 'snapshots'
+  
 # Configuring models
 # Full documentation: https://docs.getdbt.com/docs/configuring-models
 
