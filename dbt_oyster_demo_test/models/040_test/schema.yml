@@ -16,6 +16,15 @@ models:
         tests:
           - unique
           - not_null
+      - name: CardStatus
+        description: "Dynamic lifecycle phase validation ('Active', 'Blocked', 'Expired')."
+        tests:
+          # Generic test to warn if any status is 'Expired'
+          - accepted_values:
+              values: ['Active', 'Blocked']
+              config:
+                severity: warn
+              description: "Triggers a warning if any card status is 'Expired' or outside active/blocked phases."
 
   - name: fact_transaction
     description: "Atomic transactional entries mapped against historical dimension surrogate indexes."
