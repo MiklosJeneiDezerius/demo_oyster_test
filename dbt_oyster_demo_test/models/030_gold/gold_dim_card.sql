@@ -1,5 +1,18 @@
-{{ config(materialized='table', schema='gold') }}
-SELECT 
-    CardSK, CardID, AccountSK, AccountID, CardNumber, CardTier, CardStatus, ExpiryDate, IsCurrentVersion
+{{ config(
+    materialized='table',
+    schema='gold'
+) }}
+
+SELECT
+    [CardSK]
+    ,[AccountSK] -- Restored and validated account mapping link
+    ,[CardID]
+    ,[AccountID]
+    ,[CardNumber]
+    ,[CardTier]
+    ,[CardStatus]
+    ,[ExpiryDate]
+    ,[ValidFromTS]
+    ,[ValidToTS]
 FROM {{ ref('dim_card') }}
-WHERE IsCurrentVersion = 1
+WHERE [IsCurrentVersion] = 1
