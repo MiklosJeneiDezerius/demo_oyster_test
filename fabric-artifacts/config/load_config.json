@@ -1,0 +1,14 @@
+{
+  "files_to_load": [
+    "Customer.csv",
+    "CustomerType.csv",
+    "CustomerAddress.csv",
+    "Account.csv",
+    "AccountType.csv",
+    "Currency.csv",
+    "DebitCard.csv",
+    "CardTier.csv",
+    "Transaction_Ledger.csv",
+    "TransactionStatus.csv"
+  ]
+}
