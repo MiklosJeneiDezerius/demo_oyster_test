@@ -4,11 +4,11 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "bc053bcf-b8f0-b4ed-468a-332a6b8b6e91",
+          "notebookId": "a2e12b38-a5a6-8860-411b-aaa28059e697",
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "num_customers": {
-              "value": "10",
+              "value": "50",
               "type": "int"
             }
           }

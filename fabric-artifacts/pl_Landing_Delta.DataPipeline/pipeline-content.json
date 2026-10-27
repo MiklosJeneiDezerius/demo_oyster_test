@@ -54,6 +54,7 @@
       {
         "type": "ForEach",
         "typeProperties": {
+          "isSequential": true,
           "items": {
             "value": "@activity('lkp_GetLoadConfig').output.value[0].files_to_load",
             "type": "Expression"

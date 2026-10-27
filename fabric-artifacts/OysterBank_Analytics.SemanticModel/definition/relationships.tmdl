@@ -1,0 +1,16 @@
+relationship 9e6f0677-9c42-c825-58f6-27e0ea634bfa
+	fromColumn: gold_fact_periodic_spend_snapshot.AccountID
+	toColumn: gold_dim_account.AccountID
+
+relationship b9ba34ec-37a8-c3db-5921-ef34066bd3cf
+	fromColumn: gold_fact_periodic_spend_snapshot.CardSK
+	toColumn: gold_dim_card.CardSK
+
+relationship 0775408a-c688-0996-5d96-40cd85e29121
+	fromColumn: gold_fact_periodic_spend_snapshot.CustomerSK
+	toColumn: gold_dim_customer.CustomerSK
+
+relationship 1ac8f6ce-916e-090b-3988-5d4b3f9d1d1c
+	fromColumn: gold_dim_date.DateSK
+	toColumn: gold_fact_periodic_spend_snapshot.DateSK
+

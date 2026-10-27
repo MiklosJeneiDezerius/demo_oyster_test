@@ -2,16 +2,16 @@
   "properties": {
     "activities": [
       {
-        "type": "TridentNotebook",
+        "type": "InvokePipeline",
         "typeProperties": {
-          "notebookId": "e0389d2f-a979-b615-4e75-750c408cdaf1",
+          "parameters": {},
+          "waitOnCompletion": true,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
-          "parameters": {
-            "num_customers": {
-              "value": "2",
-              "type": "int"
-            }
-          }
+          "pipelineId": "6909af83-592e-bbd4-45a5-6de0e6a16b40",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "339168a1-80c8-4dfe-afc0-e1072653b1bf"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -20,8 +20,15 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Notebook1",
-        "dependsOn": []
+        "name": "Load Delta",
+        "dependsOn": [
+          {
+            "activity": "Generate Data",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       },
       {
         "type": "InvokePipeline",
@@ -42,43 +49,20 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Invoke pipeline1",
-        "dependsOn": [
-          {
-            "activity": "Notebook1",
-            "dependencyConditions": [
-              "Succeeded"
-            ]
-          }
-        ]
+        "name": "Generate Data",
+        "dependsOn": []
       },
       {
-        "type": "TridentNotebook",
+        "type": "InvokePipeline",
         "typeProperties": {
-          "notebookId": "a520374e-f0b1-98e4-45b4-691460ce211f",
+          "parameters": {},
+          "waitOnCompletion": true,
           "workspaceId": "00000000-0000-0000-0000-000000000000",
-          "parameters": {
-            "repo_url": {
-              "value": "https://github.com/MiklosJeneiDezerius/demo_oyster_test.git",
-              "type": "string"
-            },
-            "branch": {
-              "value": "main",
-              "type": "string"
-            },
-            "dbt_subfolder": {
-              "value": "dbt_oyster_demo_test",
-              "type": "string"
-            },
-            "dbt_command": {
-              "value": "build",
-              "type": "string"
-            },
-            "dbt_args": {
-              "value": "",
-              "type": "string"
-            }
-          }
+          "pipelineId": "7786aa7c-5f48-8aeb-4c59-78cda7442deb",
+          "operationType": "InvokeFabricPipeline"
+        },
+        "externalReferences": {
+          "connection": "339168a1-80c8-4dfe-afc0-e1072653b1bf"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -87,10 +71,10 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Notebook2",
+        "name": "DW create and load",
         "dependsOn": [
           {
-            "activity": "Invoke pipeline1",
+            "activity": "Load Delta",
             "dependencyConditions": [
               "Succeeded"
             ]

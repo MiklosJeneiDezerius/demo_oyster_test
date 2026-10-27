@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "sm_OysterBank_Analytics"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "8580a7ae-d3aa-b741-4414-2af7a31186d8"
+  }
+}

@@ -1,0 +1,92 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "227e2479f0ab8084cad7",
+  "position": {
+    "x": 0,
+    "y": 0,
+    "z": 0,
+    "height": 280.73863636363632,
+    "width": 478.63636363636363,
+    "tabOrder": 0
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Total Cardholders"
+                }
+              },
+              "queryRef": "gold_fact_periodic_spend_snapshot.Total Cardholders",
+              "nativeQueryRef": "Total Cardholders"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_fact_periodic_spend_snapshot"
+                  }
+                },
+                "Property": "Total Cardholders"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "objects": {
+      "referenceLabelLayout": [
+        {
+          "properties": {
+            "position": {
+              "expr": {
+                "Literal": {
+                  "Value": "'below'"
+                }
+              }
+            }
+          },
+          "selector": {
+            "id": "default"
+          }
+        }
+      ]
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "f7aaadcf3c9a31bb4eae",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_fact_periodic_spend_snapshot"
+              }
+            },
+            "Property": "Total Cardholders"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

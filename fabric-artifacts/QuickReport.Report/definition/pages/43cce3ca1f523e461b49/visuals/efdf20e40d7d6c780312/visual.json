@@ -1,0 +1,107 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "efdf20e40d7d6c780312",
+  "position": {
+    "x": 183.82978723404256,
+    "y": 499.49709864603477,
+    "z": 3,
+    "height": 280.3868471953578,
+    "width": 776.17021276595744,
+    "tabOrder": 1
+  },
+  "visual": {
+    "visualType": "hundredPercentStackedBarChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "ActualCardTier"
+                }
+              },
+              "queryRef": "gold_fact_periodic_spend_snapshot.ActualCardTier",
+              "nativeQueryRef": "ActualCardTier",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Total Cardholders"
+                }
+              },
+              "queryRef": "gold_fact_periodic_spend_snapshot.Total Cardholders",
+              "nativeQueryRef": "Total Cardholders"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_fact_periodic_spend_snapshot"
+                  }
+                },
+                "Property": "Total Cardholders"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "abb872a6319c4a25116b",
+        "field": {
+          "Column": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_fact_periodic_spend_snapshot"
+              }
+            },
+            "Property": "ActualCardTier"
+          }
+        },
+        "type": "Categorical"
+      },
+      {
+        "name": "8fea1adff5bc64cb9785",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_fact_periodic_spend_snapshot"
+              }
+            },
+            "Property": "Total Cardholders"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

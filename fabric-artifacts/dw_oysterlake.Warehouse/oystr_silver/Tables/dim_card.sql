@@ -1,7 +1,7 @@
 CREATE TABLE [oystr_silver].[dim_card] (
     [CardSK]           VARCHAR (64)   NULL,
-    [CardID]           VARCHAR (8000) NULL,
     [AccountSK]        VARCHAR (64)   NULL,
+    [CardID]           VARCHAR (8000) NULL,
     [AccountID]        VARCHAR (8000) NULL,
     [CardNumber]       VARCHAR (8000) NULL,
     [CardTier]         VARCHAR (8000) NULL,

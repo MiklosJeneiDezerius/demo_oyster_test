@@ -1,0 +1,74 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "5cae5958e3d32a5ae1fc",
+  "position": {
+    "x": 1366.6537717601548,
+    "y": 570.05802707930366,
+    "z": 4,
+    "height": 209,
+    "width": 280,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Misaligned Cardholders"
+                }
+              },
+              "queryRef": "gold_fact_periodic_spend_snapshot.Misaligned Cardholders",
+              "nativeQueryRef": "Misaligned Cardholders"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_fact_periodic_spend_snapshot"
+                  }
+                },
+                "Property": "Misaligned Cardholders"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "20971c6d510bbf4ef5ea",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_fact_periodic_spend_snapshot"
+              }
+            },
+            "Property": "Misaligned Cardholders"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

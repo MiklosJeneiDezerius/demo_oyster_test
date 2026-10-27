@@ -1,0 +1,201 @@
+table gold_fact_periodic_spend_snapshot
+	lineageTag: 0cff53d2-37cb-4958-bc31-837b830cbf73
+	sourceLineageTag: [oystr_gold].[gold_fact_periodic_spend_snapshot]
+
+	measure 'Total Spend' = SUM(gold_fact_periodic_spend_snapshot[Rolling30DaySpend])
+		lineageTag: dad47475-2998-487c-a27d-36f816de7791
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Cardholders' = DISTINCTCOUNT(gold_fact_periodic_spend_snapshot[AccountID])
+		formatString: 0
+		lineageTag: a9b66d99-9dce-4728-bc23-9b3326980e63
+
+		changedProperty = Name
+
+	measure 'Misaligned Cardholders' = ```
+			
+			COALESCE(
+			    CALCULATE(
+			        [Total Cardholders], 
+			        gold_fact_periodic_spend_snapshot[AlignmentStatusFlag] = "Misaligned"
+			    ), 
+			    0
+			)
+			```
+		formatString: 0
+		lineageTag: e9e50199-2f52-4e89-9687-397544bb5f02
+
+		changedProperty = Name
+
+	measure 'Tier Mismatch Rate' = DIVIDE([Misaligned Cardholders], [Total Cardholders], 0)
+		lineageTag: 3290eae6-2087-476e-b01f-01599016d83f
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Upgrade Candidates' = COALESCE(CALCULATE([Total Cardholders], gold_fact_periodic_spend_snapshot[IsUpgradeCandidate] = 1),0)
+		formatString: 0
+		lineageTag: f5550820-8e45-455a-84f0-89fc2a87a067
+
+		changedProperty = Name
+
+	column SpendSnapshotSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 15e751ee-995c-4c4c-948a-6e8ec896a8cd
+		sourceLineageTag: SpendSnapshotSK
+		summarizeBy: none
+		sourceColumn: SpendSnapshotSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column DateSK
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 4cb477f4-2af1-4535-9787-522e62761ac6
+		sourceLineageTag: DateSK
+		summarizeBy: none
+		sourceColumn: DateSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column SnapshotDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: bc1407c1-cb82-4830-a8cc-c75899a3cf1c
+		sourceLineageTag: SnapshotDate
+		summarizeBy: none
+		sourceColumn: SnapshotDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 1d806f88-236a-4f3f-abe4-958c2b18bd3a
+		sourceLineageTag: AccountSK
+		summarizeBy: none
+		sourceColumn: AccountSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 95529211-f2f0-45e1-b1aa-85f451432193
+		sourceLineageTag: AccountID
+		summarizeBy: none
+		sourceColumn: AccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: f1d0175d-cb6b-49e5-827c-978401858cff
+		sourceLineageTag: CustomerSK
+		summarizeBy: none
+		sourceColumn: CustomerSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: b9a4eef2-2a35-4371-9413-a2d11b9bf636
+		sourceLineageTag: CardSK
+		summarizeBy: none
+		sourceColumn: CardSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column ActualCardTier
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 1022809b-376e-4d2c-bffb-81dd28df8119
+		sourceLineageTag: ActualCardTier
+		summarizeBy: none
+		sourceColumn: ActualCardTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column Rolling30DaySpend
+		dataType: double
+		sourceProviderType: decimal(38, 4)
+		lineageTag: 3eb37d68-688d-4e82-a721-8ced0f987b68
+		sourceLineageTag: Rolling30DaySpend
+		summarizeBy: sum
+		sourceColumn: Rolling30DaySpend
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column CalculatedSpendingTier
+		dataType: string
+		sourceProviderType: varchar(8)
+		lineageTag: 9f4583ac-5f6b-4201-b924-d7c2e48dc60d
+		sourceLineageTag: CalculatedSpendingTier
+		summarizeBy: none
+		sourceColumn: CalculatedSpendingTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsUpgradeCandidate
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0afada5e-83be-4997-affc-c57f57402531
+		sourceLineageTag: IsUpgradeCandidate
+		summarizeBy: sum
+		sourceColumn: IsUpgradeCandidate
+
+		annotation SummarizationSetBy = Automatic
+
+	column IsLowSpendPremiumAnomaly
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 0582f784-e245-4803-b0a4-e65c96b464f9
+		sourceLineageTag: IsLowSpendPremiumAnomaly
+		summarizeBy: sum
+		sourceColumn: IsLowSpendPremiumAnomaly
+
+		annotation SummarizationSetBy = Automatic
+
+	column AlignmentStatusFlag
+		dataType: string
+		sourceProviderType: varchar(10)
+		lineageTag: 693f3c21-e794-4004-a6a2-5ae5f88b701e
+		sourceLineageTag: AlignmentStatusFlag
+		summarizeBy: none
+		sourceColumn: AlignmentStatusFlag
+
+		annotation SummarizationSetBy = Automatic
+
+	column SnapshotMaterializedTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 4d5638b9-a190-495c-88bb-bb31d2838022
+		sourceLineageTag: SnapshotMaterializedTS
+		summarizeBy: none
+		sourceColumn: SnapshotMaterializedTS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_fact_periodic_spend_snapshot = entity
+		mode: directLake
+		source
+			entityName: gold_fact_periodic_spend_snapshot
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

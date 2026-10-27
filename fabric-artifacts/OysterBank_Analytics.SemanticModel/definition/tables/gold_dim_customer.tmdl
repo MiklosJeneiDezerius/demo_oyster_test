@@ -1,0 +1,166 @@
+table gold_dim_customer
+	lineageTag: e34a4228-c94e-4b08-a19e-0181028f917a
+	sourceLineageTag: [oystr_gold].[gold_dim_customer]
+
+	column CustomerSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 6ee0c5dd-1c8c-43f7-bb70-8ac568ab8429
+		sourceLineageTag: CustomerSK
+		summarizeBy: none
+		sourceColumn: CustomerSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9ff86f2a-bd54-4d9f-ae8e-8e5f29379cc2
+		sourceLineageTag: CustomerID
+		summarizeBy: none
+		sourceColumn: CustomerID
+
+		annotation SummarizationSetBy = Automatic
+
+	column FirstName
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: d4b716ba-4a14-4013-857f-7591118eb6c5
+		sourceLineageTag: FirstName
+		summarizeBy: none
+		sourceColumn: FirstName
+
+		annotation SummarizationSetBy = Automatic
+
+	column LastName
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 2664b394-d936-4df1-84e6-0b7fc087c80b
+		sourceLineageTag: LastName
+		summarizeBy: none
+		sourceColumn: LastName
+
+		annotation SummarizationSetBy = Automatic
+
+	column FullName
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: ec14dd8e-7825-4084-a7a0-1f79980e05e4
+		sourceLineageTag: FullName
+		summarizeBy: none
+		sourceColumn: FullName
+
+		annotation SummarizationSetBy = Automatic
+
+	column TaxID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: a53f9b83-af85-4f1c-8d37-7b57371a1a25
+		sourceLineageTag: TaxID
+		summarizeBy: none
+		sourceColumn: TaxID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CustomerType
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 46bd7524-76f3-4c6d-9a3c-8d600ac00c35
+		sourceLineageTag: CustomerType
+		summarizeBy: none
+		sourceColumn: CustomerType
+
+		annotation SummarizationSetBy = Automatic
+
+	column BirthDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 8ee52b7f-dac5-4c5d-ace6-b277785d566f
+		sourceLineageTag: BirthDate
+		summarizeBy: none
+		sourceColumn: BirthDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column AddressLine1
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b3b62546-f39a-40f2-b10c-61cdf5c7b5ed
+		sourceLineageTag: AddressLine1
+		summarizeBy: none
+		sourceColumn: AddressLine1
+
+		annotation SummarizationSetBy = Automatic
+
+	column City
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: e3020900-7e2e-48c7-8d0e-489d1c6365c2
+		sourceLineageTag: City
+		summarizeBy: none
+		sourceColumn: City
+
+		annotation SummarizationSetBy = Automatic
+
+	column StateRegion
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6dab3cdb-1b7a-47c5-8843-9796d2dfdcc8
+		sourceLineageTag: StateRegion
+		summarizeBy: none
+		sourceColumn: StateRegion
+
+		annotation SummarizationSetBy = Automatic
+
+	column PostalCode
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 4d13d7ca-1d56-42b3-8e71-443d5f0ba466
+		sourceLineageTag: PostalCode
+		summarizeBy: none
+		sourceColumn: PostalCode
+
+		annotation SummarizationSetBy = Automatic
+
+	column Country
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 6fbe5bd7-c8f5-499f-a8f2-2c4b98c1b837
+		sourceLineageTag: Country
+		summarizeBy: none
+		sourceColumn: Country
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValidFromTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 8ba6c4f1-f684-4a67-a26e-019c9eb0e1c3
+		sourceLineageTag: ValidFromTS
+		summarizeBy: none
+		sourceColumn: ValidFromTS
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValidToTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: a7fc3df1-51e7-48d3-a712-86d5b45a65fa
+		sourceLineageTag: ValidToTS
+		summarizeBy: none
+		sourceColumn: ValidToTS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_customer = entity
+		mode: directLake
+		source
+			entityName: gold_dim_customer
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

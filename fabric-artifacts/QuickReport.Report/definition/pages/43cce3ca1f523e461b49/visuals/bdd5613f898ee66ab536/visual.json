@@ -1,0 +1,73 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "bdd5613f898ee66ab536",
+  "position": {
+    "x": 1472.4951644100579,
+    "y": 0,
+    "z": 2,
+    "height": 280,
+    "width": 280
+  },
+  "visual": {
+    "visualType": "cardVisual",
+    "query": {
+      "queryState": {
+        "Data": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "gold_fact_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Upgrade Candidates"
+                }
+              },
+              "queryRef": "gold_fact_periodic_spend_snapshot.Upgrade Candidates",
+              "nativeQueryRef": "Upgrade Candidates"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "gold_fact_periodic_spend_snapshot"
+                  }
+                },
+                "Property": "Upgrade Candidates"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "a5b98d8e416cbf26cb58",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "gold_fact_periodic_spend_snapshot"
+              }
+            },
+            "Property": "Upgrade Candidates"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

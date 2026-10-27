@@ -1,0 +1,116 @@
+table gold_dim_card
+	lineageTag: 4e988344-bfaf-4184-ad99-1f4a257fc57f
+	sourceLineageTag: [oystr_gold].[gold_dim_card]
+
+	column CardSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 98b436c7-f769-4f36-a72e-582e28c7b178
+		sourceLineageTag: CardSK
+		summarizeBy: none
+		sourceColumn: CardSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountSK
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: cc78517d-c876-448d-bd37-5c538df4969b
+		sourceLineageTag: AccountSK
+		summarizeBy: none
+		sourceColumn: AccountSK
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 27ef3b58-8af1-406b-baee-87f5061e5c89
+		sourceLineageTag: CardID
+		summarizeBy: none
+		sourceColumn: CardID
+
+		annotation SummarizationSetBy = Automatic
+
+	column AccountID
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 89beed1f-ab09-44b9-8d80-01554a4531d2
+		sourceLineageTag: AccountID
+		summarizeBy: none
+		sourceColumn: AccountID
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardNumber
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 25d6c01f-c4a5-4bcf-8f32-ed96f698cc7a
+		sourceLineageTag: CardNumber
+		summarizeBy: none
+		sourceColumn: CardNumber
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardTier
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 117fea31-91a1-4f51-9660-7ac8d869ce2e
+		sourceLineageTag: CardTier
+		summarizeBy: none
+		sourceColumn: CardTier
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardStatus
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: b0ebf24e-e9ba-4893-b546-0ba37a80d889
+		sourceLineageTag: CardStatus
+		summarizeBy: none
+		sourceColumn: CardStatus
+
+		annotation SummarizationSetBy = Automatic
+
+	column ExpiryDate
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: e2c92bd6-2bcf-433f-be44-2e03b19f9693
+		sourceLineageTag: ExpiryDate
+		summarizeBy: none
+		sourceColumn: ExpiryDate
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValidFromTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 14880596-8df4-469f-a001-d24dbd89610c
+		sourceLineageTag: ValidFromTS
+		summarizeBy: none
+		sourceColumn: ValidFromTS
+
+		annotation SummarizationSetBy = Automatic
+
+	column ValidToTS
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: a5dd7d20-0215-49a2-acab-eecf62ce6d8d
+		sourceLineageTag: ValidToTS
+		summarizeBy: none
+		sourceColumn: ValidToTS
+
+		annotation SummarizationSetBy = Automatic
+
+	partition gold_dim_card = entity
+		mode: directLake
+		source
+			entityName: gold_dim_card
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+
