@@ -3,7 +3,7 @@
   "version": "4.0",
   "datasetReference": {
     "byPath": {
-      "path": "../OysterBank_Analytics.SemanticModel"
+      "path": "../sm_oyster.SemanticModel.SemanticModel"
     }
   }
 }

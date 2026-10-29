@@ -1,12 +1,11 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "Notebook",
-    "displayName": "OysterBank_Clean_Data_Generation",
-    "description": "New notebook"
+    "type": "Report",
+    "displayName": "rpt_slate_bi.Report"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "a2e12b38-a5a6-8860-411b-aaa28059e697"
+    "logicalId": "df3855c2-a96e-8cab-45cf-20e1d6be0359"
   }
 }

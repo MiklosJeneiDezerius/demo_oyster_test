@@ -4,14 +4,8 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "a2e12b38-a5a6-8860-411b-aaa28059e697",
-          "workspaceId": "00000000-0000-0000-0000-000000000000",
-          "parameters": {
-            "num_customers": {
-              "value": "50",
-              "type": "int"
-            }
-          }
+          "notebookId": "c26cc17a-260e-8c59-44fc-d6cd231fc926",
+          "workspaceId": "00000000-0000-0000-0000-000000000000"
         },
         "policy": {
           "timeout": "0.12:00:00",

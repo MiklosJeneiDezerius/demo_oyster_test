@@ -1,11 +1,12 @@
 {
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
   "metadata": {
-    "type": "SemanticModel",
-    "displayName": "sm_OysterBank_Analytics"
+    "type": "Notebook",
+    "displayName": "Oyster_Deterministic_Data_Generator",
+    "description": "New notebook"
   },
   "config": {
     "version": "2.0",
-    "logicalId": "8580a7ae-d3aa-b741-4414-2af7a31186d8"
+    "logicalId": "c26cc17a-260e-8c59-44fc-d6cd231fc926"
   }
 }
