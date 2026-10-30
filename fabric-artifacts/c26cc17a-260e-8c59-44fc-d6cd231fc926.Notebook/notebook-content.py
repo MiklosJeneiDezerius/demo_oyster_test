@@ -5,6 +5,18 @@
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
+# META   },
+# META   "dependencies": {
+# META     "lakehouse": {
+# META       "default_lakehouse": "6a5d7d27-1cff-4cc1-8128-60ab61a60ad2",
+# META       "default_lakehouse_name": "lh_oysterlake2",
+# META       "default_lakehouse_workspace_id": "2a3b7ca3-b1d8-4251-bada-cb2a3100cef9",
+# META       "known_lakehouses": [
+# META         {
+# META           "id": "6a5d7d27-1cff-4cc1-8128-60ab61a60ad2"
+# META         }
+# META       ]
+# META     }
 # META   }
 # META }
 
@@ -18,6 +30,8 @@
 import os
 import csv
 from datetime import datetime, timedelta
+from pyspark.sql import SparkSession
+from pyspark.sql.functions import current_date, current_timestamp, date_format
 
 # METADATA ********************
 
@@ -29,10 +43,11 @@ from datetime import datetime, timedelta
 # CELL ********************
 
 # 1. Pipeline Parameter - Set your desired volume here
-num_customers = 60  
-
+num_customers = 100  
+datetime_var = spark.range(1).select(date_format(current_timestamp(), "yyyyMMddHHmmss")).first()[0]
+year_month = spark.range(1).select(date_format(current_timestamp(), "yyyyMMdd_HHmmss")).first()[0]
 # 2. ROOT OUTPUT DIRECTORY PRESERVED UNCHANGED
-output_dir = "/lakehouse/default/Files/landing/oyster/"
+output_dir = f'/lakehouse/default/Files/oyster/landing_raw/{year_month}'
 
 # METADATA ********************
 
@@ -150,17 +165,20 @@ for i in range(1, num_customers + 1):
 # =====================================================================
 print("Exporting all structural tables securely out to CSV landing structures...")
 
+# 1. Properly extract the string value from the PySpark Row object
+
+# 2. Use f-strings (f'...') for the dictionary keys to inject the date
 files_config = {
-    'Customer.csv': (['CustomerID', 'TaxID', 'CustomerTypeID', 'FirstName', 'LastName', 'DoB'], customer_rows),
-    'CustomerType.csv': (['CustomerTypeID', 'TypeName'], customer_type_rows),
-    'CustomerAddress.csv': (['AddressID', 'CustomerID', 'AddressLine1', 'City', 'State/Region', 'PostalCode', 'Country'], customer_address_rows),
-    'Account.csv': (['AccountID', 'CustomerID', 'AccountNumber', 'AccountTypeID', 'Balance', 'CurrencyID'], account_rows),
-    'AccountType.csv': (['AccountTypeID', 'TypeName'], account_type_rows),
-    'Currency.csv': (['CurrencyID', 'CurrencyCode'], currency_rows),
-    'DebitCard.csv': (['CardID', 'AccountID', 'CardNumber', 'CardTierID', 'Status', 'ExpiryDate'], debit_card_rows),
-    'CardTier.csv': (['CardTierID', 'TierName'], card_tier_rows),
-    'Transaction_Ledger.csv': (['TransactionID', 'AccountID', 'Amount', 'Timestamp', 'Counterparty', 'TransactionStatusID'], transaction_rows),
-    'TransactionStatus.csv': (['TransactionStatusID', 'StatusName'], transaction_status_rows)
+    f'Customer_{datetime_var}.csv': (['CustomerID', 'TaxID', 'CustomerTypeID', 'FirstName', 'LastName', 'DoB'], customer_rows),
+    f'CustomerType_{datetime_var}.csv': (['CustomerTypeID', 'TypeName'], customer_type_rows),
+    f'CustomerAddress_{datetime_var}.csv': (['AddressID', 'CustomerID', 'AddressLine1', 'City', 'State/Region', 'PostalCode', 'Country'], customer_address_rows),
+    f'Account_{datetime_var}.csv': (['AccountID', 'CustomerID', 'AccountNumber', 'AccountTypeID', 'Balance', 'CurrencyID'], account_rows),
+    f'AccountType_{datetime_var}.csv': (['AccountTypeID', 'TypeName'], account_type_rows),
+    f'Currency_{datetime_var}.csv': (['CurrencyID', 'CurrencyCode'], currency_rows),
+    f'DebitCard_{datetime_var}.csv': (['CardID', 'AccountID', 'CardNumber', 'CardTierID', 'Status', 'ExpiryDate'], debit_card_rows),
+    f'CardTier_{datetime_var}.csv': (['CardTierID', 'TierName'], card_tier_rows),
+    f'Transaction_Ledger_{datetime_var}.csv': (['TransactionID', 'AccountID', 'Amount', 'Timestamp', 'Counterparty', 'TransactionStatusID'], transaction_rows),
+    f'TransactionStatus_{datetime_var}.csv': (['TransactionStatusID', 'StatusName'], transaction_status_rows)
 }
 
 for filename, (header, rows) in files_config.items():
