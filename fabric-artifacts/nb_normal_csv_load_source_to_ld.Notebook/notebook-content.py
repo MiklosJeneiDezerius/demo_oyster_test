@@ -27,7 +27,7 @@ p_load_date = "20260513"
 p_root_path = "Files/oyster/landing_raw"
 p_source_route_path = None
 p_company_cd = "oyster"
-p_source_system_cd = "oyster"
+p_source_system_cd = "oys"
 p_in_table_name = "CardTier"
 p_datev_filter = ""
 p_debug = 0
@@ -285,7 +285,7 @@ print('v_company_cd_cleared:', v_company_cd_cleared)
 
 #v_out_file_path = f"Files/{p_company_cd}/landing_parquet/{p_in_table_name.lower()}" + ".parquet"
 #print('v_out_file_path:', v_out_file_path)
-v_out_table_name = f"oyster.ld_oys_{p_in_table_name.lower()}"
+v_out_table_name_path = f"Tables/{p_source_system_cd}/ld_{p_source_system_cd}_{p_in_table_name.lower()}"
 
 
 # %%
