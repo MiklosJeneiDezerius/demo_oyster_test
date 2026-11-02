@@ -83,7 +83,7 @@
                     "type": "string"
                   },
                   "p_source_system_cd": {
-                    "value": "oyster",
+                    "value": "oys",
                     "type": "string"
                   },
                   "p_in_table_name": {

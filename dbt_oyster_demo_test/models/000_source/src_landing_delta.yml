@@ -3,7 +3,7 @@ version: 2
 sources:
   - name: landing_delta
     database: lh_oysterlake2
-    schema: oyster
+    schema: dbo
     tables:
       - name: customer
         identifier: ld_oys_customer
