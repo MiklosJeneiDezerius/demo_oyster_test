@@ -164,11 +164,16 @@ def read_datev_csv_multi(file_path_pattern, table_name):
         return match.group(1) if match else "0000"
 
     def safe_decode(content_bytes):
-        """Safely attempt UTF-16-LE (with BOM) decoding, fallback to UTF-8."""
-        try:
+        """Decode BOM-marked UTF-16, otherwise prefer UTF-8."""
+        if content_bytes.startswith((b"\xff\xfe", b"\xfe\xff")):
             return content_bytes.decode("utf-16")
+        try:
+            decoded = content_bytes.decode("utf-8-sig")
+            if "\x00" not in decoded:
+                return decoded
         except UnicodeDecodeError:
-            return content_bytes.decode("utf-8")
+            pass
+        return content_bytes.decode("utf-16")
 
     # Collect all files as (path, bytes) tuples to the driver
     all_files = rdd_raw.collect()
@@ -285,7 +290,7 @@ print('v_company_cd_cleared:', v_company_cd_cleared)
 
 #v_out_file_path = f"Files/{p_company_cd}/landing_parquet/{p_in_table_name.lower()}" + ".parquet"
 #print('v_out_file_path:', v_out_file_path)
-v_out_table_name = f"oyster.ld_oys_{p_in_table_name.lower()}"
+v_out_table_name_path = f"Tables/{p_source_system_cd}/ld_oys_{p_in_table_name.lower()}"
 
 
 # %%
@@ -303,7 +308,7 @@ if not v_error:
      .format("delta")
      .mode("overwrite")
      # .partitionBy("m_valid_dt") 
-     .save(v_out_table_name))
+    .save(v_out_table_name_path))
 
     print("Write complete! Check your storage lake directory.")
 
