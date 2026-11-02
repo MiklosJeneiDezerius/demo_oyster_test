@@ -303,7 +303,7 @@ if not v_error:
      .format("delta")
      .mode("overwrite")
      # .partitionBy("m_valid_dt") 
-     .saveAsTable(v_out_table_name))
+     .save(v_out_table_name))
 
     print("Write complete! Check your storage lake directory.")
 
