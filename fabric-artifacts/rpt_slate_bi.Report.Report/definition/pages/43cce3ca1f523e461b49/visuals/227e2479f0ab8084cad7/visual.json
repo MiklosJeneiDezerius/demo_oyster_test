@@ -20,13 +20,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_periodic_spend_snapshot"
+                      "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
                   "Property": "Total Cardholders"
                 }
               },
-              "queryRef": "gold_fact_periodic_spend_snapshot.Total Cardholders",
+              "queryRef": "g_fct_periodic_spend_snapshot.Total Cardholders",
               "nativeQueryRef": "Total Cardholders"
             }
           ]
@@ -39,7 +39,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_periodic_spend_snapshot"
+                    "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
                 "Property": "Total Cardholders"
@@ -79,7 +79,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "gold_fact_periodic_spend_snapshot"
+                "Entity": "g_fct_periodic_spend_snapshot"
               }
             },
             "Property": "Total Cardholders"

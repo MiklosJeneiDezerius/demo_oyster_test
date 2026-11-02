@@ -19,13 +19,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_periodic_spend_snapshot"
+                      "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
                   "Property": "Upgrade Candidates"
                 }
               },
-              "queryRef": "gold_fact_periodic_spend_snapshot.Upgrade Candidates",
+              "queryRef": "g_fct_periodic_spend_snapshot.Upgrade Candidates",
               "nativeQueryRef": "Upgrade Candidates"
             }
           ]
@@ -38,7 +38,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_periodic_spend_snapshot"
+                    "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
                 "Property": "Upgrade Candidates"
@@ -60,7 +60,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "gold_fact_periodic_spend_snapshot"
+                "Entity": "g_fct_periodic_spend_snapshot"
               }
             },
             "Property": "Upgrade Candidates"

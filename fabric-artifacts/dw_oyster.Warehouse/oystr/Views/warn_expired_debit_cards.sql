@@ -6,7 +6,7 @@ select
     CardID,
     CardNumber,
     CardStatus
-from [dw_oysterlake].[oystr_silver].[dim_card]
+from [dw_oysterlake].[oystr_silver].[s_dim_card]
 where CardStatus = 'Expired';
 
 GO

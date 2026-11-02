@@ -24,7 +24,7 @@ clean-targets:         # directories to be removed by `dbt clean`
 
 vars:
   # Target Env Database & Schema Parameters
-  target_snapshot_db: 'dw_oysterlake'
+  target_snapshot_db: "{{ env_var('DBT_DATABASE', 'dw_oyster') }}"
   target_snapshot_schema: 'snapshots'
   
 # Configuring models

@@ -19,13 +19,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_periodic_spend_snapshot"
+                      "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
                   "Property": "Misaligned Cardholders"
                 }
               },
-              "queryRef": "gold_fact_periodic_spend_snapshot.Misaligned Cardholders",
+              "queryRef": "g_fct_periodic_spend_snapshot.Misaligned Cardholders",
               "nativeQueryRef": "Misaligned Cardholders"
             }
           ]
@@ -38,7 +38,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_periodic_spend_snapshot"
+                    "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
                 "Property": "Misaligned Cardholders"
@@ -60,7 +60,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "gold_fact_periodic_spend_snapshot"
+                "Entity": "g_fct_periodic_spend_snapshot"
               }
             },
             "Property": "Misaligned Cardholders"

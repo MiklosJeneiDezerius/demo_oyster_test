@@ -20,13 +20,13 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_periodic_spend_snapshot"
+                      "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
                   "Property": "ActualCardTier"
                 }
               },
-              "queryRef": "gold_fact_periodic_spend_snapshot.ActualCardTier",
+              "queryRef": "g_fct_periodic_spend_snapshot.ActualCardTier",
               "nativeQueryRef": "ActualCardTier",
               "active": true
             }
@@ -39,13 +39,13 @@
                 "Measure": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "gold_fact_periodic_spend_snapshot"
+                      "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
                   "Property": "Total Cardholders"
                 }
               },
-              "queryRef": "gold_fact_periodic_spend_snapshot.Total Cardholders",
+              "queryRef": "g_fct_periodic_spend_snapshot.Total Cardholders",
               "nativeQueryRef": "Total Cardholders"
             }
           ]
@@ -58,7 +58,7 @@
               "Measure": {
                 "Expression": {
                   "SourceRef": {
-                    "Entity": "gold_fact_periodic_spend_snapshot"
+                    "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
                 "Property": "Total Cardholders"
@@ -80,7 +80,7 @@
           "Column": {
             "Expression": {
               "SourceRef": {
-                "Entity": "gold_fact_periodic_spend_snapshot"
+                "Entity": "g_fct_periodic_spend_snapshot"
               }
             },
             "Property": "ActualCardTier"
@@ -94,7 +94,7 @@
           "Measure": {
             "Expression": {
               "SourceRef": {
-                "Entity": "gold_fact_periodic_spend_snapshot"
+                "Entity": "g_fct_periodic_spend_snapshot"
               }
             },
             "Property": "Total Cardholders"
