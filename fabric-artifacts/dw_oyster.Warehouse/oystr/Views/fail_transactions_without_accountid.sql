@@ -6,7 +6,7 @@ select
     TransactionID,
     Amount,
     TransactionTimestamp
-from [dw_oysterlake].[oystr_silver].[fact_transaction]
+from [dw_oyster].[oystr_silver].[s_fct_transaction]
 where AccountID is null;
 
 GO
