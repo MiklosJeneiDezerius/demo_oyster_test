@@ -56,33 +56,53 @@
         "typeProperties": {
           "isSequential": true,
           "items": {
-            "value": "@activity('lkp_GetLoadConfig').output.value[0].files_to_load",
+            "value": "@activity('lkp_GetLoadConfig').output.value",
             "type": "Expression"
           },
           "activities": [
             {
               "type": "TridentNotebook",
               "typeProperties": {
-                "notebookId": "a0fef597-108e-aa9f-43f7-e710dcfdacfd",
+                "notebookId": "73aa6202-6cd1-ad56-45c1-43671f9fcd31",
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
-                  "p_source_sytem_cd": {
-                    "value": "OYS",
+                  "p_load_date": {
+                    "value": "20260513",
                     "type": "string"
                   },
-                  "p_subfolder_path": {
+                  "p_root_path": {
+                    "value": "Files/oyster/landing_raw",
+                    "type": "string"
+                  },
+                  "p_source_route_path": {
+                    "value": "",
+                    "type": "string"
+                  },
+                  "p_company_cd": {
+                    "value": "oyster",
+                    "type": "string"
+                  },
+                  "p_source_system_cd": {
                     "value": "oyster",
                     "type": "string"
                   },
                   "p_in_table_name": {
                     "value": {
-                      "value": "@item()",
+                      "value": "@item().source_object_name",
                       "type": "Expression"
                     },
                     "type": "string"
                   },
+                  "p_datev_filter": {
+                    "value": "",
+                    "type": "string"
+                  },
+                  "p_debug": {
+                    "value": "0",
+                    "type": "int"
+                  },
                   "p_lakehouse_name": {
-                    "value": "lh_oysterlake",
+                    "value": "lh_oysterlake2",
                     "type": "string"
                   }
                 }
