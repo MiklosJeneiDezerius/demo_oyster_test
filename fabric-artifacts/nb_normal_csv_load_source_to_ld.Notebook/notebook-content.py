@@ -28,7 +28,7 @@ p_root_path = "Files/oyster/landing_raw"
 p_source_route_path = None
 p_company_cd = "oyster"
 p_source_system_cd = "oys"
-p_in_table_name = "CardTier"
+p_in_table_name = "Customer"
 p_datev_filter = ""
 p_debug = 0
 p_lakehouse_name = "lh_oysterlake2"
@@ -290,11 +290,14 @@ print('v_company_cd_cleared:', v_company_cd_cleared)
 
 #v_out_file_path = f"Files/{p_company_cd}/landing_parquet/{p_in_table_name.lower()}" + ".parquet"
 #print('v_out_file_path:', v_out_file_path)
-<<<<<<< HEAD
-v_out_table_name_path = f"Tables/{p_source_system_cd}/ld_oys_{p_in_table_name.lower()}"
-=======
-v_out_table_name_path = f"Tables/{p_source_system_cd}/ld_{p_source_system_cd}_{p_in_table_name.lower()}"
->>>>>>> 9dec3d834ca728f13d1ebf8a59600328bd70131a
+# %%
+v_out_table_name = "ld_"+p_source_system_cd.lower()+"_"+p_in_table_name.lower()
+display(v_out_table_name)
+
+# %%
+# Path to the Delta table
+v_out_table_name_path = "Tables/"+v_out_table_name
+display(v_out_table_name_path)
 
 
 # %%
@@ -312,31 +315,9 @@ if not v_error:
      .format("delta")
      .mode("overwrite")
      # .partitionBy("m_valid_dt") 
-    .save(v_out_table_name_path))
+     .saveAsTable(v_out_table_name))
 
     print("Write complete! Check your storage lake directory.")
-
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
-# CELL ********************
-
-# %%
-# Define target ABFSS filepath string
-v_parquet_src_path = "abfss://demo_oyster_test@onelake.dfs.fabric.microsoft.com/lh_oysterlake2.Lakehouse/Files/oyster/landing_parquet/cardtier.parquet"
-
-# %%
-# Read the compressed columnar Parquet dataset into a DataFrame
-df_cardtier = spark.read.format("parquet").load(v_parquet_src_path)
-
-# %%
-# Render interactive table data frame view inside your notebook canvas layout
-display(df_cardtier)
 
 
 # METADATA ********************
