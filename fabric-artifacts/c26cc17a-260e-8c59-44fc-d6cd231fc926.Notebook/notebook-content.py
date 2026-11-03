@@ -43,7 +43,7 @@ from pyspark.sql.functions import current_date, current_timestamp, date_format
 # CELL ********************
 
 # 1. Pipeline Parameter - Set your desired volume here
-num_customers = 100  
+num_customers = 83  
 datetime_var = spark.range(1).select(date_format(current_timestamp(), "yyyyMMddHHmmss")).first()[0]
 year_month = spark.range(1).select(date_format(current_timestamp(), "yyyyMMdd_HHmmss")).first()[0]
 # 2. ROOT OUTPUT DIRECTORY PRESERVED UNCHANGED
