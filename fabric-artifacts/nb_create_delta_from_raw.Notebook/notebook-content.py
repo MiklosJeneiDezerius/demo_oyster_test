@@ -26,7 +26,7 @@
 
 p_source_sytem_cd = "OYS"
 p_subfolder_path = "oyster"
-p_in_table_name = "Transaction_Ledger.csv"
+p_in_table_name = "Account_20261102122351_core.csv"
 p_lakehouse_name = "lh_oysterlake"
 
 # METADATA ********************
