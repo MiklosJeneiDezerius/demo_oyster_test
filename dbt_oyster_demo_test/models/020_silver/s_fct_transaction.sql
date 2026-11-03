@@ -7,8 +7,8 @@ WITH source_transactions AS (
     FROM {{ ref('b_oys_transaction') }} t
     LEFT JOIN {{ ref('b_oys_transaction_status') }} ts ON t.[TransactionStatusID] = ts.[TransactionStatusID]
 ),
-account_history AS (
-    SELECT [AccountSK], [AccountID], [CustomerID], [ValidFromTS] FROM {{ ref('s_dim_account') }}
+accounts AS (
+    SELECT [AccountSK], [AccountID], [CustomerID] FROM {{ ref('s_dim_account') }}
 ),
 customer_history AS (
     SELECT [CustomerSK], [CustomerID], [ValidFromTS], [ValidToTS] FROM {{ ref('s_dim_customer') }}
@@ -33,17 +33,15 @@ SELECT
     st.[TransactionStatus]
 FROM source_transactions st
 
--- 1. Map to the exact Account record state active during the transaction
-INNER JOIN account_history da 
+INNER JOIN accounts da
     ON st.[AccountID] = da.[AccountID]
-    --AND st.[TransactionTimestamp] BETWEEN da.[ValidFromTS] AND da.[ValidToTS]
 
 -- 2. Map to the exact Customer profile state active during the transaction
 INNER JOIN customer_history dcuh 
     ON da.[CustomerID] = dcuh.[CustomerID]
-    AND st.[TransactionTimestamp] BETWEEN dcuh.[ValidFromTS] AND dcuh.[ValidToTS]
+    AND st.[TransactionTimestamp] BETWEEN dcuh.[ValidFromTS] AND DATEADD(MICROSECOND, -1, ISNULL(dcuh.[ValidToTS], '9999-12-31 00:00:00.000000'))
 
 -- 3. Map to the exact Card asset state active during the transaction
 LEFT JOIN card_history dc 
     ON st.[AccountID] = dc.[AccountID]
-    AND st.[TransactionTimestamp] BETWEEN dc.[ValidFromTS] AND dc.[ValidToTS]
+    AND st.[TransactionTimestamp] BETWEEN dc.[ValidFromTS] AND DATEADD(MICROSECOND, -1, ISNULL(dc.[ValidToTS], '9999-12-31 00:00:00.000000'))

@@ -12,5 +12,4 @@ SELECT
     ,[AccountType]
     ,[CurrentBalance]
     ,[CurrencyCode]
-    ,[ValidFromTS]
 FROM {{ ref('s_dim_account') }}

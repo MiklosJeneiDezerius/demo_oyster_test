@@ -1,0 +1,66 @@
+version: 2
+
+models:
+  - name: b_oys_customer
+    columns:
+      - name: CustomerID
+        tests:
+          - not_null
+          - unique
+  - name: b_oys_account
+    columns:
+      - name: AccountID
+        tests:
+          - not_null
+          - unique
+      - name: CustomerID
+        tests:
+          - not_null
+  - name: b_oys_debit_card
+    columns:
+      - name: CardID
+        tests:
+          - not_null
+          - unique
+      - name: AccountID
+        tests:
+          - not_null
+  - name: b_oys_transaction
+    columns:
+      - name: TransactionID
+        tests:
+          - not_null
+          - unique
+      - name: AccountID
+        tests:
+          - not_null
+  - name: s_dim_date
+    columns:
+      - name: DateSK
+        tests:
+          - not_null
+          - unique
+  - name: ga_dim_account
+    columns:
+      - name: AccountSK
+        tests:
+          - not_null
+          - unique
+  - name: ga_dim_card
+    columns:
+      - name: CardSK
+        tests:
+          - not_null
+          - unique
+  - name: ga_dim_customer
+    columns:
+      - name: CustomerSK
+        tests:
+          - not_null
+          - unique
+  - name: g_dim_date
+    columns:
+      - name: DateSK
+        tests:
+          - not_null
+          - unique

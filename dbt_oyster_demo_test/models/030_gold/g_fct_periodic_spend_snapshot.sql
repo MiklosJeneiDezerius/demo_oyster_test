@@ -29,9 +29,11 @@ daily_account_spine AS (
 ),
 
 -- Point-in-time dimension slice tracking references
-historical_account_states AS (
+accounts AS (
     SELECT 
-        [AccountSK], [AccountID], [CustomerSK], [ValidFromTS]
+        [AccountSK], 
+        [AccountID], 
+        [CustomerSK]
     FROM {{ ref('s_dim_account') }}
 ),
 
@@ -58,17 +60,12 @@ rolling_spend_calculation AS (
         s.[DateSK],
         s.[FullDate],
         s.[AccountID],
-        
-        -- Map the precise Account and Customer state active on this snapshot date
         da.[AccountSK],
         da.[CustomerSK],
-        
-        -- Map the precise Card asset state active on this snapshot date
         dc.[CardSK],
         COALESCE(dc.[CardTier], 'Standard') AS [ActualCardTier],
         COALESCE(t.[DailySpendAmount], 0) AS [DailySpendAmount],
         
-        -- High-performance continuous 30-day trailing metric engine
         SUM(COALESCE(t.[DailySpendAmount], 0)) OVER (
             PARTITION BY s.[AccountID]
             ORDER BY s.[FullDate]
@@ -76,7 +73,7 @@ rolling_spend_calculation AS (
         ) AS [Rolling30DaySpend]
     FROM daily_account_spine s
     
-    INNER JOIN historical_account_states da
+    INNER JOIN accounts da
         ON s.[AccountID] = da.[AccountID]
         
     LEFT JOIN daily_transactions t 
