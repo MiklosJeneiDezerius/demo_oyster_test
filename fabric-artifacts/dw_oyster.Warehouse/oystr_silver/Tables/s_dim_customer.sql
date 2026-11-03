@@ -3,7 +3,7 @@ CREATE TABLE [oystr_silver].[s_dim_customer] (
     [CustomerID]       VARCHAR (8000) NULL,
     [FirstName]        VARCHAR (8000) NULL,
     [LastName]         VARCHAR (8000) NULL,
-    [FullName]         VARCHAR (8000) NULL,
+    [FullName]         VARCHAR (8000) NOT NULL,
     [TaxID]            VARCHAR (8000) NULL,
     [CustomerType]     VARCHAR (8000) NULL,
     [BirthDate]        DATE           NULL,

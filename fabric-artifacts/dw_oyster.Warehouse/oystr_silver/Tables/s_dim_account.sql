@@ -6,8 +6,7 @@ CREATE TABLE [oystr_silver].[s_dim_account] (
     [AccountNumber]  VARCHAR (8000)  NULL,
     [AccountType]    VARCHAR (8000)  NULL,
     [CurrentBalance] DECIMAL (18, 4) NULL,
-    [CurrencyCode]   VARCHAR (8000)  NULL,
-    [ValidFromTS]    DATETIME2 (6)   NULL
+    [CurrencyCode]   VARCHAR (8000)  NULL
 );
 
 
