@@ -4,7 +4,7 @@
       {
         "type": "TridentNotebook",
         "typeProperties": {
-          "notebookId": "a520374e-f0b1-98e4-45b4-691460ce211f",
+          "notebookId": "881d010f-86fe-bbad-44b3-13a60783045f",
           "workspaceId": "00000000-0000-0000-0000-000000000000",
           "parameters": {
             "repo_url": {
