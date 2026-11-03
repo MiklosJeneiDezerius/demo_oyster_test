@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "efdf20e40d7d6c780312",
   "position": {
-    "x": 183.82978723404256,
-    "y": 499.49709864603477,
+    "x": 18.409090909090907,
+    "y": 351.30681818181813,
     "z": 3,
-    "height": 280.3868471953578,
-    "width": 776.17021276595744,
+    "height": 428.01136363636363,
+    "width": 941.93181818181813,
     "tabOrder": 1
   },
   "visual": {
@@ -42,11 +42,25 @@
                       "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
-                  "Property": "Total Cardholders"
+                  "Property": "Aligned Cardholders"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.Total Cardholders",
-              "nativeQueryRef": "Total Cardholders"
+              "queryRef": "g_fct_periodic_spend_snapshot.Aligned Cardholders",
+              "nativeQueryRef": "Aligned Cardholders"
+            },
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "g_fct_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Misaligned Cardholders"
+                }
+              },
+              "queryRef": "g_fct_periodic_spend_snapshot.Misaligned Cardholders",
+              "nativeQueryRef": "Misaligned Cardholders"
             }
           ]
         }
@@ -61,7 +75,7 @@
                     "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
-                "Property": "Total Cardholders"
+                "Property": "Aligned Cardholders"
               }
             },
             "direction": "Descending"
@@ -87,20 +101,6 @@
           }
         },
         "type": "Categorical"
-      },
-      {
-        "name": "8fea1adff5bc64cb9785",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "g_fct_periodic_spend_snapshot"
-              }
-            },
-            "Property": "Total Cardholders"
-          }
-        },
-        "type": "Advanced"
       }
     ]
   }

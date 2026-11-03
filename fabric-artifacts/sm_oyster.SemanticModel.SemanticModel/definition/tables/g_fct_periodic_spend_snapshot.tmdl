@@ -43,6 +43,21 @@ table g_fct_periodic_spend_snapshot
 
 		changedProperty = Name
 
+	measure 'Aligned Cardholders' = ```
+			
+			COALESCE(
+			    CALCULATE(
+			        [Total Cardholders], 
+			        g_fct_periodic_spend_snapshot[AlignmentStatusFlag] = "Aligned"
+			    ), 
+			    0
+			)
+			```
+		formatString: 0
+		lineageTag: aeb5d2e5-d887-40b9-bddd-f3dea89d3e2e
+
+		changedProperty = Name
+
 	column SpendSnapshotSK
 		dataType: string
 		sourceProviderType: varchar(64)

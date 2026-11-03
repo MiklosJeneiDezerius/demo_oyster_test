@@ -2,17 +2,36 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5cae5958e3d32a5ae1fc",
   "position": {
-    "x": 1366.6537717601548,
-    "y": 570.05802707930366,
+    "x": 987.95454545454538,
+    "y": 351.30681818181813,
     "z": 4,
-    "height": 209,
-    "width": 280,
+    "height": 428.01136363636363,
+    "width": 879.03409090909088,
     "tabOrder": 2
   },
   "visual": {
     "visualType": "donutChart",
     "query": {
       "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "g_fct_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "ActualCardTier"
+                }
+              },
+              "queryRef": "g_fct_periodic_spend_snapshot.ActualCardTier",
+              "nativeQueryRef": "ActualCardTier",
+              "active": true
+            }
+          ]
+        },
         "Y": {
           "projections": [
             {
