@@ -14,7 +14,6 @@ annotation PBI_QueryOrder = ["DatabaseQuery"]
 annotation PBI_ProTooling = ["WebModelingEdit"]
 
 ref table g_dim_date
-ref table ga_dim_account
 ref table ga_dim_card
 ref table ga_dim_customer
 ref table g_fct_periodic_spend_snapshot

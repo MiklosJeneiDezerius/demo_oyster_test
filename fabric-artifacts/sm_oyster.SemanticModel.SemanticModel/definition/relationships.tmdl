@@ -1,7 +1,3 @@
-relationship 9e6f0677-9c42-c825-58f6-27e0ea634bfa
-	fromColumn: g_fct_periodic_spend_snapshot.AccountID
-	toColumn: ga_dim_account.AccountID
-
 relationship b9ba34ec-37a8-c3db-5921-ef34066bd3cf
 	fromColumn: g_fct_periodic_spend_snapshot.CardSK
 	toColumn: ga_dim_card.CardSK
