@@ -158,10 +158,13 @@ def read_datev_csv_multi(file_path_pattern, table_name):
 
     rdd_raw = spark.sparkContext.binaryFiles(glob_pattern)
 
-    def extract_year_from_path(path):
-        """Extract 4-digit year from a .../current/<year>/... path segment."""
-        match = re.search(r'/current/(\d{4})(?:/|$)', path)
-        return match.group(1) if match else "0000"
+    def extract_source_timestamp(path):
+        match = re.search(r'/landing_raw/(\d{8}_\d{6}|\d{14}|\d{8})/', path)
+        if not match:
+            raise ValueError(f"Missing source date folder in path: {path}")
+        folder = match.group(1)
+        date_format = "%Y%m%d_%H%M%S" if "_" in folder else "%Y%m%d%H%M%S" if len(folder) == 14 else "%Y%m%d"
+        return datetime.strptime(folder, date_format).strftime("%Y-%m-%d %H:%M:%S")
 
     def safe_decode(content_bytes):
         """Decode BOM-marked UTF-16, otherwise prefer UTF-8."""
@@ -187,12 +190,12 @@ def read_datev_csv_multi(file_path_pattern, table_name):
     raw_header = [c.strip("\r").strip() for c in first_lines[0].split(",")]
     header = [sanitize_column_name(c) for c in raw_header]
     num_cols = len(header)
-    full_header = ["_source_year"] + header
+    full_header = ["m_source_dttm", "m_source_file"] + header
 
     # Parse all files on the driver
     all_rows = []
     for path, content in all_files:
-        year = extract_year_from_path(path)
+        source_timestamp = extract_source_timestamp(path)
         file_text = safe_decode(content)
         lines = file_text.split("\n")
         for line in lines[1:]:
@@ -204,19 +207,19 @@ def read_datev_csv_multi(file_path_pattern, table_name):
                 parts += [""] * (num_cols - len(parts))
             if len(parts) > num_cols:
                 parts = parts[:num_cols]
-            all_rows.append(Row(**dict(zip(full_header, [year] + parts))))
+                all_rows.append(Row(**dict(zip(full_header, [source_timestamp, path] + parts))))
 
-    df = spark.createDataFrame(all_rows)
+            df = spark.createDataFrame(all_rows).withColumn("m_source_dttm", col("m_source_dttm").cast("timestamp"))
     return df
 
 # %%
 def merge_and_deduplicate(df, data_cols):
-    window = Window.partitionBy(*data_cols).orderBy(desc("_source_year"))
+    window = Window.partitionBy(*data_cols).orderBy(desc("m_source_dttm"), desc("m_source_file"))
     df_deduped = (
         df
         .withColumn("_rn", row_number().over(window))
         .filter(col("_rn") == 1)
-        .drop("_rn", "_source_year")
+        .drop("_rn")
     )
     return df_deduped
 
@@ -231,7 +234,7 @@ try:
             raise ValueError(f"p_datev_filter column '{filter_col}' not found in data. Available: {df_raw.columns}")
         data_cols = [filter_col]
     else:
-        data_cols = [c for c in df_raw.columns if c != "_source_year"]
+        data_cols = [c for c in df_raw.columns if c not in ("m_source_dttm", "m_source_file")]
 
     df = merge_and_deduplicate(df_raw, data_cols)
     display(df)
@@ -250,7 +253,8 @@ if not v_error:
                          .withColumn("m_updated_at_dttm", from_utc_timestamp(current_timestamp(), "Europe/Budapest")) \
                          .withColumn("m_extracted_dttm", from_utc_timestamp(current_timestamp(), "Europe/Budapest")) \
                          .withColumn("m_source_system_cd", lit(p_source_system_cd)) \
-                         .withColumn("m_table_nm", lit(p_in_table_name))
+                         .withColumn("m_table_nm", lit(p_in_table_name)) \
+                         .withColumn("m_loaded_at_dttm", current_timestamp())
 
 # %%
 # Display enriched DataFrame in debug mode
@@ -258,10 +262,11 @@ if p_debug and not v_error:
     display(df_with_metadata)
 
 # %%
-# Cast all columns to string for uniform Parquet output
+# Preserve source and load timestamps while casting the remaining columns to string
 if not v_error:
     df_string = df_with_metadata.selectExpr(
-        *[f"CAST(`{c}` AS STRING) AS `{c}`" for c in df_with_metadata.columns]
+                *[f"`{c}`" if c in ("m_source_dttm", "m_loaded_at_dttm")
+                    else f"CAST(`{c}` AS STRING) AS `{c}`" for c in df_with_metadata.columns]
     )
     display(df_string) 
     
@@ -313,6 +318,7 @@ if not v_error:
     
     (df_string.write
      .format("delta")
+        .option("mergeSchema", "true")
      .mode("overwrite")
      # .partitionBy("m_valid_dt") 
      .saveAsTable(v_out_table_name))
