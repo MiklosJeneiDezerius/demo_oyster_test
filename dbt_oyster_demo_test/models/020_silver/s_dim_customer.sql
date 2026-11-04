@@ -37,7 +37,7 @@ customer_versions AS (
         s.[StateRegion],
         s.[PostalCode],
         s.[Country],
-        COALESCE(NULLIF(TRIM(t.[TypeName]), ''), 'Individual') AS [CustomerType],
+        COALESCE(NULLIF(TRIM(t.[type_nm]), ''), 'Individual') AS [CustomerType],
         CASE
             WHEN s.[VersionNumber] = 1 THEN CAST('1900-01-01 00:00:00.000000' AS DATETIME2(6))
             ELSE s.[SnapshotValidFromTS]
@@ -45,7 +45,7 @@ customer_versions AS (
         s.[ValidToTS]
     FROM snapshot_records s
     LEFT JOIN {{ ref('b_oys_customer_type') }} t
-        ON s.[CustomerTypeID] = t.[CustomerTypeID]
+        ON s.[CustomerTypeID] = t.[customer_type_id]
 )
 SELECT
     CONVERT(
@@ -55,23 +55,23 @@ SELECT
             CONCAT(CAST([CustomerID] AS VARCHAR(50)), '|', CONVERT(VARCHAR(50), [ValidFromTS], 121))
         ),
         2
-    ) AS [CustomerSK],
-    [CustomerID],
-    [FirstName],
-    [LastName],
-    CONCAT([FirstName], ' ', [LastName]) AS [FullName],
-    [TaxID],
-    [CustomerType],
-    [BirthDate],
-    [AddressLine1],
-    [City],
-    [StateRegion],
-    [PostalCode],
-    [Country],
-    [ValidFromTS],
-    [ValidToTS],
+    ) AS [s_dim_customer_sk],
+    [CustomerID] AS [customer_id],
+    [FirstName] AS [first_nm],
+    [LastName] AS [last_nm],
+    CONCAT([FirstName], ' ', [LastName]) AS [full_nm],
+    [TaxID] AS [tax_id],
+    [CustomerType] AS [customer_type_nm],
+    [BirthDate] AS [birth_dt],
+    [AddressLine1] AS [address_line_1_txt],
+    [City] AS [city_nm],
+    [StateRegion] AS [state_region_nm],
+    [PostalCode] AS [postal_cd],
+    [Country] AS [country_nm],
+    [ValidFromTS] AS [valid_from_dttm],
+    [ValidToTS] AS [valid_to_dttm],
     CASE
         WHEN [ValidToTS] >= CAST('9999-12-31 00:00:00.000000' AS DATETIME2(6)) THEN 1
         ELSE 0
-    END AS [IsCurrentVersion]
+    END AS [is_current_version_flag]
 FROM customer_versions

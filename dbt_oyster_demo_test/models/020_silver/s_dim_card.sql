@@ -22,27 +22,27 @@ adjusted_timestamps AS (
             ELSE s.OriginalValidFromTS
         END AS [ValidFromTS]
     FROM snapshot_source s
-    LEFT JOIN {{ ref('b_oys_card_tier') }} t ON s.CardTierID = t.CardTierID
+    LEFT JOIN {{ ref('b_oys_card_tier') }} t ON s.CardTierID = t.card_tier_id
 )
 
 SELECT 
     -- Version-specific compound surrogate key using the baseline-adjusted ValidFromTS
-    CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', CONCAT(CAST(s.CardID AS VARCHAR(50)), '_', CAST(s.ValidFromTS AS VARCHAR(50)))), 2) AS [CardSK],
+    CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', CONCAT(CAST(s.CardID AS VARCHAR(50)), '_', CAST(s.ValidFromTS AS VARCHAR(50)))), 2) AS [s_dim_card_sk],
     
     -- Restored structural account surrogate key join target
-    CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', CAST(s.AccountID AS VARCHAR(50))), 2) AS [AccountSK],
+    CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', CAST(s.AccountID AS VARCHAR(50))), 2) AS [s_dim_account_sk],
     
-    s.CardID,
-    s.AccountID,
-    TRIM(s.CardNumber) AS [CardNumber],
-    COALESCE(TRIM(t.[TierName]), 'Standard') AS [CardTier],
-    TRIM(s.Status) AS [CardStatus],
-    CAST(s.ExpiryDate AS DATE) AS [ExpiryDate],
-    s.ValidFromTS,
-    s.ValidToTS,
+    s.CardID AS [card_id],
+    s.AccountID AS [account_id],
+    TRIM(s.CardNumber) AS [card_number_txt],
+    COALESCE(TRIM(t.[tier_nm]), 'Standard') AS [card_tier_nm],
+    TRIM(s.Status) AS [card_status_cd],
+    CAST(s.ExpiryDate AS DATE) AS [expiry_dt],
+    s.ValidFromTS AS [valid_from_dttm],
+    s.ValidToTS AS [valid_to_dttm],
     CASE 
         WHEN s.ValidToTS >= CAST('9999-12-31 00:00:00.000000' AS DATETIME2(6)) THEN 1 
         ELSE 0 
-    END AS [IsCurrentVersion]
+    END AS [is_current_version_flag]
 FROM adjusted_timestamps s
-LEFT JOIN {{ ref('b_oys_card_tier') }} t ON s.CardTierID = t.CardTierID
+LEFT JOIN {{ ref('b_oys_card_tier') }} t ON s.CardTierID = t.card_tier_id

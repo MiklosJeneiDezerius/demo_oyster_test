@@ -5,10 +5,10 @@
 
 WITH date_spine AS (
     SELECT DISTINCT 
-        [DateSK],
-        [FullDate]
+        [s_dim_date_sk] AS [DateSK],
+        [full_dt] AS [FullDate]
     FROM {{ ref('s_dim_date') }}
-    WHERE [FullDate] BETWEEN
+    WHERE [full_dt] BETWEEN
     DATEADD(day, -29, CAST('2025-01-01' AS DATE))
     AND CAST(GETDATE() AS DATE)
 ),
@@ -16,7 +16,7 @@ WITH date_spine AS (
 -- Isolate unique accounts using historical snapshot grains
 active_accounts AS (
     SELECT DISTINCT
-        [AccountID]
+        [account_id] AS [AccountID]
     FROM {{ ref('s_dim_account') }}
 ),
 
@@ -38,28 +38,33 @@ daily_account_spine AS (
 -- Point-in-time dimension slice tracking references
 accounts AS (
     SELECT
-        [AccountSK],
-        [AccountID],
-        [CustomerID],
-        [CustomerSK]
+        [s_dim_account_sk] AS [AccountSK],
+        [account_id] AS [AccountID],
+        [customer_id] AS [CustomerID],
+        [s_dim_customer_sk] AS [CustomerSK]
     FROM {{ ref('s_dim_account') }}
 ),
 
 historical_card_states AS (
     SELECT 
-        [AccountSK], [CardSK], [CardTier], [CardStatus], [ValidFromTS], [ValidToTS]
+        [s_dim_account_sk] AS [AccountSK],
+        [s_dim_card_sk] AS [CardSK],
+        [card_tier_nm] AS [CardTier],
+        [card_status_cd] AS [CardStatus],
+        [valid_from_dttm] AS [ValidFromTS],
+        [valid_to_dttm] AS [ValidToTS]
     FROM {{ ref('s_dim_card') }}
 ),
 
 -- Roll up daily approved transaction ledger entries
 daily_transactions AS (
     SELECT 
-        st.[AccountSK],
-        CAST(st.[TransactionTimestamp] AS DATE) AS [TransactionDate],
-        SUM(st.[Amount]) AS [DailySpendAmount]
+        st.[s_dim_account_sk] AS [AccountSK],
+        CAST(st.[transaction_dttm] AS DATE) AS [TransactionDate],
+        SUM(st.[transaction_amt]) AS [DailySpendAmount]
     FROM {{ ref('s_fct_transaction') }} st
-    WHERE st.[TransactionStatus] = 'Approved'
-    GROUP BY st.[AccountSK], CAST(st.[TransactionTimestamp] AS DATE)
+    WHERE st.[transaction_status_cd] = 'Approved'
+    GROUP BY st.[s_dim_account_sk], CAST(st.[transaction_dttm] AS DATE)
 ),
 
 -- Resolve point-in-time record status slices and compute windows
@@ -69,7 +74,7 @@ rolling_spend_calculation AS (
         s.[FullDate],
         s.[AccountID],
         da.[AccountSK],
-        cu.[CustomerSK],
+        cu.[s_dim_customer_sk] AS [CustomerSK],
         dc.[CardSK],
         COALESCE(dc.[CardTier], 'Standard') AS [ActualCardTier],
         COALESCE(t.[DailySpendAmount], 0) AS [DailySpendAmount],
@@ -85,9 +90,9 @@ rolling_spend_calculation AS (
         ON s.[AccountID] = da.[AccountID]
 
     LEFT JOIN {{ ref('s_dim_customer') }} cu
-        ON da.[CustomerID] = cu.[CustomerID]
-        AND cu.[ValidFromTS] < s.[NextDayStartTS]
-        AND cu.[ValidToTS] >= s.[NextDayStartTS]
+        ON da.[CustomerID] = cu.[customer_id]
+        AND cu.[valid_from_dttm] < s.[NextDayStartTS]
+        AND cu.[valid_to_dttm] >= s.[NextDayStartTS]
         
     LEFT JOIN daily_transactions t 
         ON da.[AccountSK] = t.[AccountSK] 
@@ -103,37 +108,37 @@ SELECT
     -- Master compound hash key to isolate daily unique window state rows
     CONVERT(VARCHAR(64), HASHBYTES('SHA2_256', 
         CONCAT(CAST([DateSK] AS VARCHAR(20)), '_', CAST([AccountID] AS VARCHAR(50)))
-    ), 2) AS [SpendSnapshotSK],
+    ), 2) AS [g_fct_periodic_spend_snapshot_sk],
     
-    [DateSK],
-    [FullDate] AS [SnapshotDate],
-    [AccountSK],
-    [AccountID],
-    [CustomerSK],
-    [CardSK],
-    [ActualCardTier],
-    [Rolling30DaySpend],
+    [DateSK] AS [s_dim_date_sk],
+    [FullDate] AS [snapshot_dt],
+    [AccountSK] AS [s_dim_account_sk],
+    [AccountID] AS [account_id],
+    [CustomerSK] AS [s_dim_customer_sk],
+    [CardSK] AS [s_dim_card_sk],
+    [ActualCardTier] AS [actual_card_tier_nm],
+    [Rolling30DaySpend] AS [rolling_30_day_spend_amt],
     
     -- Business logic evaluation rules mapping account status tiers
     CASE 
         WHEN [Rolling30DaySpend] >= 5000.00 THEN 'Platinum'
         WHEN [Rolling30DaySpend] >= 2000.00 THEN 'Gold'
         ELSE 'Standard'
-    END AS [CalculatedSpendingTier],
+    END AS [calculated_spending_tier_nm],
     
     -- Evaluate tier upgrade eligibility parameters
     CASE 
         WHEN [Rolling30DaySpend] >= 5000.00 AND [ActualCardTier] IN ('Standard', 'Gold') THEN 1
         WHEN [Rolling30DaySpend] >= 2000.00 AND [ActualCardTier] = 'Standard' THEN 1
         ELSE 0 
-    END AS [IsUpgradeCandidate],
+    END AS [is_upgrade_candidate_flag],
     
     -- Flag risk anomalies (High-tier asset card matching low active spend velocity)
     CASE 
         WHEN [ActualCardTier] = 'Platinum' AND [Rolling30DaySpend] < 5000.00 THEN 1
         WHEN [ActualCardTier] = 'Gold' AND [Rolling30DaySpend] < 2000.00 THEN 1
         ELSE 0 
-    END AS [IsLowSpendPremiumAnomaly],
+    END AS [is_low_spend_premium_anomaly_flag],
     
     -- Governance lineage alignment tracking evaluations
     CASE 
@@ -141,8 +146,8 @@ SELECT
         WHEN [Rolling30DaySpend] >= 2000.00 AND [Rolling30DaySpend] < 5000.00 AND [ActualCardTier] = 'Gold' THEN 'Aligned'
         WHEN [Rolling30DaySpend] < 2000.00 AND [ActualCardTier] = 'Standard' THEN 'Aligned'
         ELSE 'Misaligned'
-    END AS [AlignmentStatusFlag],
+    END AS [alignment_status_cd],
     
-    CAST(GETDATE() AS DATETIME2(6)) AS [SnapshotMaterializedTS]
+    CAST(GETDATE() AS DATETIME2(6)) AS [snapshot_materialized_dttm]
 FROM rolling_spend_calculation
 WHERE [FullDate] >= CAST('2025-01-01' AS DATE);

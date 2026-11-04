@@ -1,18 +1,18 @@
 CREATE TABLE [oystr_gold].[g_fct_periodic_spend_snapshot] (
-    [SpendSnapshotSK]          VARCHAR (64)    NULL,
-    [DateSK]                   INT             NULL,
-    [SnapshotDate]             DATE            NULL,
-    [AccountSK]                VARCHAR (64)    NULL,
-    [AccountID]                VARCHAR (8000)  NULL,
-    [CustomerSK]               VARCHAR (64)    NULL,
-    [CardSK]                   VARCHAR (64)    NULL,
-    [ActualCardTier]           VARCHAR (8000)  NULL,
-    [Rolling30DaySpend]        DECIMAL (38, 4) NULL,
-    [CalculatedSpendingTier]   VARCHAR (8)     NOT NULL,
-    [IsUpgradeCandidate]       INT             NOT NULL,
-    [IsLowSpendPremiumAnomaly] INT             NOT NULL,
-    [AlignmentStatusFlag]      VARCHAR (10)    NOT NULL,
-    [SnapshotMaterializedTS]   DATETIME2 (6)   NULL
+    [g_fct_periodic_spend_snapshot_sk] VARCHAR (64) NULL,
+    [s_dim_date_sk] INT NULL,
+    [snapshot_dt] DATE NULL,
+    [s_dim_account_sk] VARCHAR (64) NULL,
+    [account_id] VARCHAR (8000) NULL,
+    [s_dim_customer_sk] VARCHAR (64) NULL,
+    [s_dim_card_sk] VARCHAR (64) NULL,
+    [actual_card_tier_nm] VARCHAR (8000) NULL,
+    [rolling_30_day_spend_amt] DECIMAL (38, 4) NULL,
+    [calculated_spending_tier_nm] VARCHAR (8) NOT NULL,
+    [is_upgrade_candidate_flag] INT NOT NULL,
+    [is_low_spend_premium_anomaly_flag] INT NOT NULL,
+    [alignment_status_cd] VARCHAR (10) NOT NULL,
+    [snapshot_materialized_dttm] DATETIME2 (6) NULL
 );
 
 

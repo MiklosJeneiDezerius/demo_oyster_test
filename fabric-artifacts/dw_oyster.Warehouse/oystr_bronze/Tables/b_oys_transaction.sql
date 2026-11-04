@@ -1,11 +1,11 @@
 CREATE TABLE [oystr_bronze].[b_oys_transaction] (
-    [TransactionID]       VARCHAR (8000)  NULL,
-    [AccountID]           VARCHAR (8000)  NULL,
-    [Amount]              DECIMAL (18, 4) NULL,
-    [transaction_at]      DATETIME2 (6)   NULL,
-    [Counterparty]        VARCHAR (8000)  NULL,
-    [TransactionStatusID] VARCHAR (8000)  NULL,
-    [IngestedTS]          DATETIME2 (6)   NULL
+    [transaction_id] VARCHAR (8000) NULL,
+    [account_id] VARCHAR (8000) NULL,
+    [transaction_amt] DECIMAL (18, 4) NULL,
+    [transaction_dttm] DATETIME2 (6) NULL,
+    [counterparty_nm] VARCHAR (8000) NULL,
+    [transaction_status_id] VARCHAR (8000) NULL,
+    [ingested_dttm] DATETIME2 (6) NULL
 );
 
 

@@ -1,11 +1,11 @@
 CREATE TABLE [oystr_bronze].[b_oys_account] (
-    [AccountID]     VARCHAR (8000)  NULL,
-    [CustomerID]    VARCHAR (8000)  NULL,
-    [AccountNumber] VARCHAR (8000)  NULL,
-    [AccountTypeID] VARCHAR (8000)  NULL,
-    [Balance]       DECIMAL (18, 4) NULL,
-    [CurrencyID]    VARCHAR (8000)  NULL,
-    [IngestedTS]    DATETIME2 (6)   NULL
+    [account_id] VARCHAR (8000) NULL,
+    [customer_id] VARCHAR (8000) NULL,
+    [account_number_txt] VARCHAR (8000) NULL,
+    [account_type_id] VARCHAR (8000) NULL,
+    [balance_amt] DECIMAL (18, 4) NULL,
+    [currency_id] VARCHAR (8000) NULL,
+    [ingested_dttm] DATETIME2 (6) NULL
 );
 
 

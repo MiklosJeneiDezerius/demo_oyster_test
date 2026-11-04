@@ -1,11 +1,11 @@
 CREATE TABLE [oystr_bronze].[b_oys_debit_card] (
-    [CardID]     VARCHAR (8000) NULL,
-    [AccountID]  VARCHAR (8000) NULL,
-    [CardNumber] VARCHAR (8000) NULL,
-    [CardTierID] VARCHAR (8000) NULL,
-    [Status]     VARCHAR (8000) NULL,
-    [ExpiryDate] VARCHAR (8000) NULL,
-    [IngestedTS] DATETIME2 (6)  NULL
+    [card_id] VARCHAR (8000) NULL,
+    [account_id] VARCHAR (8000) NULL,
+    [card_number_txt] VARCHAR (8000) NULL,
+    [card_tier_id] VARCHAR (8000) NULL,
+    [card_status_cd] VARCHAR (8000) NULL,
+    [expiry_dt] VARCHAR (8000) NULL,
+    [ingested_dttm] DATETIME2 (6) NULL
 );
 
 

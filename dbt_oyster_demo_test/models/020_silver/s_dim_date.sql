@@ -27,29 +27,29 @@ DateSpine AS (
 
 SELECT
     -- Surrogate Key: Smart Date Key format (YYYYMMDD) as an integer
-    CAST(FORMAT(CalendarDate, 'yyyyMMdd') AS INT) AS DateSK,
+    CAST(FORMAT(CalendarDate, 'yyyyMMdd') AS INT) AS s_dim_date_sk,
     
-    CalendarDate AS FullDate,
-    DATEPART(year, CalendarDate) AS CalendarYear,
-    DATEPART(quarter, CalendarDate) AS CalendarQuarter,
-    CONCAT('Q', DATEPART(quarter, CalendarDate)) AS CalendarQuarterName,
-    DATEPART(month, CalendarDate) AS MonthNumberOfYear,
-    CAST(FORMAT(CalendarDate, 'MMMM') AS VARCHAR(50)) AS MonthName,
-    CAST(FORMAT(CalendarDate, 'MMM') AS VARCHAR(50)) AS MonthShortName,
-    DATEPART(week, CalendarDate) AS WeekNumberOfYear,
-    DATEPART(day, CalendarDate) AS DayNumberOfMonth,
-    DATEPART(dayofyear, CalendarDate) AS DayNumberOfYear,
-    DATEPART(weekday, CalendarDate) AS DayNumberOfWeek,
-    CAST(FORMAT(CalendarDate, 'dddd') AS VARCHAR(50)) AS DayName,
-    CAST(FORMAT(CalendarDate, 'ddd') AS VARCHAR(50)) AS DayShortName,
+    CalendarDate AS full_dt,
+    DATEPART(year, CalendarDate) AS calendar_year_num,
+    DATEPART(quarter, CalendarDate) AS calendar_quarter_num,
+    CONCAT('Q', DATEPART(quarter, CalendarDate)) AS calendar_quarter_nm,
+    DATEPART(month, CalendarDate) AS month_of_year_num,
+    CAST(FORMAT(CalendarDate, 'MMMM') AS VARCHAR(50)) AS month_nm,
+    CAST(FORMAT(CalendarDate, 'MMM') AS VARCHAR(50)) AS month_short_nm,
+    DATEPART(week, CalendarDate) AS week_of_year_num,
+    DATEPART(day, CalendarDate) AS day_of_month_num,
+    DATEPART(dayofyear, CalendarDate) AS day_of_year_num,
+    DATEPART(weekday, CalendarDate) AS day_of_week_num,
+    CAST(FORMAT(CalendarDate, 'dddd') AS VARCHAR(50)) AS day_nm,
+    CAST(FORMAT(CalendarDate, 'ddd') AS VARCHAR(50)) AS day_short_nm,
     
     -- Business Flags
     CASE 
         WHEN DATEPART(weekday, CalendarDate) IN (1, 7) THEN 1 
         ELSE 0 
-    END AS IsWeekend,
+    END AS is_weekend_flag,
     
     -- Year-Month string identifier (YYYY-MM)
-    CAST(FORMAT(CalendarDate, 'yyyy-MM') AS VARCHAR(7)) AS YearMonthStr
+    CAST(FORMAT(CalendarDate, 'yyyy-MM') AS VARCHAR(7)) AS year_month_cd
 
 FROM DateSpine

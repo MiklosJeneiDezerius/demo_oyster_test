@@ -1,22 +1,184 @@
 version: 2
 
 models:
-  - name: s_dim_customer
-    description: "Cleaned customer profile dimensions hosting unmasked analytics keys."
+  - name: ga_dim_card
+    description: "Current Gold cards with snake_case physical columns. Semantic model mappings preserve existing report-facing names."
     columns:
-      - name: CustomerSK
+      - name: ga_dim_card_sk
+        tests:
+          - unique
+          - not_null
+      - name: card_id
+        tests:
+          - unique
+          - not_null
+
+  - name: g_dim_date
+    description: "Gold calendar with snake_case physical columns. Semantic model mappings preserve existing report-facing names."
+    columns:
+      - name: g_dim_date_sk
+        tests:
+          - unique
+          - not_null
+      - name: full_dt
+        tests:
+          - unique
+          - not_null
+
+  - name: ga_dim_customer
+    description: "Current Gold customers with snake_case physical columns. Semantic model mappings preserve existing report-facing names."
+    columns:
+      - name: ga_dim_customer_sk
+        tests:
+          - unique
+          - not_null
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: warn_expired_debit_cards
+    description: "Diagnostic rows for expired cards, exposing card_id, card_number_txt, and card_status_cd."
+
+  - name: fail_transactions_without_accountid
+    description: "Diagnostic rows for transactions missing account_id, exposing transaction_id, transaction_amt, and transaction_dttm."
+
+  - name: b_oys_customer_address
+    description: "Source customer addresses with snake_case columns. Snapshot input aliases preserve the existing history schema."
+    columns:
+      - name: address_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_debit_card
+    description: "Source debit cards with snake_case columns; expiry_dt retains the source text type until Silver conversion. Snapshot input aliases preserve the existing history schema."
+    columns:
+      - name: card_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_customer
+    description: "Source customers with snake_case columns; birth_dt retains the source text type until Silver conversion. Snapshot input aliases preserve the existing history schema."
+    columns:
+      - name: customer_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_customer_type
+    description: "Source customer types with customer_type_id, type_nm, and ingested_dttm."
+    columns:
+      - name: customer_type_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_transaction
+    description: "Source transactions with snake_case identifiers, transaction_amt, transaction_dttm, and ingested_dttm."
+    columns:
+      - name: transaction_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_transaction_status
+    description: "Source transaction statuses with transaction_status_id, status_nm, and ingested_dttm."
+    columns:
+      - name: transaction_status_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_currency
+    description: "Source currencies with currency_id, currency_cd, and ingested_dttm."
+    columns:
+      - name: currency_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_card_tier
+    description: "Source card tiers with card_tier_id, tier_nm, and ingested_dttm."
+    columns:
+      - name: card_tier_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_account
+    description: "Source accounts with snake_case identifiers, textual account numbers, balance_amt, and ingested_dttm."
+    columns:
+      - name: account_id
+        tests:
+          - unique
+          - not_null
+
+  - name: b_oys_account_type
+    description: "Source account types with account_type_id, type_nm, and ingested_dttm."
+    columns:
+      - name: account_type_id
+        tests:
+          - unique
+          - not_null
+
+  - name: s_dim_date
+    description: "Calendar dimension with snake_case columns; s_dim_date_sk retains the integer YYYYMMDD date key."
+    columns:
+      - name: s_dim_date_sk
+        tests:
+          - unique
+          - not_null
+      - name: full_dt
+        tests:
+          - unique
+          - not_null
+
+  - name: s_dim_account
+    description: "Account dimension with snake_case column names and dimension-qualified surrogate keys."
+    columns:
+      - name: s_dim_account_sk
+        tests:
+          - unique
+          - not_null
+      - name: account_id
+        tests:
+          - unique
+          - not_null
+
+  - name: ga_dim_account
+    description: "Gold account dimension with snake_case columns and a dimension-qualified surrogate key."
+    columns:
+      - name: ga_dim_account_sk
+        tests:
+          - unique
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('s_dim_account')
+                field: s_dim_account_sk
+      - name: account_id
+        tests:
+          - unique
+          - not_null
+
+  - name: s_dim_customer
+    description: "Historical customer dimension with snake_case columns and a dimension-qualified surrogate key."
+    columns:
+      - name: s_dim_customer_sk
         tests:
           - unique
           - not_null
 
   - name: s_dim_card
-    description: "SCD Type 2 timeline engine detailing card historical tier metadata transitions."
+    description: "Historical card dimension with snake_case columns and dimension-qualified surrogate keys."
     columns:
-      - name: CardSK
+      - name: s_dim_card_sk
         tests:
           - unique
           - not_null
-      - name: CardStatus
+      - name: card_status_cd
         description: "Dynamic lifecycle phase validation ('Active', 'Blocked', 'Expired')."
         tests:
           # Generic test to warn if any status is 'Expired'
@@ -27,34 +189,34 @@ models:
               description: "Triggers a warning if any card status is 'Expired' or outside active/blocked phases."
 
   - name: s_fct_transaction
-    description: "Atomic transactional entries mapped against historical dimension surrogate indexes."
+    description: "Atomic transactions with snake_case columns and dimension-qualified foreign keys; s_dim_date_sk identifies the transaction date."
     columns:
-      - name: TransactionSK
+      - name: s_fct_transaction_sk
         tests:
           - unique
           - not_null
-      - name: CardSK
+      - name: s_dim_card_sk
         tests:
           - not_null
   - name: g_fct_periodic_spend_snapshot
-    description: "Daily periodic snapshot engine materializing rolling 30-day cardholder analytics and spend tier deviations."
+    description: "Daily periodic snapshot with snake_case physical columns and Silver historical dimension keys. Semantic model mappings preserve existing report-facing names."
     columns:
-      - name: SpendSnapshotSK
+      - name: g_fct_periodic_spend_snapshot_sk
         description: "Primary Surrogate Key uniquely identifying an account snapshot per calendar date."
         tests:
           - unique
           - not_null
-      - name: DateSK
+      - name: s_dim_date_sk
         description: "Foreign key linkage validating calendar dimension continuity."
         tests:
           - not_null
           - relationships:
               to: ref('s_dim_date')
-              field: DateSK
-      - name: AccountSK
+              field: s_dim_date_sk
+      - name: s_dim_account_sk
         description: "Foreign key linking directly to the enterprise account record."
         tests:
           - not_null
           - relationships:
               to: ref('s_dim_account')
-              field: AccountSK
+              field: s_dim_account_sk

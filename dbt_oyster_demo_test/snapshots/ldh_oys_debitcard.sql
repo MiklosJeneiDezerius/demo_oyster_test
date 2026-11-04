@@ -16,11 +16,11 @@
 ) }}
 
 SELECT 
-    CardID,
-    AccountID,
-    CardNumber,
-    CardTierID,
-    Status,
-    ExpiryDate
+    card_id AS CardID,
+    account_id AS AccountID,
+    card_number_txt AS CardNumber,
+    card_tier_id AS CardTierID,
+    card_status_cd AS Status,
+    expiry_dt AS ExpiryDate
 FROM {{ ref('b_oys_debit_card') }}
 {% endsnapshot %}

@@ -1,20 +1,20 @@
 CREATE TABLE [oystr_silver].[s_dim_date] (
-    [DateSK]              INT          NULL,
-    [FullDate]            DATE         NULL,
-    [CalendarYear]        INT          NULL,
-    [CalendarQuarter]     INT          NULL,
-    [CalendarQuarterName] VARCHAR (13) NOT NULL,
-    [MonthNumberOfYear]   INT          NULL,
-    [MonthName]           VARCHAR (50) NULL,
-    [MonthShortName]      VARCHAR (50) NULL,
-    [WeekNumberOfYear]    INT          NULL,
-    [DayNumberOfMonth]    INT          NULL,
-    [DayNumberOfYear]     INT          NULL,
-    [DayNumberOfWeek]     INT          NULL,
-    [DayName]             VARCHAR (50) NULL,
-    [DayShortName]        VARCHAR (50) NULL,
-    [IsWeekend]           INT          NOT NULL,
-    [YearMonthStr]        VARCHAR (7)  NULL
+    [s_dim_date_sk] INT NULL,
+    [full_dt] DATE NULL,
+    [calendar_year_num] INT NULL,
+    [calendar_quarter_num] INT NULL,
+    [calendar_quarter_nm] VARCHAR (13) NOT NULL,
+    [month_of_year_num] INT NULL,
+    [month_nm] VARCHAR (50) NULL,
+    [month_short_nm] VARCHAR (50) NULL,
+    [week_of_year_num] INT NULL,
+    [day_of_month_num] INT NULL,
+    [day_of_year_num] INT NULL,
+    [day_of_week_num] INT NULL,
+    [day_nm] VARCHAR (50) NULL,
+    [day_short_nm] VARCHAR (50) NULL,
+    [is_weekend_flag] INT NOT NULL,
+    [year_month_cd] VARCHAR (7) NULL
 );
 
 

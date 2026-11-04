@@ -6,9 +6,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: 6ee0c5dd-1c8c-43f7-bb70-8ac568ab8429
-		sourceLineageTag: CustomerSK
+		sourceLineageTag: ga_dim_customer_sk
 		summarizeBy: none
-		sourceColumn: CustomerSK
+		sourceColumn: ga_dim_customer_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -16,9 +16,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 9ff86f2a-bd54-4d9f-ae8e-8e5f29379cc2
-		sourceLineageTag: CustomerID
+		sourceLineageTag: customer_id
 		summarizeBy: none
-		sourceColumn: CustomerID
+		sourceColumn: customer_id
 
 		annotation SummarizationSetBy = Automatic
 
@@ -26,9 +26,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: d4b716ba-4a14-4013-857f-7591118eb6c5
-		sourceLineageTag: FirstName
+		sourceLineageTag: first_nm
 		summarizeBy: none
-		sourceColumn: FirstName
+		sourceColumn: first_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -36,9 +36,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 2664b394-d936-4df1-84e6-0b7fc087c80b
-		sourceLineageTag: LastName
+		sourceLineageTag: last_nm
 		summarizeBy: none
-		sourceColumn: LastName
+		sourceColumn: last_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -46,9 +46,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: ec14dd8e-7825-4084-a7a0-1f79980e05e4
-		sourceLineageTag: FullName
+		sourceLineageTag: full_nm
 		summarizeBy: none
-		sourceColumn: FullName
+		sourceColumn: full_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -56,9 +56,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: a53f9b83-af85-4f1c-8d37-7b57371a1a25
-		sourceLineageTag: TaxID
+		sourceLineageTag: tax_id
 		summarizeBy: none
-		sourceColumn: TaxID
+		sourceColumn: tax_id
 
 		annotation SummarizationSetBy = Automatic
 
@@ -66,9 +66,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 46bd7524-76f3-4c6d-9a3c-8d600ac00c35
-		sourceLineageTag: CustomerType
+		sourceLineageTag: customer_type_nm
 		summarizeBy: none
-		sourceColumn: CustomerType
+		sourceColumn: customer_type_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -77,9 +77,9 @@ table ga_dim_customer
 		formatString: General Date
 		sourceProviderType: date
 		lineageTag: 8ee52b7f-dac5-4c5d-ace6-b277785d566f
-		sourceLineageTag: BirthDate
+		sourceLineageTag: birth_dt
 		summarizeBy: none
-		sourceColumn: BirthDate
+		sourceColumn: birth_dt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -87,9 +87,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: b3b62546-f39a-40f2-b10c-61cdf5c7b5ed
-		sourceLineageTag: AddressLine1
+		sourceLineageTag: address_line_1_txt
 		summarizeBy: none
-		sourceColumn: AddressLine1
+		sourceColumn: address_line_1_txt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -97,9 +97,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: e3020900-7e2e-48c7-8d0e-489d1c6365c2
-		sourceLineageTag: City
+		sourceLineageTag: city_nm
 		summarizeBy: none
-		sourceColumn: City
+		sourceColumn: city_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -107,9 +107,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 6dab3cdb-1b7a-47c5-8843-9796d2dfdcc8
-		sourceLineageTag: StateRegion
+		sourceLineageTag: state_region_nm
 		summarizeBy: none
-		sourceColumn: StateRegion
+		sourceColumn: state_region_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -117,9 +117,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 4d13d7ca-1d56-42b3-8e71-443d5f0ba466
-		sourceLineageTag: PostalCode
+		sourceLineageTag: postal_cd
 		summarizeBy: none
-		sourceColumn: PostalCode
+		sourceColumn: postal_cd
 
 		annotation SummarizationSetBy = Automatic
 
@@ -127,9 +127,9 @@ table ga_dim_customer
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 6fbe5bd7-c8f5-499f-a8f2-2c4b98c1b837
-		sourceLineageTag: Country
+		sourceLineageTag: country_nm
 		summarizeBy: none
-		sourceColumn: Country
+		sourceColumn: country_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -138,9 +138,9 @@ table ga_dim_customer
 		formatString: General Date
 		sourceProviderType: datetime2
 		lineageTag: 8ba6c4f1-f684-4a67-a26e-019c9eb0e1c3
-		sourceLineageTag: ValidFromTS
+		sourceLineageTag: valid_from_dttm
 		summarizeBy: none
-		sourceColumn: ValidFromTS
+		sourceColumn: valid_from_dttm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -149,9 +149,9 @@ table ga_dim_customer
 		formatString: General Date
 		sourceProviderType: datetime2
 		lineageTag: a7fc3df1-51e7-48d3-a712-86d5b45a65fa
-		sourceLineageTag: ValidToTS
+		sourceLineageTag: valid_to_dttm
 		summarizeBy: none
-		sourceColumn: ValidToTS
+		sourceColumn: valid_to_dttm
 
 		annotation SummarizationSetBy = Automatic
 

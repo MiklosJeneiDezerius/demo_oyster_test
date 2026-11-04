@@ -1,12 +1,12 @@
 CREATE TABLE [oystr_bronze].[b_oys_customer_address] (
-    [AddressID]    VARCHAR (8000) NULL,
-    [CustomerID]   VARCHAR (8000) NULL,
-    [AddressLine1] VARCHAR (8000) NULL,
-    [City]         VARCHAR (8000) NULL,
-    [StateRegion]  VARCHAR (8000) NULL,
-    [PostalCode]   VARCHAR (8000) NULL,
-    [Country]      VARCHAR (8000) NULL,
-    [IngestedTS]   DATETIME2 (6)  NULL
+    [address_id] VARCHAR (8000) NULL,
+    [customer_id] VARCHAR (8000) NULL,
+    [address_line_1_txt] VARCHAR (8000) NULL,
+    [city_nm] VARCHAR (8000) NULL,
+    [state_region_nm] VARCHAR (8000) NULL,
+    [postal_cd] VARCHAR (8000) NULL,
+    [country_nm] VARCHAR (8000) NULL,
+    [ingested_dttm] DATETIME2 (6) NULL
 );
 
 

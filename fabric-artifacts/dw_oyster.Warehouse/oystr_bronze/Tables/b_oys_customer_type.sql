@@ -1,7 +1,7 @@
 CREATE TABLE [oystr_bronze].[b_oys_customer_type] (
-    [CustomerTypeID] VARCHAR (8000) NULL,
-    [TypeName]       VARCHAR (8000) NULL,
-    [IngestedTS]     DATETIME2 (6)  NULL
+    [customer_type_id] VARCHAR (8000) NULL,
+    [type_nm] VARCHAR (8000) NULL,
+    [ingested_dttm] DATETIME2 (6) NULL
 );
 
 

@@ -42,30 +42,30 @@ SELECT
     c.IngestedTS
 FROM (
     SELECT
-        CustomerID,
-        TaxID,
-        CustomerTypeID,
-        FirstName,
-        LastName,
-        DoB,
-        IngestedTS,
+        customer_id AS CustomerID,
+        tax_id AS TaxID,
+        customer_type_id AS CustomerTypeID,
+        first_nm AS FirstName,
+        last_nm AS LastName,
+        birth_dt AS DoB,
+        ingested_dttm AS IngestedTS,
         ROW_NUMBER() OVER (
-            PARTITION BY CustomerID
-            ORDER BY IngestedTS DESC
+            PARTITION BY customer_id
+            ORDER BY ingested_dttm DESC
         ) AS customer_rn
     FROM {{ ref('b_oys_customer') }}
 ) c
 LEFT JOIN (
     SELECT
-        CustomerID,
-        AddressLine1,
-        City,
-        StateRegion,
-        PostalCode,
-        Country,
+        customer_id AS CustomerID,
+        address_line_1_txt AS AddressLine1,
+        city_nm AS City,
+        state_region_nm AS StateRegion,
+        postal_cd AS PostalCode,
+        country_nm AS Country,
         ROW_NUMBER() OVER (
-            PARTITION BY CustomerID
-            ORDER BY AddressID DESC
+            PARTITION BY customer_id
+            ORDER BY address_id DESC
         ) AS address_rn
     FROM {{ ref('b_oys_customer_address') }}
 ) a

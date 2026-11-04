@@ -1,5 +1,5 @@
 SELECT 
-    [CardTierID]
-    ,[TierName]
-    ,CAST(GETDATE() AS DATETIME2(6)) as IngestedTS
+    [CardTierID] AS [card_tier_id]
+    ,[TierName] AS [tier_nm]
+    ,CAST(GETDATE() AS DATETIME2(6)) AS [ingested_dttm]
 FROM {{ source('landing_delta', 'cardtier') }}

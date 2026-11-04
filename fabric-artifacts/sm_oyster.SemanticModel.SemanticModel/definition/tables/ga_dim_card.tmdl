@@ -6,9 +6,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: 98b436c7-f769-4f36-a72e-582e28c7b178
-		sourceLineageTag: CardSK
+		sourceLineageTag: ga_dim_card_sk
 		summarizeBy: none
-		sourceColumn: CardSK
+		sourceColumn: ga_dim_card_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -16,9 +16,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: cc78517d-c876-448d-bd37-5c538df4969b
-		sourceLineageTag: AccountSK
+		sourceLineageTag: s_dim_account_sk
 		summarizeBy: none
-		sourceColumn: AccountSK
+		sourceColumn: s_dim_account_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -26,9 +26,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 27ef3b58-8af1-406b-baee-87f5061e5c89
-		sourceLineageTag: CardID
+		sourceLineageTag: card_id
 		summarizeBy: none
-		sourceColumn: CardID
+		sourceColumn: card_id
 
 		annotation SummarizationSetBy = Automatic
 
@@ -36,9 +36,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 89beed1f-ab09-44b9-8d80-01554a4531d2
-		sourceLineageTag: AccountID
+		sourceLineageTag: account_id
 		summarizeBy: none
-		sourceColumn: AccountID
+		sourceColumn: account_id
 
 		annotation SummarizationSetBy = Automatic
 
@@ -46,9 +46,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 25d6c01f-c4a5-4bcf-8f32-ed96f698cc7a
-		sourceLineageTag: CardNumber
+		sourceLineageTag: card_number_txt
 		summarizeBy: none
-		sourceColumn: CardNumber
+		sourceColumn: card_number_txt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -56,9 +56,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 117fea31-91a1-4f51-9660-7ac8d869ce2e
-		sourceLineageTag: CardTier
+		sourceLineageTag: card_tier_nm
 		summarizeBy: none
-		sourceColumn: CardTier
+		sourceColumn: card_tier_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -66,9 +66,9 @@ table ga_dim_card
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: b0ebf24e-e9ba-4893-b546-0ba37a80d889
-		sourceLineageTag: CardStatus
+		sourceLineageTag: card_status_cd
 		summarizeBy: none
-		sourceColumn: CardStatus
+		sourceColumn: card_status_cd
 
 		annotation SummarizationSetBy = Automatic
 
@@ -77,9 +77,9 @@ table ga_dim_card
 		formatString: General Date
 		sourceProviderType: date
 		lineageTag: e2c92bd6-2bcf-433f-be44-2e03b19f9693
-		sourceLineageTag: ExpiryDate
+		sourceLineageTag: expiry_dt
 		summarizeBy: none
-		sourceColumn: ExpiryDate
+		sourceColumn: expiry_dt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -88,9 +88,9 @@ table ga_dim_card
 		formatString: General Date
 		sourceProviderType: datetime2
 		lineageTag: 14880596-8df4-469f-a001-d24dbd89610c
-		sourceLineageTag: ValidFromTS
+		sourceLineageTag: valid_from_dttm
 		summarizeBy: none
-		sourceColumn: ValidFromTS
+		sourceColumn: valid_from_dttm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -99,9 +99,9 @@ table ga_dim_card
 		formatString: General Date
 		sourceProviderType: datetime2
 		lineageTag: a5dd7d20-0215-49a2-acab-eecf62ce6d8d
-		sourceLineageTag: ValidToTS
+		sourceLineageTag: valid_to_dttm
 		summarizeBy: none
-		sourceColumn: ValidToTS
+		sourceColumn: valid_to_dttm
 
 		annotation SummarizationSetBy = Automatic
 

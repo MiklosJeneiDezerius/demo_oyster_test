@@ -62,9 +62,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: 15e751ee-995c-4c4c-948a-6e8ec896a8cd
-		sourceLineageTag: SpendSnapshotSK
+		sourceLineageTag: g_fct_periodic_spend_snapshot_sk
 		summarizeBy: none
-		sourceColumn: SpendSnapshotSK
+		sourceColumn: g_fct_periodic_spend_snapshot_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -73,9 +73,9 @@ table g_fct_periodic_spend_snapshot
 		formatString: 0
 		sourceProviderType: int
 		lineageTag: 4cb477f4-2af1-4535-9787-522e62761ac6
-		sourceLineageTag: DateSK
+		sourceLineageTag: s_dim_date_sk
 		summarizeBy: none
-		sourceColumn: DateSK
+		sourceColumn: s_dim_date_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -84,9 +84,9 @@ table g_fct_periodic_spend_snapshot
 		formatString: General Date
 		sourceProviderType: date
 		lineageTag: bc1407c1-cb82-4830-a8cc-c75899a3cf1c
-		sourceLineageTag: SnapshotDate
+		sourceLineageTag: snapshot_dt
 		summarizeBy: none
-		sourceColumn: SnapshotDate
+		sourceColumn: snapshot_dt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -94,9 +94,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: 1d806f88-236a-4f3f-abe4-958c2b18bd3a
-		sourceLineageTag: AccountSK
+		sourceLineageTag: s_dim_account_sk
 		summarizeBy: none
-		sourceColumn: AccountSK
+		sourceColumn: s_dim_account_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -104,9 +104,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 95529211-f2f0-45e1-b1aa-85f451432193
-		sourceLineageTag: AccountID
+		sourceLineageTag: account_id
 		summarizeBy: none
-		sourceColumn: AccountID
+		sourceColumn: account_id
 
 		annotation SummarizationSetBy = Automatic
 
@@ -114,9 +114,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: f1d0175d-cb6b-49e5-827c-978401858cff
-		sourceLineageTag: CustomerSK
+		sourceLineageTag: s_dim_customer_sk
 		summarizeBy: none
-		sourceColumn: CustomerSK
+		sourceColumn: s_dim_customer_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -124,9 +124,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(64)
 		lineageTag: b9a4eef2-2a35-4371-9413-a2d11b9bf636
-		sourceLineageTag: CardSK
+		sourceLineageTag: s_dim_card_sk
 		summarizeBy: none
-		sourceColumn: CardSK
+		sourceColumn: s_dim_card_sk
 
 		annotation SummarizationSetBy = Automatic
 
@@ -134,9 +134,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(8000)
 		lineageTag: 1022809b-376e-4d2c-bffb-81dd28df8119
-		sourceLineageTag: ActualCardTier
+		sourceLineageTag: actual_card_tier_nm
 		summarizeBy: none
-		sourceColumn: ActualCardTier
+		sourceColumn: actual_card_tier_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -144,9 +144,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: double
 		sourceProviderType: decimal(38, 4)
 		lineageTag: 3eb37d68-688d-4e82-a721-8ced0f987b68
-		sourceLineageTag: Rolling30DaySpend
+		sourceLineageTag: rolling_30_day_spend_amt
 		summarizeBy: sum
-		sourceColumn: Rolling30DaySpend
+		sourceColumn: rolling_30_day_spend_amt
 
 		annotation SummarizationSetBy = Automatic
 
@@ -156,9 +156,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(8)
 		lineageTag: 9f4583ac-5f6b-4201-b924-d7c2e48dc60d
-		sourceLineageTag: CalculatedSpendingTier
+		sourceLineageTag: calculated_spending_tier_nm
 		summarizeBy: none
-		sourceColumn: CalculatedSpendingTier
+		sourceColumn: calculated_spending_tier_nm
 
 		annotation SummarizationSetBy = Automatic
 
@@ -167,9 +167,9 @@ table g_fct_periodic_spend_snapshot
 		formatString: 0
 		sourceProviderType: int
 		lineageTag: 0afada5e-83be-4997-affc-c57f57402531
-		sourceLineageTag: IsUpgradeCandidate
+		sourceLineageTag: is_upgrade_candidate_flag
 		summarizeBy: sum
-		sourceColumn: IsUpgradeCandidate
+		sourceColumn: is_upgrade_candidate_flag
 
 		annotation SummarizationSetBy = Automatic
 
@@ -178,9 +178,9 @@ table g_fct_periodic_spend_snapshot
 		formatString: 0
 		sourceProviderType: int
 		lineageTag: 0582f784-e245-4803-b0a4-e65c96b464f9
-		sourceLineageTag: IsLowSpendPremiumAnomaly
+		sourceLineageTag: is_low_spend_premium_anomaly_flag
 		summarizeBy: sum
-		sourceColumn: IsLowSpendPremiumAnomaly
+		sourceColumn: is_low_spend_premium_anomaly_flag
 
 		annotation SummarizationSetBy = Automatic
 
@@ -188,9 +188,9 @@ table g_fct_periodic_spend_snapshot
 		dataType: string
 		sourceProviderType: varchar(10)
 		lineageTag: 693f3c21-e794-4004-a6a2-5ae5f88b701e
-		sourceLineageTag: AlignmentStatusFlag
+		sourceLineageTag: alignment_status_cd
 		summarizeBy: none
-		sourceColumn: AlignmentStatusFlag
+		sourceColumn: alignment_status_cd
 
 		annotation SummarizationSetBy = Automatic
 
@@ -199,9 +199,9 @@ table g_fct_periodic_spend_snapshot
 		formatString: General Date
 		sourceProviderType: datetime2
 		lineageTag: 4d5638b9-a190-495c-88bb-bb31d2838022
-		sourceLineageTag: SnapshotMaterializedTS
+		sourceLineageTag: snapshot_materialized_dttm
 		summarizeBy: none
-		sourceColumn: SnapshotMaterializedTS
+		sourceColumn: snapshot_materialized_dttm
 
 		annotation SummarizationSetBy = Automatic
 
