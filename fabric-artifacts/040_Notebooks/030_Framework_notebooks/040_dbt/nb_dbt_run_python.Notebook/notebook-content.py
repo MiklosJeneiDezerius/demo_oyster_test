@@ -1,24 +1,9 @@
 # Fabric notebook source
 
-# METADATA ********************
-
-# META {
-# META   "kernel_info": {
-# META     "name": "synapse_pyspark"
-# META   }
-# META }
 
 # PARAMETERS CELL ********************
 
 # Fabric notebook source
-
-# METADATA ********************
-
-# META {
-# META   "kernel_info": {
-# META     "name": "synapse_pyspark"
-# META   }
-# META }
 
 # MARKDOWN ********************
 
@@ -30,8 +15,7 @@
 # That identity needs Warehouse DDL/DML permissions and SELECT access to the Lakehouse SQL sources.
 # No service principal secrets or Key Vault access are required for this user-token runner.
 # Repository cloning without a GitHub credential requires a public repository.
-#
-# > If the issued user token is not accepted by the Warehouse SQL endpoint, `dbt debug` stops with an authentication/authorization error.
+# # > If the issued user token is not accepted by the Warehouse SQL endpoint, `dbt debug` stops with an authentication/authorization error.
 
 
 # PARAMETERS CELL ********************
@@ -195,12 +179,4 @@ print('dbt execution completed successfully.')
 # META {
 # META   "language": "python",
 # META   "language_group": "jupyter_python"
-# META }
-
-
-# METADATA ********************
-
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
 # META }
