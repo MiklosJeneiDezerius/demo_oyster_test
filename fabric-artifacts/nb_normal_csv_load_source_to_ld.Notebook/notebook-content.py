@@ -207,9 +207,9 @@ def read_datev_csv_multi(file_path_pattern, table_name):
                 parts += [""] * (num_cols - len(parts))
             if len(parts) > num_cols:
                 parts = parts[:num_cols]
-                all_rows.append(Row(**dict(zip(full_header, [source_timestamp, path] + parts))))
+            all_rows.append(Row(**dict(zip(full_header, [source_timestamp, path] + parts))))
 
-            df = spark.createDataFrame(all_rows).withColumn("m_source_dttm", col("m_source_dttm").cast("timestamp"))
+    df = spark.createDataFrame(all_rows).withColumn("m_source_dttm", col("m_source_dttm").cast("timestamp"))
     return df
 
 # %%
