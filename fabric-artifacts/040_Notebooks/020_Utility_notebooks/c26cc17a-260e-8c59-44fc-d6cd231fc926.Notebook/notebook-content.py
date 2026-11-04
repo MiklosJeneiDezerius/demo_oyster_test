@@ -8,12 +8,12 @@
 # META   },
 # META   "dependencies": {
 # META     "lakehouse": {
-# META       "default_lakehouse": "6a5d7d27-1cff-4cc1-8128-60ab61a60ad2",
+# META       "default_lakehouse": "97d704f2-e89e-488b-b8e8-7a52ded016b7",
 # META       "default_lakehouse_name": "lh_oysterlake2",
-# META       "default_lakehouse_workspace_id": "2a3b7ca3-b1d8-4251-bada-cb2a3100cef9",
+# META       "default_lakehouse_workspace_id": "efc752a1-1a79-4121-b55e-0f8c8c172fba",
 # META       "known_lakehouses": [
 # META         {
-# META           "id": "6a5d7d27-1cff-4cc1-8128-60ab61a60ad2"
+# META           "id": "97d704f2-e89e-488b-b8e8-7a52ded016b7"
 # META         }
 # META       ]
 # META     }
