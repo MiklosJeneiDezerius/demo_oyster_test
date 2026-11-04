@@ -3,12 +3,12 @@
 WITH snapshot_source AS (
     SELECT 
         s.*,
-        s.dbt_valid_from AS OriginalValidFromTS,
-        COALESCE(s.dbt_valid_to, CAST('9999-12-31 00:00:00.000000' AS DATETIME2(6))) AS ValidToTS,
+        s.m_valid_from_dttm AS OriginalValidFromTS,
+        COALESCE(s.m_valid_to_dttm, CAST('9999-12-31 00:00:00.000000' AS DATETIME2(6))) AS ValidToTS,
         -- Identify the very first snapshot version for each individual card
         ROW_NUMBER() OVER (
             PARTITION BY s.CardID 
-            ORDER BY s.dbt_valid_from ASC
+            ORDER BY s.m_valid_from_dttm ASC
         ) AS version_num
     FROM {{ ref('ldh_oys_debitcard') }} s
 ),

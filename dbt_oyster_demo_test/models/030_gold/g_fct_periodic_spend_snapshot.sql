@@ -8,7 +8,9 @@ WITH date_spine AS (
         [DateSK],
         [FullDate]
     FROM {{ ref('s_dim_date') }}
-    WHERE [FullDate] BETWEEN '2025-01-01' AND CAST(GETDATE() AS DATE)
+    WHERE [FullDate] BETWEEN
+    DATEADD(day, -29, CAST('2025-01-01' AS DATE))
+    AND CAST(GETDATE() AS DATE)
 ),
 
 -- Isolate unique accounts using historical snapshot grains
@@ -20,19 +22,25 @@ active_accounts AS (
 
 -- Generate the daily cross-join grid matrix footprint
 daily_account_spine AS (
-    SELECT 
+    SELECT
         d.[DateSK],
         d.[FullDate],
-        a.[AccountID]
+        a.[AccountID],
+        DATEADD(
+            day,
+            1,
+            CAST(d.[FullDate] AS DATETIME2(6))
+        ) AS [NextDayStartTS]
     FROM date_spine d
     CROSS JOIN active_accounts a
 ),
 
 -- Point-in-time dimension slice tracking references
 accounts AS (
-    SELECT 
-        [AccountSK], 
-        [AccountID], 
+    SELECT
+        [AccountSK],
+        [AccountID],
+        [CustomerID],
         [CustomerSK]
     FROM {{ ref('s_dim_account') }}
 ),
@@ -61,7 +69,7 @@ rolling_spend_calculation AS (
         s.[FullDate],
         s.[AccountID],
         da.[AccountSK],
-        da.[CustomerSK],
+        cu.[CustomerSK],
         dc.[CardSK],
         COALESCE(dc.[CardTier], 'Standard') AS [ActualCardTier],
         COALESCE(t.[DailySpendAmount], 0) AS [DailySpendAmount],
@@ -75,14 +83,20 @@ rolling_spend_calculation AS (
     
     INNER JOIN accounts da
         ON s.[AccountID] = da.[AccountID]
+
+    LEFT JOIN {{ ref('s_dim_customer') }} cu
+        ON da.[CustomerID] = cu.[CustomerID]
+        AND cu.[ValidFromTS] < s.[NextDayStartTS]
+        AND cu.[ValidToTS] >= s.[NextDayStartTS]
         
     LEFT JOIN daily_transactions t 
         ON da.[AccountSK] = t.[AccountSK] 
         AND s.[FullDate] = t.[TransactionDate]
         
-    LEFT JOIN historical_card_states dc 
+    LEFT JOIN historical_card_states dc
         ON da.[AccountSK] = dc.[AccountSK]
-        AND CAST(s.[FullDate] AS DATETIME2) BETWEEN dc.[ValidFromTS] AND dc.[ValidToTS]
+        AND dc.[ValidFromTS] < s.[NextDayStartTS]
+        AND dc.[ValidToTS] >= s.[NextDayStartTS]
 )
 
 SELECT
@@ -130,4 +144,5 @@ SELECT
     END AS [AlignmentStatusFlag],
     
     CAST(GETDATE() AS DATETIME2(6)) AS [SnapshotMaterializedTS]
-FROM rolling_spend_calculation;
+FROM rolling_spend_calculation
+WHERE [FullDate] >= CAST('2025-01-01' AS DATE);

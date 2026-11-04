@@ -13,14 +13,14 @@ WITH snapshot_records AS (
         COALESCE(c.[StateRegion], 'NOT PROVIDED') AS [StateRegion],
         COALESCE(c.[PostalCode], 'NOT PROVIDED') AS [PostalCode],
         COALESCE(c.[Country], 'NOT PROVIDED') AS [Country],
-        CAST(c.[dbt_valid_from] AS DATETIME2(6)) AS [SnapshotValidFromTS],
+        CAST(c.[m_valid_from_dttm] AS DATETIME2(6)) AS [SnapshotValidFromTS],
         COALESCE(
-            CAST(c.[dbt_valid_to] AS DATETIME2(6)),
+            CAST(c.[m_valid_to_dttm] AS DATETIME2(6)),
             CAST('9999-12-31 00:00:00.000000' AS DATETIME2(6))
         ) AS [ValidToTS],
         ROW_NUMBER() OVER (
             PARTITION BY c.[CustomerID]
-            ORDER BY c.[dbt_valid_from] ASC
+            ORDER BY c.[m_valid_from_dttm] ASC
         ) AS [VersionNumber]
     FROM {{ ref('ldh_oys_customer') }} c
 ),
