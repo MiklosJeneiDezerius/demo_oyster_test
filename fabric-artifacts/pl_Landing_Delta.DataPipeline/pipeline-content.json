@@ -49,14 +49,21 @@
           "secureOutput": false
         },
         "name": "lkp_GetLoadConfig",
-        "dependsOn": []
+        "dependsOn": [
+          {
+            "activity": "Set Variable v_load_date",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
       },
       {
         "type": "ForEach",
         "typeProperties": {
           "isSequential": true,
           "items": {
-            "value": "@activity('lkp_GetLoadConfig').output.value",
+            "value": "@activity('Filter - active tables').output.Value",
             "type": "Expression"
           },
           "activities": [
@@ -67,7 +74,10 @@
                 "workspaceId": "00000000-0000-0000-0000-000000000000",
                 "parameters": {
                   "p_load_date": {
-                    "value": "20260513",
+                    "value": {
+                      "value": "@variables('v_load_date')",
+                      "type": "Expression"
+                    },
                     "type": "string"
                   },
                   "p_root_path": {
@@ -122,6 +132,44 @@
         "name": "forEach_FileLoader",
         "dependsOn": [
           {
+            "activity": "Filter - active tables",
+            "dependencyConditions": [
+              "Succeeded"
+            ]
+          }
+        ]
+      },
+      {
+        "type": "SetVariable",
+        "typeProperties": {
+          "variableName": "v_load_date",
+          "value": {
+            "value": "@if(empty(pipeline().parameters.p_load_date), formatDateTime(addDays(convertFromUtc(utcNow(), 'Central Europe Standard Time'), -1), 'yyyyMMdd'), pipeline().parameters.p_load_date)",
+            "type": "Expression"
+          }
+        },
+        "policy": {
+          "secureInput": false,
+          "secureOutput": false
+        },
+        "name": "Set Variable v_load_date",
+        "dependsOn": []
+      },
+      {
+        "type": "Filter",
+        "typeProperties": {
+          "items": {
+            "value": "@activity('lkp_GetLoadConfig').output.value",
+            "type": "Expression"
+          },
+          "condition": {
+            "value": "@equals(item().is_active, '1')",
+            "type": "Expression"
+          }
+        },
+        "name": "Filter - active tables",
+        "dependsOn": [
+          {
             "activity": "lkp_GetLoadConfig",
             "dependencyConditions": [
               "Succeeded"
@@ -129,6 +177,16 @@
           }
         ]
       }
-    ]
+    ],
+    "parameters": {
+      "p_load_date": {
+        "type": "string"
+      }
+    },
+    "variables": {
+      "v_load_date": {
+        "type": "String"
+      }
+    }
   }
 }
