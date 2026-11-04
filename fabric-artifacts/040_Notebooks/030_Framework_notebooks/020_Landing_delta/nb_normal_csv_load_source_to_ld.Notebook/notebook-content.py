@@ -23,7 +23,7 @@
 # PARAMETERS CELL ********************
 
 # %%
-p_load_date = "20260513"
+p_load_date = ""
 p_root_path = "Files/oyster/landing_raw"
 p_source_route_path = None
 p_company_cd = "oyster"
@@ -52,6 +52,7 @@ from pyspark.sql import Window
 import re
 import csv
 from io import StringIO
+
 
 # %%
 spark.conf.set("spark.sql.parquet.int96RebaseModeInRead", "LEGACY") 
