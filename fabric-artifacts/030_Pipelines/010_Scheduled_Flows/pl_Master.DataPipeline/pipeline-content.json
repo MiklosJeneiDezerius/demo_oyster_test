@@ -82,17 +82,16 @@
         ]
       },
       {
-        "type": "PBISemanticModelRefresh",
+        "type": "InvokePipeline",
         "typeProperties": {
-          "method": "POST",
-          "groupId": "2a3b7ca3-b1d8-4251-bada-cb2a3100cef9",
-          "datasetId": "f1bba241-402e-4c72-937e-a8ee45133077",
-          "commitMode": "Transactional",
+          "parameters": {},
           "waitOnCompletion": true,
-          "operationType": "SemanticModelRefresh"
+          "workspaceId": "00000000-0000-0000-0000-000000000000",
+          "pipelineId": "9fbdf7c8-20f7-9fda-474f-28e5f7c359f2",
+          "operationType": "InvokeFabricPipeline"
         },
         "externalReferences": {
-          "connection": "cbe086b5-9d49-4561-8700-5a9616c45af7"
+          "connection": "339168a1-80c8-4dfe-afc0-e1072653b1bf"
         },
         "policy": {
           "timeout": "0.12:00:00",
@@ -101,7 +100,7 @@
           "secureInput": false,
           "secureOutput": false
         },
-        "name": "Semantic model refresh1",
+        "name": "pl_Refresh_Semantic_Model",
         "dependsOn": [
           {
             "activity": "DW create and load",

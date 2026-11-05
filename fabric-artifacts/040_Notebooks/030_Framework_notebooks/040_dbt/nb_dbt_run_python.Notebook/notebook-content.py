@@ -30,8 +30,7 @@
 # No service principal secrets or Key Vault access are required for this user-token runner.
 # Repository cloning without a GitHub credential requires a public repository.
 # > If the issued user token is not accepted by the Warehouse SQL endpoint, `dbt debug` stops with an authentication/authorization error.
-#
-# If the main dbt command fails, the runner waits 30 seconds and runs `dbt retry` once for failed and skipped nodes (e.g. transient Warehouse write conflicts).
+# # If the main dbt command fails, the runner waits 30 seconds and runs `dbt retry` once for failed and skipped nodes (e.g. transient Warehouse write conflicts).
 
 
 # PARAMETERS CELL ********************

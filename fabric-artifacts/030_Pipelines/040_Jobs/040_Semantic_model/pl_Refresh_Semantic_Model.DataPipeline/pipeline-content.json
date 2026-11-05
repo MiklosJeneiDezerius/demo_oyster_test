@@ -1,0 +1,29 @@
+{
+  "properties": {
+    "activities": [
+      {
+        "name": "Semantic model refresh1",
+        "type": "PBISemanticModelRefresh",
+        "dependsOn": [],
+        "policy": {
+          "timeout": "0.12:00:00",
+          "retry": 0,
+          "retryIntervalInSeconds": 30,
+          "secureOutput": false,
+          "secureInput": false
+        },
+        "typeProperties": {
+          "method": "POST",
+          "operationType": "SemanticModelRefresh",
+          "groupId": "efc752a1-1a79-4121-b55e-0f8c8c172fba",
+          "datasetId": "e3731990-106d-45cb-a323-f1052f27fa17",
+          "waitOnCompletion": true,
+          "commitMode": "Transactional"
+        },
+        "externalReferences": {
+          "connection": "cbe086b5-9d49-4561-8700-5a9616c45af7"
+        }
+      }
+    ]
+  }
+}
