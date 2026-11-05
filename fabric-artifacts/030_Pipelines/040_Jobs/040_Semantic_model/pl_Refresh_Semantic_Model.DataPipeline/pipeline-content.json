@@ -16,7 +16,8 @@
           "method": "POST",
           "operationType": "SemanticModelRefresh",
           "groupId": "efc752a1-1a79-4121-b55e-0f8c8c172fba",
-          "datasetId": "e3731990-106d-45cb-a323-f1052f27fa17",
+          "datasetId": "1488a6d0-69fc-4788-90d5-422cb11cafb7",
+          "objects": [],
           "waitOnCompletion": true,
           "commitMode": "Transactional"
         },

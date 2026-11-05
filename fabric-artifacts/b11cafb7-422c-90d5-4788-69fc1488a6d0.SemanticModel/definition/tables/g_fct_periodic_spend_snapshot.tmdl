@@ -1,0 +1,234 @@
+table g_fct_periodic_spend_snapshot
+	lineageTag: 7eca8dea-1257-4149-9330-a11501275bc7
+	sourceLineageTag: [oystr_gold].[g_fct_periodic_spend_snapshot]
+
+	measure 'Total No. of Cards' =
+			
+			COALESCE (
+			    DISTINCTCOUNTNOBLANK (
+			        'g_fct_periodic_spend_snapshot'[s_dim_card_sk]
+			    ),
+			    0
+			)
+		formatString: 0
+		lineageTag: 85578c83-8f89-44ec-b347-911c1ef9806c
+
+		changedProperty = Name
+
+	measure 'Upgrade Candidate Cards' =
+			
+			CALCULATE (
+			    [Total No. of Cards],
+			    KEEPFILTERS (
+			        'g_fct_periodic_spend_snapshot'[is_upgrade_candidate_flag] = 1
+			    )
+			)
+		formatString: 0
+		lineageTag: 071e7394-ac9d-4eee-be18-5b5dc161c6b7
+
+		changedProperty = Name
+
+	measure 'Downgrade Candidate Cards' =
+			
+			CALCULATE (
+			    [Total No. of Cards],
+			    KEEPFILTERS (
+			        'g_fct_periodic_spend_snapshot'[is_low_spend_premium_anomaly_flag] = 1
+			    )
+			)
+		formatString: 0
+		lineageTag: feb72e30-3dc4-4342-bde9-47d579a0c7a8
+
+		changedProperty = Name
+
+	measure 'Misaligned Cards' =
+			
+			CALCULATE (
+			    [Total No. of Cards],
+			    KEEPFILTERS (
+			        'g_fct_periodic_spend_snapshot'[alignment_status_cd] = "Misaligned"
+			    )
+			)
+		formatString: 0
+		lineageTag: 0fd4a540-c693-41bf-9198-8bfc897f50c7
+
+		changedProperty = Name
+
+	measure 'Aligned Cards' =
+			
+			CALCULATE (
+			    [Total No. of Cards],
+			    KEEPFILTERS (
+			        'g_fct_periodic_spend_snapshot'[alignment_status_cd] = "Aligned"
+			    )
+			)
+		formatString: 0
+		lineageTag: c1d134b6-bef5-446a-97e8-cd9032e27ddd
+
+		changedProperty = Name
+
+	measure 'Tier Mismatch Rate' =
+			
+			DIVIDE ( [Misaligned Cards], [Total No. of Cards], 0 )
+		lineageTag: c153450f-b8bb-46af-a08e-3f7ae3a8cdd1
+
+		changedProperty = Name
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column g_fct_periodic_spend_snapshot_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 12743377-c324-4b2f-9c2e-6e00a0be632a
+		sourceLineageTag: g_fct_periodic_spend_snapshot_sk
+		summarizeBy: none
+		sourceColumn: g_fct_periodic_spend_snapshot_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_date_sk
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 894bf402-3dc7-440d-ba08-8abded5e31ba
+		sourceLineageTag: s_dim_date_sk
+		summarizeBy: none
+		sourceColumn: s_dim_date_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_dt
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: cb80677c-95b2-4fc3-909b-efcdb51ca52e
+		sourceLineageTag: snapshot_dt
+		summarizeBy: none
+		sourceColumn: snapshot_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_account_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 771d7c85-0b7d-4b59-9a5f-1de30153e26c
+		sourceLineageTag: s_dim_account_sk
+		summarizeBy: none
+		sourceColumn: s_dim_account_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 128c59e3-e20e-42b0-9378-04811878bbc8
+		sourceLineageTag: account_id
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_customer_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 8af44f3a-698b-48b3-8c04-104e8aa565ba
+		sourceLineageTag: s_dim_customer_sk
+		summarizeBy: none
+		sourceColumn: s_dim_customer_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_card_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 7ef67790-a288-483f-8dd3-1993fd5e260e
+		sourceLineageTag: s_dim_card_sk
+		summarizeBy: none
+		sourceColumn: s_dim_card_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column actual_card_tier_nm
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 37f03e1a-02d1-4228-8739-e84340e2e41b
+		sourceLineageTag: actual_card_tier_nm
+		summarizeBy: none
+		sourceColumn: actual_card_tier_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column rolling_30_day_spend_amt
+		dataType: double
+		sourceProviderType: decimal(38, 4)
+		lineageTag: 07cef14a-7a60-4ffc-8767-8cd93b311191
+		sourceLineageTag: rolling_30_day_spend_amt
+		summarizeBy: sum
+		sourceColumn: rolling_30_day_spend_amt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column calculated_spending_tier_nm
+		dataType: string
+		sourceProviderType: varchar(8)
+		lineageTag: cc4317f6-b2eb-4808-9701-f755c7710a51
+		sourceLineageTag: calculated_spending_tier_nm
+		summarizeBy: none
+		sourceColumn: calculated_spending_tier_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_upgrade_candidate_flag
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: cfc4168e-ef02-47bc-aae2-76576d0ee6e3
+		sourceLineageTag: is_upgrade_candidate_flag
+		summarizeBy: sum
+		sourceColumn: is_upgrade_candidate_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_low_spend_premium_anomaly_flag
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 6c4671f1-7948-4ca2-9094-1f5331c5f9d8
+		sourceLineageTag: is_low_spend_premium_anomaly_flag
+		summarizeBy: sum
+		sourceColumn: is_low_spend_premium_anomaly_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column alignment_status_cd
+		dataType: string
+		sourceProviderType: varchar(10)
+		lineageTag: 050298ab-1606-404a-b555-b8e7c7c0b2fd
+		sourceLineageTag: alignment_status_cd
+		summarizeBy: none
+		sourceColumn: alignment_status_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column snapshot_materialized_dttm
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: e328b650-9836-407a-a230-f222880fbc55
+		sourceLineageTag: snapshot_materialized_dttm
+		summarizeBy: none
+		sourceColumn: snapshot_materialized_dttm
+
+		annotation SummarizationSetBy = Automatic
+
+	partition g_fct_periodic_spend_snapshot = entity
+		mode: directLake
+		source
+			entityName: g_fct_periodic_spend_snapshot
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+
