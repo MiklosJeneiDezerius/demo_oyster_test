@@ -1,0 +1,7 @@
+CREATE TABLE [oystr_dq].[unique_b_oys_transaction_status_transaction_status_id] (
+    [unique_field] VARCHAR (8000) NULL,
+    [n_records]    INT            NULL
+);
+
+
+GO
