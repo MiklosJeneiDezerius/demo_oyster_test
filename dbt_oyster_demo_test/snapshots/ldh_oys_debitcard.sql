@@ -15,6 +15,9 @@
     dbt_valid_to_current="CAST('9999-12-31 00:00:00' AS DATETIME2(6))"
 ) }}
 
+-- Fabric Warehouse locks whole tables; serialize snapshots to avoid concurrent-write deadlocks.
+-- depends_on: {{ ref('ldh_oys_customer') }}
+
 SELECT 
     card_id AS CardID,
     account_id AS AccountID,

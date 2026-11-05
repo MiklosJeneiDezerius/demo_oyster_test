@@ -6,6 +6,23 @@ Try running the following commands:
 - dbt run
 - dbt test
 
+### Fabric connection
+
+The `server` in [profiles.yml](profiles.yml) must match the SQL connection
+string shown in the target Fabric Warehouse settings. The default database is
+`dw_oyster`; `DBT_DATABASE` and `DBT_TARGET` can override the database and target.
+Local runs use Azure CLI authentication.
+
+Validate the connection before building:
+
+```shell
+dbt debug --profiles-dir .
+```
+
+The Fabric runner notebook clones the configured GitHub branch and creates a
+runtime token-credential profile from this file. Local profile changes must be
+committed and pushed to that branch before a notebook run can use them.
+
 
 ### Resources:
 - Learn more about dbt [in the docs](https://docs.getdbt.com/docs/introduction)

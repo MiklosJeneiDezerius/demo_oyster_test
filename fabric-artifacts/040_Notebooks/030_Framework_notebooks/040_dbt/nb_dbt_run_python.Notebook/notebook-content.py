@@ -30,6 +30,8 @@
 # No service principal secrets or Key Vault access are required for this user-token runner.
 # Repository cloning without a GitHub credential requires a public repository.
 # > If the issued user token is not accepted by the Warehouse SQL endpoint, `dbt debug` stops with an authentication/authorization error.
+#
+# If the main dbt command fails, the runner waits 30 seconds and runs `dbt retry` once for failed and skipped nodes (e.g. transient Warehouse write conflicts).
 
 
 # PARAMETERS CELL ********************
@@ -68,6 +70,7 @@ import shutil
 import shlex
 import subprocess
 import textwrap
+import time
 from notebookutils import credentials
 
 # 1. Isolated dbt environment. No notebook-kernel restart.
@@ -184,7 +187,14 @@ def run_dbt(arguments):
 run_dbt(['debug'])
 if any(os.path.isfile(os.path.join(dbt_dir, name)) for name in ('packages.yml', 'dependencies.yml')):
     run_dbt(['deps'])
-run_dbt([dbt_command, *shlex.split(dbt_args)])
+try:
+    run_dbt([dbt_command, *shlex.split(dbt_args)])
+except subprocess.CalledProcessError:
+    # Fabric Warehouse rolls back one side of a concurrent write conflict; rerun only failed and skipped nodes once.
+    retry_delay_seconds = 30
+    print(f'dbt {dbt_command} failed. Retrying failed and skipped nodes in {retry_delay_seconds} seconds...')
+    time.sleep(retry_delay_seconds)
+    run_dbt(['retry'])
 print('dbt execution completed successfully.')
 
 
