@@ -23,6 +23,8 @@ clean-targets:         # directories to be removed by `dbt clean`
   - "dbt_packages"
 
 vars:
+  # DEMO ONLY: fixed reference date for the gold spend snapshot.
+  demo_snapshot_date: '2026-09-15'
   # Target Env Database & Schema Parameters
   target_snapshot_db: "{{ env_var('DBT_DATABASE', 'dw_oyster') }}"
   target_snapshot_schema: 'snapshots'

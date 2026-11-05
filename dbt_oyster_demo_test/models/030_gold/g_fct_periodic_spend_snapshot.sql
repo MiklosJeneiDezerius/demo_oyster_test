@@ -8,9 +8,15 @@ WITH date_spine AS (
         [s_dim_date_sk] AS [DateSK],
         [full_dt] AS [FullDate]
     FROM {{ ref('s_dim_date') }}
+    -- Original date range through the current day:
+    -- WHERE [full_dt] BETWEEN
+    -- DATEADD(day, -29, CAST('2025-01-01' AS DATE))
+    -- AND CAST(GETDATE() AS DATE)
+
+    -- DEMO ONLY: use a fixed reference date for repeatable 30-day spending.
     WHERE [full_dt] BETWEEN
-    DATEADD(day, -29, CAST('2025-01-01' AS DATE))
-    AND CAST(GETDATE() AS DATE)
+    DATEADD(day, -29, CAST('{{ var("demo_snapshot_date") }}' AS DATE))
+    AND CAST('{{ var("demo_snapshot_date") }}' AS DATE)
 ),
 
 -- Isolate unique accounts using historical snapshot grains
@@ -150,4 +156,7 @@ SELECT
     
     CAST(GETDATE() AS DATETIME2(6)) AS [snapshot_materialized_dttm]
 FROM rolling_spend_calculation
-WHERE [FullDate] >= CAST('2025-01-01' AS DATE);
+-- Original output: all daily snapshots from 2025-01-01.
+-- WHERE [FullDate] >= CAST('2025-01-01' AS DATE);
+-- DEMO ONLY: return just the fixed reference day's snapshot.
+WHERE [FullDate] = CAST('{{ var("demo_snapshot_date") }}' AS DATE);
