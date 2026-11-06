@@ -5,23 +5,23 @@
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
-# META   },
+# META   }
 # META }
 
 # CELL ********************
 
-%%configure
-{
-    "defaultLakehouse": {
-        "name": "lh_oysterlake_core"
-    }
-}
-
-# METADATA ********************
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
+# MAGIC %%configure
+# MAGIC {
+# MAGIC     "defaultLakehouse": {
+# MAGIC         "name": "lh_oysterlake_core"
+# MAGIC     }
+# MAGIC }
+# MAGIC 
+# MAGIC # METADATA ********************
+# MAGIC # META {
+# MAGIC # META   "language": "python",
+# MAGIC # META   "language_group": "synapse_pyspark"
+# MAGIC # META }
 
 # PARAMETERS CELL ********************
 

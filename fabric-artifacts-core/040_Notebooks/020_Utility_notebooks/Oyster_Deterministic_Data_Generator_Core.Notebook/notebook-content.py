@@ -1,6 +1,7 @@
 # Fabric notebook source
 
 # METADATA ********************
+
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
@@ -9,14 +10,21 @@
 
 # CELL ********************
 
-%%configure
-{
-    "defaultLakehouse": {
-        "name": "lh_oysterlake_core"
-    }
-}
+# MAGIC %%configure
+# MAGIC {
+# MAGIC     "defaultLakehouse": {
+# MAGIC         "name": "lh_oysterlake_core"
+# MAGIC     }
+# MAGIC }
+# MAGIC 
+# MAGIC # METADATA ********************
+# MAGIC # META {
+# MAGIC # META   "language": "python",
+# MAGIC # META   "language_group": "synapse_pyspark"
+# MAGIC # META }
 
 # METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
@@ -24,10 +32,17 @@
 
 # PARAMETERS CELL ********************
 
-num_customers = 83
+num_customers = 100
 anchor_date = "2026-09-01"
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
@@ -104,6 +119,13 @@ for table_name, (header, rows) in files_config.items():
     print(f"{table_name}: {len(rows)} rows written to {path}")
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
