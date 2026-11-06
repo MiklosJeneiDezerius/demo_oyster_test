@@ -36,12 +36,12 @@
 # PARAMETERS CELL ********************
 
 # ---- FABRIC PIPELINE PARAMETERS ----
-repo_url = 'https://github.com/MiklosJeneiDezerius/demo_oyster_test.git'
-branch = 'main'
-dbt_subfolder = 'dbt_oyster_demo_test_core'
-dbt_command = 'build'
-dbt_args = ''  # pl. '--select b_oys_customer'
-dbt_server = ''  # Warehouse SQL endpoint hostname.
+repo_url = globals().get('repo_url', 'https://github.com/MiklosJeneiDezerius/demo_oyster_test.git')
+branch = globals().get('branch', 'main')
+dbt_subfolder = globals().get('dbt_subfolder', 'dbt_oyster_demo_test_core')
+dbt_command = globals().get('dbt_command', 'build')
+dbt_args = globals().get('dbt_args', '')  # pl. '--select b_oys_customer'
+dbt_server = globals().get('dbt_server', '')  # Warehouse SQL endpoint hostname.
 
 if not dbt_server:
     raise ValueError('Set dbt_server to the Warehouse SQL endpoint hostname.')
