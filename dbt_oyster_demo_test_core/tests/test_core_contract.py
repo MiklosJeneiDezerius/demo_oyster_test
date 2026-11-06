@@ -90,8 +90,8 @@ class CoreContractTests(unittest.TestCase):
         self.assertEqual(
             core,
             reference.replace(
-                "dbt_subfolder = 'dbt_oyster_demo_test'",
-                "dbt_subfolder = 'dbt_oyster_demo_test_core'",
+                "dbt_subfolder = globals().get('dbt_subfolder', 'dbt_oyster_demo_test')",
+                "dbt_subfolder = globals().get('dbt_subfolder', 'dbt_oyster_demo_test_core')",
             ),
         )
 
