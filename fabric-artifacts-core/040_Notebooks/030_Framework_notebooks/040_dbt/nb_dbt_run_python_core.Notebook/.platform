@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_dbt_run_python_core"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "319c8012-e3a3-58ec-9d0a-d5c6ba9a9357"
+  }
+}

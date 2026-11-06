@@ -1,6 +1,6 @@
 SELECT
-    TRY_CONVERT(INT, [CustomerID]) AS [CustomerID],
-    TRIM([FirstName]) AS [FirstName],
-    TRIM([LastName]) AS [LastName],
-    CAST(GETDATE() AS DATETIME2(6)) AS [IngestedTS]
+    CAST([CustomerID] AS INT) AS [customer_id],
+    TRIM([FirstName]) AS [first_nm],
+    TRIM([LastName]) AS [last_nm],
+    CAST(GETDATE() AS DATETIME2(6)) AS [ingested_dttm]
 FROM {{ source('landing_delta_core', 'customer') }}

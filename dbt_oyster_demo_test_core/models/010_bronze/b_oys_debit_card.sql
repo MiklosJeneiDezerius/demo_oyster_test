@@ -1,6 +1,6 @@
 SELECT
-    TRY_CONVERT(INT, [CardID]) AS [CardID],
-    TRY_CONVERT(INT, [AccountID]) AS [AccountID],
-    TRIM([CardTier]) AS [CardTier],
-    CAST(GETDATE() AS DATETIME2(6)) AS [IngestedTS]
+    CAST([CardID] AS INT) AS [card_id],
+    CAST([AccountID] AS INT) AS [account_id],
+    TRIM([CardTier]) AS [card_tier_nm],
+    CAST(GETDATE() AS DATETIME2(6)) AS [ingested_dttm]
 FROM {{ source('landing_delta_core', 'debitcard') }}

@@ -1,0 +1,93 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
+  "name": "5cae5958e3d32a5ae1fc",
+  "position": {
+    "x": 987.9545454545454,
+    "y": 351.30681818181813,
+    "z": 4,
+    "height": 428.0113636363636,
+    "width": 879.0340909090909,
+    "tabOrder": 2
+  },
+  "visual": {
+    "visualType": "donutChart",
+    "query": {
+      "queryState": {
+        "Category": {
+          "projections": [
+            {
+              "field": {
+                "Column": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "g_fct_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "CalculatedSpendingTier"
+                }
+              },
+              "queryRef": "g_fct_periodic_spend_snapshot.CalculatedSpendingTier",
+              "nativeQueryRef": "CalculatedSpendingTier",
+              "active": true
+            }
+          ]
+        },
+        "Y": {
+          "projections": [
+            {
+              "field": {
+                "Measure": {
+                  "Expression": {
+                    "SourceRef": {
+                      "Entity": "g_fct_periodic_spend_snapshot"
+                    }
+                  },
+                  "Property": "Total Accounts"
+                }
+              },
+              "queryRef": "g_fct_periodic_spend_snapshot.Total Accounts",
+              "nativeQueryRef": "Total Accounts"
+            }
+          ]
+        }
+      },
+      "sortDefinition": {
+        "sort": [
+          {
+            "field": {
+              "Measure": {
+                "Expression": {
+                  "SourceRef": {
+                    "Entity": "g_fct_periodic_spend_snapshot"
+                  }
+                },
+                "Property": "Total Accounts"
+              }
+            },
+            "direction": "Descending"
+          }
+        ],
+        "isDefaultSort": true
+      }
+    },
+    "drillFilterOtherVisuals": true
+  },
+  "filterConfig": {
+    "filters": [
+      {
+        "name": "20971c6d510bbf4ef5ea",
+        "field": {
+          "Measure": {
+            "Expression": {
+              "SourceRef": {
+                "Entity": "g_fct_periodic_spend_snapshot"
+              }
+            },
+            "Property": "Total Accounts"
+          }
+        },
+        "type": "Advanced"
+      }
+    ]
+  }
+}

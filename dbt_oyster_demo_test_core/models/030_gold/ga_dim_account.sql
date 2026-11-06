@@ -1,14 +1,9 @@
-{{ config(materialized='table', schema='core_gold') }}
-
 SELECT
-    a.[AccountSK],
-    a.[AccountID],
-    a.[CustomerSK],
-    a.[CustomerID],
-    c.[FirstName],
-    c.[LastName],
-    CONCAT(c.[FirstName], ' ', c.[LastName]) AS [FullName],
-    a.[CurrentBalance]
-FROM {{ ref('s_dim_account') }} a
-LEFT JOIN {{ ref('s_dim_customer') }} c
-    ON a.[CustomerSK] = c.[CustomerSK]
+    [s_dim_account_sk] AS [ga_dim_account_sk],
+    [s_dim_customer_sk],
+    [account_id],
+    [customer_id],
+    [current_balance_amt],
+    [card_id],
+    [card_tier_nm]
+FROM {{ ref('s_dim_account') }}

@@ -2,65 +2,159 @@ version: 2
 
 models:
   - name: b_oys_customer
+    description: "Core source customers with snake_case physical columns."
     columns:
-      - name: CustomerID
-        tests:
-          - not_null
-          - unique
+      - name: customer_id
+        data_tests: [not_null, unique]
   - name: b_oys_account
+    description: "Core source accounts; invalid numeric values fail conversion."
     columns:
-      - name: AccountID
-        tests:
+      - name: account_id
+        data_tests: [not_null, unique]
+      - name: customer_id
+        data_tests:
           - not_null
-          - unique
-      - name: CustomerID
-        tests:
-          - not_null
+          - relationships:
+              arguments:
+                to: ref('b_oys_customer')
+                field: customer_id
+      - name: balance_amt
+        data_tests: [not_null]
   - name: b_oys_debit_card
+    description: "Core debit cards; at most one card per account, denormalized into the account dimension."
     columns:
-      - name: CardID
-        tests:
+      - name: card_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
           - not_null
           - unique
-      - name: AccountID
-        tests:
+          - relationships:
+              arguments:
+                to: ref('b_oys_account')
+                field: account_id
+      - name: card_tier_nm
+        data_tests:
           - not_null
+          - accepted_values:
+              arguments:
+                values: ['Standard', 'Gold', 'Platinum']
   - name: b_oys_transaction
+    description: "Core ledger; all transactions contribute to spend because no status source exists."
     columns:
-      - name: TransactionID
-        tests:
+      - name: transaction_id
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests:
           - not_null
-          - unique
-      - name: AccountID
-        tests:
+          - relationships:
+              arguments:
+                to: ref('b_oys_account')
+                field: account_id
+      - name: transaction_amt
+        data_tests: [not_null]
+      - name: transaction_dttm
+        data_tests: [not_null]
+  - name: s_dim_customer
+    description: "Current customers, with stable business-key hashes; no SCD2 in the simplified core."
+    columns:
+      - name: s_dim_customer_sk
+        data_tests: [not_null, unique]
+      - name: customer_id
+        data_tests: [not_null, unique]
+  - name: s_dim_account
+    description: "One row per account with optional debit-card attributes; cardless accounts are retained."
+    columns:
+      - name: s_dim_account_sk
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests: [not_null, unique]
+      - name: s_dim_customer_sk
+        data_tests:
           - not_null
+          - relationships:
+              arguments:
+                to: ref('s_dim_customer')
+                field: s_dim_customer_sk
   - name: s_dim_date
     columns:
-      - name: DateSK
-        tests:
+      - name: s_dim_date_sk
+        data_tests: [not_null, unique]
+      - name: full_dt
+        data_tests: [not_null, unique]
+  - name: s_fct_transaction
+    columns:
+      - name: s_fct_transaction_sk
+        data_tests: [not_null, unique]
+      - name: s_dim_account_sk
+        data_tests:
           - not_null
-          - unique
+          - relationships:
+              arguments:
+                to: ref('s_dim_account')
+                field: s_dim_account_sk
+      - name: s_dim_customer_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('s_dim_customer')
+                field: s_dim_customer_sk
+      - name: s_dim_date_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('s_dim_date')
+                field: s_dim_date_sk
   - name: ga_dim_account
     columns:
-      - name: AccountSK
-        tests:
-          - not_null
-          - unique
-  - name: ga_dim_card
-    columns:
-      - name: CardSK
-        tests:
-          - not_null
-          - unique
+      - name: ga_dim_account_sk
+        data_tests: [not_null, unique]
+      - name: account_id
+        data_tests: [not_null, unique]
   - name: ga_dim_customer
     columns:
-      - name: CustomerSK
-        tests:
-          - not_null
-          - unique
+      - name: ga_dim_customer_sk
+        data_tests: [not_null, unique]
+      - name: customer_id
+        data_tests: [not_null, unique]
   - name: g_dim_date
     columns:
-      - name: DateSK
-        tests:
+      - name: g_dim_date_sk
+        data_tests: [not_null, unique]
+      - name: full_dt
+        data_tests: [not_null, unique]
+  - name: g_fct_periodic_spend_snapshot
+    description: "One row per account per day from 2025-01-01; 30-day spend includes 29 warm-up days."
+    columns:
+      - name: g_fct_periodic_spend_snapshot_sk
+        data_tests: [not_null, unique]
+      - name: s_dim_date_sk
+        data_tests:
           - not_null
-          - unique
+          - relationships:
+              arguments:
+                to: ref('g_dim_date')
+                field: g_dim_date_sk
+      - name: s_dim_account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ga_dim_account')
+                field: ga_dim_account_sk
+      - name: s_dim_customer_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('ga_dim_customer')
+                field: ga_dim_customer_sk
+      - name: calculated_spending_tier_nm
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Standard', 'Gold', 'Platinum']
+  - name: fail_transactions_without_accountid
+    description: "Diagnostic view exposing transactions with missing account_id."

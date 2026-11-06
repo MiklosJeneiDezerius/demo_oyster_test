@@ -2,7 +2,7 @@ version: 2
 
 sources:
   - name: landing_delta_core
-    database: lh_oysterlake2
+    database: "{{ env_var('DBT_SOURCE_DATABASE', 'lh_oysterlake_core') }}"
     schema: dbo
     tables:
       - name: customer

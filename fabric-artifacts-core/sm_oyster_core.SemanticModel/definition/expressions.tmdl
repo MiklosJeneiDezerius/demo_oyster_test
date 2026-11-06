@@ -1,0 +1,10 @@
+/// Shared Warehouse connection; matches the core dbt profile. Rebind for another deployment target.
+expression DatabaseQuery =
+		let
+		    database = Sql.Database("xe6b73af6wce5cpkwv3dpk3vzi-ufjmp33zdiqudnk6b6giyfzpxi.datawarehouse.fabric.microsoft.com", "dw_oyster")
+		in
+		    database
+	lineageTag: ff3d465e-d208-4657-822a-6656c07dd1ac
+
+	annotation PBI_IncludeFutureArtifacts = False
+

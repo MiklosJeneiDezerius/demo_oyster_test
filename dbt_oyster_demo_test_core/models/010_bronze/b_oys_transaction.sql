@@ -1,7 +1,7 @@
 SELECT
-    TRY_CONVERT(INT, [TransactionID]) AS [TransactionID],
-    TRY_CONVERT(INT, [AccountID]) AS [AccountID],
-    TRY_CONVERT(DECIMAL(18, 4), [Amount]) AS [Amount],
-    TRY_CONVERT(DATETIME2(6), [Timestamp]) AS [TransactionTimestamp],
-    CAST(GETDATE() AS DATETIME2(6)) AS [IngestedTS]
+    CAST([TransactionID] AS INT) AS [transaction_id],
+    CAST([AccountID] AS INT) AS [account_id],
+    CAST([Amount] AS DECIMAL(18, 4)) AS [transaction_amt],
+    CAST([Timestamp] AS DATETIME2(6)) AS [transaction_dttm],
+    CAST(GETDATE() AS DATETIME2(6)) AS [ingested_dttm]
 FROM {{ source('landing_delta_core', 'transaction') }}

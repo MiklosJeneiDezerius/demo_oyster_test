@@ -40,3 +40,11 @@ models:
     "030_gold":
       +materialized: table
       +schema: core_gold
+    "050_dq":
+      +materialized: view
+      +schema: core_dq
+
+data_tests:
+  dbt_oyster_demo_test_core:
+    +store_failures: true
+    +schema: core_dq

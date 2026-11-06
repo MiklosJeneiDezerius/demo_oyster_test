@@ -1,0 +1,26 @@
+[
+  {
+    "source_object_name": "Customer",
+    "is_active": "1",
+    "is_active_delta": "1",
+    "is_active_delta_incremental": "0"
+  },
+  {
+    "source_object_name": "Account",
+    "is_active": "1",
+    "is_active_delta": "1",
+    "is_active_delta_incremental": "0"
+  },
+  {
+    "source_object_name": "DebitCard",
+    "is_active": "1",
+    "is_active_delta": "1",
+    "is_active_delta_incremental": "0"
+  },
+  {
+    "source_object_name": "Transaction_Ledger",
+    "is_active": "1",
+    "is_active_delta": "1",
+    "is_active_delta_incremental": "1"
+  }
+]

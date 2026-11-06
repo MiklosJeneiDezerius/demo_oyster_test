@@ -1,0 +1,12 @@
+relationship 0775408a-c688-0996-5d96-40cd85e29121
+	fromColumn: g_fct_periodic_spend_snapshot.CustomerSK
+	toColumn: ga_dim_customer.CustomerSK
+
+relationship 'Core snapshot to date'
+	fromColumn: g_fct_periodic_spend_snapshot.DateSK
+	toColumn: g_dim_date.DateSK
+
+relationship 'Core snapshot to account'
+	fromColumn: g_fct_periodic_spend_snapshot.AccountSK
+	toColumn: ga_dim_account.AccountSK
+

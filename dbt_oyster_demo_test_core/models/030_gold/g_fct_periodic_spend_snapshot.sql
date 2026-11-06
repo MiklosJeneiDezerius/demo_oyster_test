@@ -1,99 +1,51 @@
-{{ config(materialized='table', schema='core_gold') }}
-
 WITH date_spine AS (
-    SELECT [DateSK], [FullDate]
-    FROM {{ ref('g_dim_date') }}
-    WHERE [FullDate] BETWEEN CAST('2024-12-03' AS DATE) AND CAST(GETDATE() AS DATE)
-),
-active_accounts AS (
-    SELECT [AccountSK], [CustomerSK], [AccountID]
-    FROM {{ ref('ga_dim_account') }}
-),
-daily_account_spine AS (
-    SELECT d.[DateSK], d.[FullDate], a.[AccountSK], a.[CustomerSK], a.[AccountID]
-    FROM date_spine d
-    CROSS JOIN active_accounts a
+    SELECT [s_dim_date_sk], [full_dt]
+    FROM {{ ref('s_dim_date') }}
+    WHERE [full_dt] BETWEEN
+        DATEADD(day, -29, CAST('2025-01-01' AS DATE))
+        AND CAST(GETDATE() AS DATE)
 ),
 daily_transactions AS (
     SELECT
-        t.[AccountID],
-        CAST(t.[TransactionTimestamp] AS DATE) AS [TransactionDate],
-        SUM(t.[Amount]) AS [DailySpendAmount]
-    FROM {{ ref('s_fct_transaction') }} t
-    GROUP BY t.[AccountID], CAST(t.[TransactionTimestamp] AS DATE)
+        [s_dim_account_sk],
+        CAST([transaction_dttm] AS DATE) AS [transaction_dt],
+        SUM([transaction_amt]) AS [daily_spend_amt]
+    FROM {{ ref('s_fct_transaction') }}
+    GROUP BY [s_dim_account_sk], CAST([transaction_dttm] AS DATE)
 ),
-ranked_cards AS (
+rolling_spend AS (
     SELECT
-        c.[AccountID],
-        c.[CardSK],
-        c.[CardTier],
-        ROW_NUMBER() OVER (
-            PARTITION BY c.[AccountID]
-            ORDER BY c.[CardID] DESC
-        ) AS [CardRank]
-    FROM {{ ref('ga_dim_card') }} c
-),
-rolling_spend_calculation AS (
-    SELECT
-        s.[DateSK],
-        s.[FullDate],
-        s.[AccountSK],
-        s.[CustomerSK],
-        s.[AccountID],
-        c.[CardSK],
-        COALESCE(c.[CardTier], 'Standard') AS [ActualCardTier],
-        COALESCE(t.[DailySpendAmount], CAST(0 AS DECIMAL(18, 4))) AS [DailySpendAmount],
-        SUM(COALESCE(t.[DailySpendAmount], CAST(0 AS DECIMAL(18, 4)))) OVER (
-            PARTITION BY s.[AccountID]
-            ORDER BY s.[FullDate]
+        d.[s_dim_date_sk],
+        d.[full_dt],
+        a.[s_dim_account_sk],
+        a.[s_dim_customer_sk],
+        a.[account_id],
+        SUM(COALESCE(t.[daily_spend_amt], 0)) OVER (
+            PARTITION BY a.[account_id]
+            ORDER BY d.[full_dt]
             ROWS BETWEEN 29 PRECEDING AND CURRENT ROW
-        ) AS [Rolling30DaySpend]
-    FROM daily_account_spine s
+        ) AS [rolling_30_day_spend_amt]
+    FROM date_spine d
+    CROSS JOIN {{ ref('s_dim_account') }} a
     LEFT JOIN daily_transactions t
-        ON s.[AccountID] = t.[AccountID]
-       AND s.[FullDate] = t.[TransactionDate]
-    LEFT JOIN ranked_cards c
-        ON s.[AccountID] = c.[AccountID]
-       AND c.[CardRank] = 1
+        ON a.[s_dim_account_sk] = t.[s_dim_account_sk]
+       AND d.[full_dt] = t.[transaction_dt]
 )
 SELECT
-    CONVERT(VARCHAR(64), HASHBYTES(
-        'SHA2_256',
-        CONCAT(CAST([DateSK] AS VARCHAR(20)), '_', CAST([AccountID] AS VARCHAR(50)))
-    ), 2) AS [SpendSnapshotSK],
-    [DateSK],
-    [FullDate] AS [SnapshotDate],
-    [AccountSK],
-    [AccountID],
-    [CustomerSK],
-    [CardSK],
-    [ActualCardTier],
-    [Rolling30DaySpend],
+    CONVERT(VARCHAR(64), HASHBYTES('SHA2_256',
+        CONCAT(CAST([s_dim_date_sk] AS VARCHAR(20)), '_', CAST([account_id] AS VARCHAR(50)))
+    ), 2) AS [g_fct_periodic_spend_snapshot_sk],
+    [s_dim_date_sk],
+    [full_dt] AS [snapshot_dt],
+    [s_dim_account_sk],
+    [s_dim_customer_sk],
+    [account_id],
+    [rolling_30_day_spend_amt],
     CASE
-        WHEN [Rolling30DaySpend] >= 5000.00 THEN 'Platinum'
-        WHEN [Rolling30DaySpend] >= 2000.00 THEN 'Gold'
+        WHEN [rolling_30_day_spend_amt] >= 5000.00 THEN 'Platinum'
+        WHEN [rolling_30_day_spend_amt] >= 2000.00 THEN 'Gold'
         ELSE 'Standard'
-    END AS [CalculatedSpendingTier],
-    CASE
-        WHEN [Rolling30DaySpend] >= 5000.00
-             AND [ActualCardTier] IN ('Standard', 'Gold') THEN 1
-        WHEN [Rolling30DaySpend] >= 2000.00
-             AND [ActualCardTier] = 'Standard' THEN 1
-        ELSE 0
-    END AS [IsUpgradeCandidate],
-    CASE
-        WHEN [ActualCardTier] = 'Platinum' AND [Rolling30DaySpend] < 5000.00 THEN 1
-        WHEN [ActualCardTier] = 'Gold' AND [Rolling30DaySpend] < 2000.00 THEN 1
-        ELSE 0
-    END AS [IsLowSpendPremiumAnomaly],
-    CASE
-        WHEN [Rolling30DaySpend] >= 5000.00 AND [ActualCardTier] = 'Platinum' THEN 'Aligned'
-        WHEN [Rolling30DaySpend] >= 2000.00
-             AND [Rolling30DaySpend] < 5000.00
-             AND [ActualCardTier] = 'Gold' THEN 'Aligned'
-        WHEN [Rolling30DaySpend] < 2000.00 AND [ActualCardTier] = 'Standard' THEN 'Aligned'
-        ELSE 'Misaligned'
-    END AS [AlignmentStatusFlag],
-    CAST(GETDATE() AS DATETIME2(6)) AS [SnapshotMaterializedTS]
-FROM rolling_spend_calculation
-WHERE [FullDate] >= CAST('2025-01-01' AS DATE)
+    END AS [calculated_spending_tier_nm],
+    CAST(GETDATE() AS DATETIME2(6)) AS [snapshot_materialized_dttm]
+FROM rolling_spend
+WHERE [full_dt] >= CAST('2025-01-01' AS DATE)
