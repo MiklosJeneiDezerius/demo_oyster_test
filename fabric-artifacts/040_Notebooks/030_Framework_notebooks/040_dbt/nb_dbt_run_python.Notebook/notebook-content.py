@@ -41,10 +41,10 @@ branch = 'main'
 dbt_subfolder = 'dbt_oyster_demo_test'
 dbt_command = 'build'
 dbt_args = ''  # pl. '--select b_oys_customer'
-dbt_server = ''  # Fabric Warehouse SQL endpoint hostname.
+dbt_server = ''  # Warehouse SQL endpoint hostname.
 
 if not dbt_server:
-    raise ValueError('Set dbt_server to the SQL endpoint hostname for dw_oyster.')
+    raise ValueError('Set dbt_server to the Warehouse SQL endpoint hostname.')
 
 # METADATA ********************
 

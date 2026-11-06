@@ -92,12 +92,6 @@ class CoreContractTests(unittest.TestCase):
             reference.replace(
                 "dbt_subfolder = 'dbt_oyster_demo_test'",
                 "dbt_subfolder = 'dbt_oyster_demo_test_core'",
-            ).replace(
-                "dbt_args = ''  # pl. '--select b_oys_customer'",
-                "dbt_args = ''  # pl. '--select b_oys_customer'\ndbt_server = ''  # Core workspace SQL endpoint hostname.\n\nif not dbt_server:\n    raise ValueError('Set dbt_server to the SQL endpoint hostname for dw_oyster_core.')",
-            ).replace(
-                "dbt_environment['FABRIC_SQL_ACCESS_TOKEN'] = sql_token",
-                "dbt_environment['FABRIC_SQL_ACCESS_TOKEN'] = sql_token\ndbt_environment['DBT_SERVER'] = dbt_server",
             ),
         )
 
