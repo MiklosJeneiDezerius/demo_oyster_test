@@ -1,0 +1,183 @@
+table g_dim_date
+	lineageTag: 5569cbdc-14b9-412c-bd61-25bd915e3f2c
+	sourceLineageTag: [oystr_gold].[g_dim_date]
+
+	column g_dim_date_sk
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 3c92baa8-eccc-42f2-8959-22ce76268574
+		sourceLineageTag: g_dim_date_sk
+		summarizeBy: none
+		sourceColumn: g_dim_date_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column full_dt
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: e1d2142d-c458-4b39-9ff9-0df11e70cf0f
+		sourceLineageTag: full_dt
+		summarizeBy: none
+		sourceColumn: full_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_year_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 6ffeaa9b-d6e1-46ff-8ccc-ed08500701d0
+		sourceLineageTag: calendar_year_num
+		summarizeBy: sum
+		sourceColumn: calendar_year_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_quarter_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 459d0ca5-d475-471d-aa5e-4a32e9c65ae1
+		sourceLineageTag: calendar_quarter_num
+		summarizeBy: sum
+		sourceColumn: calendar_quarter_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column calendar_quarter_nm
+		dataType: string
+		sourceProviderType: varchar(13)
+		lineageTag: 56777452-7b5f-47dc-bf92-6c8ee3960ff8
+		sourceLineageTag: calendar_quarter_nm
+		summarizeBy: none
+		sourceColumn: calendar_quarter_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_of_year_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: bcbf14cb-2c47-4c40-9577-059feddf8c8a
+		sourceLineageTag: month_of_year_num
+		summarizeBy: sum
+		sourceColumn: month_of_year_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_nm
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 73b18495-5845-4837-89d5-65531d4e184c
+		sourceLineageTag: month_nm
+		summarizeBy: none
+		sourceColumn: month_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column month_short_nm
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 19d75d88-7fa1-4bd1-9953-a49f99f5a435
+		sourceLineageTag: month_short_nm
+		summarizeBy: none
+		sourceColumn: month_short_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column week_of_year_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 12fa24e9-4152-4399-aa0c-878e3068ed23
+		sourceLineageTag: week_of_year_num
+		summarizeBy: sum
+		sourceColumn: week_of_year_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_month_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: da36e430-c5e5-4de1-9384-31d376e9ab69
+		sourceLineageTag: day_of_month_num
+		summarizeBy: sum
+		sourceColumn: day_of_month_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_year_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 60d3524a-5400-4fe4-a0d8-a4dee09f01c1
+		sourceLineageTag: day_of_year_num
+		summarizeBy: sum
+		sourceColumn: day_of_year_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_of_week_num
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 90df6a4a-803d-4d38-a53e-3b62d01e27f6
+		sourceLineageTag: day_of_week_num
+		summarizeBy: sum
+		sourceColumn: day_of_week_num
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_nm
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: 009574a6-c257-4c05-99e2-3b6869bd62d1
+		sourceLineageTag: day_nm
+		summarizeBy: none
+		sourceColumn: day_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column day_short_nm
+		dataType: string
+		sourceProviderType: varchar(50)
+		lineageTag: fb0757c7-fc99-413d-a1f4-b21e65b5db31
+		sourceLineageTag: day_short_nm
+		summarizeBy: none
+		sourceColumn: day_short_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column is_weekend_flag
+		dataType: int64
+		formatString: 0
+		sourceProviderType: int
+		lineageTag: 876b8e6f-86de-436e-9e12-a87bff780b87
+		sourceLineageTag: is_weekend_flag
+		summarizeBy: sum
+		sourceColumn: is_weekend_flag
+
+		annotation SummarizationSetBy = Automatic
+
+	column year_month_cd
+		dataType: string
+		sourceProviderType: varchar(7)
+		lineageTag: ed549f90-5298-4229-8a11-ea81fb8658bd
+		sourceLineageTag: year_month_cd
+		summarizeBy: none
+		sourceColumn: year_month_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	partition g_dim_date = entity
+		mode: directLake
+		source
+			entityName: g_dim_date
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

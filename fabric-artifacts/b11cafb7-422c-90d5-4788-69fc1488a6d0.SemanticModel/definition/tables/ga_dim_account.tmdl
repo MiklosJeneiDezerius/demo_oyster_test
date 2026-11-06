@@ -1,0 +1,96 @@
+table ga_dim_account
+	lineageTag: 9ba41e23-3436-4322-8e9c-a5776efc9896
+	sourceLineageTag: [oystr_gold].[ga_dim_account]
+
+	column ga_dim_account_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 03b39026-78d7-4bc2-95ef-cef787aa2e70
+		sourceLineageTag: ga_dim_account_sk
+		summarizeBy: none
+		sourceColumn: ga_dim_account_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_customer_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: f7e3a15b-cbf9-4ecb-bc65-505ee6c2e0ab
+		sourceLineageTag: s_dim_customer_sk
+		summarizeBy: none
+		sourceColumn: s_dim_customer_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 78af80d6-fee6-41eb-b880-fc656aba1b56
+		sourceLineageTag: account_id
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column customer_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 28125f5c-db2d-42be-b527-15fe19e4e1e1
+		sourceLineageTag: customer_id
+		summarizeBy: none
+		sourceColumn: customer_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_number_txt
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 7552a523-013d-4731-9c82-e186159d6c4f
+		sourceLineageTag: account_number_txt
+		summarizeBy: none
+		sourceColumn: account_number_txt
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_type_nm
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 36836aa2-87b3-4b28-b61f-bbbb258772ec
+		sourceLineageTag: account_type_nm
+		summarizeBy: none
+		sourceColumn: account_type_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column current_balance_amt
+		dataType: decimal
+		formatString: \$#,0.###############;(\$#,0.###############);\$#,0.###############
+		sourceProviderType: decimal(18, 4)
+		lineageTag: 385249b2-9aee-437a-8b0d-9a91e82a9c27
+		sourceLineageTag: current_balance_amt
+		summarizeBy: sum
+		sourceColumn: current_balance_amt
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation PBI_FormatHint = {"currencyCulture":"en-US"}
+
+	column currency_cd
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 5863e5c6-d785-41b1-9105-0e86a4979df0
+		sourceLineageTag: currency_cd
+		summarizeBy: none
+		sourceColumn: currency_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ga_dim_account = entity
+		mode: directLake
+		source
+			entityName: ga_dim_account
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+

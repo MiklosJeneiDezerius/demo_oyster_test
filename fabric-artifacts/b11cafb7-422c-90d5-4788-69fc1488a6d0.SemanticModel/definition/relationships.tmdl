@@ -1,0 +1,16 @@
+relationship e83ea0c9-e555-8f83-fbce-60784861f212
+	fromColumn: g_dim_date.g_dim_date_sk
+	toColumn: g_fct_periodic_spend_snapshot.s_dim_date_sk
+
+relationship e295bb0f-8424-32ae-00a7-e14f69a34cfd
+	fromColumn: ga_dim_account.ga_dim_account_sk
+	toColumn: g_fct_periodic_spend_snapshot.s_dim_account_sk
+
+relationship 4649151b-104d-e35d-6fd7-2104b4d0039c
+	fromColumn: ga_dim_customer.ga_dim_customer_sk
+	toColumn: g_fct_periodic_spend_snapshot.s_dim_customer_sk
+
+relationship 0ad85189-097a-73df-8e40-ffef97efdc9d
+	fromColumn: ga_dim_card.s_dim_account_sk
+	toColumn: g_fct_periodic_spend_snapshot.s_dim_card_sk
+

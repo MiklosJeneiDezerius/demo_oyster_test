@@ -1,0 +1,116 @@
+table ga_dim_card
+	lineageTag: 3b71fefb-99e5-4486-99ed-9669362ded16
+	sourceLineageTag: [oystr_gold].[ga_dim_card]
+
+	column ga_dim_card_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: 433edb6e-acd7-4c74-a7e3-ecb330d2c5b7
+		sourceLineageTag: ga_dim_card_sk
+		summarizeBy: none
+		sourceColumn: ga_dim_card_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column s_dim_account_sk
+		dataType: string
+		sourceProviderType: varchar(64)
+		lineageTag: b0f749dc-599a-4ffe-b8d9-6ef6d8a92778
+		sourceLineageTag: s_dim_account_sk
+		summarizeBy: none
+		sourceColumn: s_dim_account_sk
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 0e36a8df-47d8-4195-8d9f-340ffed3fb2d
+		sourceLineageTag: card_id
+		summarizeBy: none
+		sourceColumn: card_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column account_id
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: f2e4d422-b29e-425d-a4ab-23c7d5dc5d17
+		sourceLineageTag: account_id
+		summarizeBy: none
+		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_number_txt
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9f3e35ca-44ae-4b4d-bf7b-f96682c7bad7
+		sourceLineageTag: card_number_txt
+		summarizeBy: none
+		sourceColumn: card_number_txt
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_tier_nm
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 9da071a4-48bd-4329-9e0e-38d2a4b1e09e
+		sourceLineageTag: card_tier_nm
+		summarizeBy: none
+		sourceColumn: card_tier_nm
+
+		annotation SummarizationSetBy = Automatic
+
+	column card_status_cd
+		dataType: string
+		sourceProviderType: varchar(8000)
+		lineageTag: 69fbb575-de8f-4521-92f0-5cbaa427e10e
+		sourceLineageTag: card_status_cd
+		summarizeBy: none
+		sourceColumn: card_status_cd
+
+		annotation SummarizationSetBy = Automatic
+
+	column expiry_dt
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: date
+		lineageTag: 20db93c4-9eab-488c-9e8c-3897e0b62a29
+		sourceLineageTag: expiry_dt
+		summarizeBy: none
+		sourceColumn: expiry_dt
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_from_dttm
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: 6f4f4def-f54b-48dc-8f7d-86c857a60704
+		sourceLineageTag: valid_from_dttm
+		summarizeBy: none
+		sourceColumn: valid_from_dttm
+
+		annotation SummarizationSetBy = Automatic
+
+	column valid_to_dttm
+		dataType: dateTime
+		formatString: General Date
+		sourceProviderType: datetime2
+		lineageTag: cb57fc83-1e31-448f-ab46-651f9156ef64
+		sourceLineageTag: valid_to_dttm
+		summarizeBy: none
+		sourceColumn: valid_to_dttm
+
+		annotation SummarizationSetBy = Automatic
+
+	partition ga_dim_card = entity
+		mode: directLake
+		source
+			entityName: ga_dim_card
+			schemaName: oystr_gold
+			expressionSource: DatabaseQuery
+
+	annotation PBI_ResultType = Table
+
