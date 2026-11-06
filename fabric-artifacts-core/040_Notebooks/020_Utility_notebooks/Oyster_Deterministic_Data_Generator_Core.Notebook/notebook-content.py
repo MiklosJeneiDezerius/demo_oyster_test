@@ -31,7 +31,7 @@ anchor_date = "2026-09-01"
 
 # # Oyster Core deterministic source data
 # Customer, Account, DebitCard and Transaction_Ledger are generated.
-# The six spend scenarios match the full project's ledger amounts.
+# The seven spend scenarios match the full project's ledger amounts.
 
 # CELL ********************
 
@@ -60,8 +60,12 @@ scenarios = {
     4: (15, 600, 1, 9),
     5: (3, 250, 4, 11),
     0: (3, 225, 5, 15),
+    6: (15, 550, 1, 16),
 }
-card_tiers = {1: "Standard", 2: "Gold", 3: "Standard", 4: "Gold", 5: "Gold", 0: "Platinum"}
+card_tiers = {
+    1: "Standard", 2: "Gold", 3: "Standard", 4: "Gold",
+    5: "Gold", 0: "Platinum", 6: "Platinum",
+}
 transaction_id = 1
 for customer_id in range(1, num_customers + 1):
     account_id = customer_id * 10
@@ -71,8 +75,8 @@ for customer_id in range(1, num_customers + 1):
         last_names[customer_id % len(last_names)],
     ))
     account_rows.append((account_id, customer_id, customer_id * 111.11))
-    debit_card_rows.append((customer_id * 100, account_id, card_tiers[customer_id % 6]))
-    days, amount, day_step, hour = scenarios[customer_id % 6]
+    debit_card_rows.append((customer_id * 100, account_id, card_tiers[customer_id % 7]))
+    days, amount, day_step, hour = scenarios[customer_id % 7]
     for day in range(days):
         transaction_time = anchor + timedelta(days=day * day_step, hours=hour)
         transaction_rows.append((

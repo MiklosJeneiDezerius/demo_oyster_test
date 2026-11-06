@@ -9,7 +9,8 @@ these IDs identify Git artifacts, not pre-existing deployed Fabric items.
 `pl_Master_Core` runs, in order:
 
 1. `pl_Landing_Raw_Core`: generate Customer, Account, DebitCard and Transaction_Ledger CSV
-   batches using the same six deterministic spend scenarios as the full demo.
+   batches using the same seven deterministic spend scenarios as the full demo,
+   including an aligned Platinum account and a low-spend Platinum anomaly.
    `num_customers` defaults to 83 and is forwarded to the generator.
 2. `pl_Landing_Delta_Core`: read [config/load_config.json](config/load_config.json),
    filter on both `is_active` and `is_active_delta`, then sequentially load

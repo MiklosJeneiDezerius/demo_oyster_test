@@ -21,7 +21,11 @@ NOTEBOOKS = ARTIFACTS / "040_Notebooks"
 def notebook_code(name):
     path = next(NOTEBOOKS.rglob(f"{name}.Notebook")) / "notebook-content.py"
     source = path.read_text(encoding="utf-8")
-    return re.sub(r"(?ms)^%%configure\n.*?(?=^# METADATA)", "", source)
+    return re.sub(
+        r"(?ms)^%%configure\n.*?(?=^# (?:PARAMETERS CELL|CELL|METADATA|MARKDOWN)\b)",
+        "",
+        source,
+    )
 
 
 class CoreContractTests(unittest.TestCase):
@@ -120,9 +124,29 @@ class CoreContractTests(unittest.TestCase):
         notebook_parameters = pipeline["properties"]["activities"][0]["typeProperties"]["parameters"]
         self.assertIn("dbt_server", notebook_parameters)
 
-    def test_generator_has_four_entities_and_same_spend_scenarios(self):
+    def test_full_warehouse_server_is_pipeline_parameterized(self):
+        full_profile = (ROOT / "dbt_oyster_demo_test" / "profiles.yml").read_text()
+        full_runner = (
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "030_Framework_notebooks"
+            / "040_dbt" / "nb_dbt_run_python.Notebook" / "notebook-content.py"
+        ).read_text(encoding="utf-8")
+        pipeline = json.loads(
+            (
+                ROOT / "fabric-artifacts" / "030_Pipelines" / "040_Jobs" / "030_dbt"
+                / "pl_Create_DW.DataPipeline" / "pipeline-content.json"
+            ).read_text()
+        )
+        notebook_parameters = pipeline["properties"]["activities"][0]["typeProperties"]["parameters"]
+        self.assertIn("env_var('DBT_SERVER')", full_profile)
+        self.assertIn("dbt_environment['DBT_SERVER'] = dbt_server", full_runner)
+        self.assertEqual(
+            notebook_parameters["dbt_server"]["value"],
+            "xe6b73af6wce5cpkwv3dpk3vzi-ufjmp33zdiqudnk6b6giyfzpxi.datawarehouse.fabric.microsoft.com",
+        )
+
+    def test_generator_has_four_entities_and_aligned_platinum_scenario(self):
         code = notebook_code("Oyster_Deterministic_Data_Generator_Core")
-        code = code.replace("num_customers = 83", "num_customers = 6")
+        code = code.replace("num_customers = 83", "num_customers = 7")
         real_open = open
         with tempfile.TemporaryDirectory() as directory:
             def local_open(path, *args, **kwargs):
@@ -133,20 +157,39 @@ class CoreContractTests(unittest.TestCase):
                 exec(compile(code, "<core generator>", "exec"), namespace)
             files = list(Path(directory).glob("*.csv"))
             self.assertEqual(len(files), 4)
-            self.assertEqual(len(namespace["customer_rows"]), 6)
-            self.assertEqual(len(namespace["account_rows"]), 6)
+            self.assertEqual(len(namespace["customer_rows"]), 7)
+            self.assertEqual(len(namespace["account_rows"]), 7)
             self.assertEqual(namespace["debit_card_rows"], [
                 (100, 10, "Standard"), (200, 20, "Gold"),
                 (300, 30, "Standard"), (400, 40, "Gold"),
                 (500, 50, "Gold"), (600, 60, "Platinum"),
+                (700, 70, "Platinum"),
             ])
             totals = {}
             for _, account, amount, _ in namespace["transaction_rows"]:
                 totals[account] = totals.get(account, 0) + amount
-            self.assertEqual(totals, {10: 900, 20: 3600, 30: 8250, 40: 9000, 50: 750, 60: 675})
+            self.assertEqual(
+                totals,
+                {10: 900, 20: 3600, 30: 8250, 40: 9000, 50: 750, 60: 8250, 70: 675},
+            )
+            self.assertGreaterEqual(totals[60], 5000)
+            self.assertLess(totals[70], 2000)
             for path in files:
                 with real_open(path, newline="", encoding="utf-8") as stream:
                     self.assertTrue(list(csv.DictReader(stream)))
+
+    def test_full_generator_has_matching_aligned_platinum_scenario(self):
+        generator = (
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "020_Utility_notebooks"
+            / "c26cc17a-260e-8c59-44fc-d6cd231fc926.Notebook" / "notebook-content.py"
+        ).read_text(encoding="utf-8")
+        scenario = re.search(
+            r"(?ms)^    elif scenario == 6:\n(.*?)(?=^# =+|\Z)", generator,
+        )
+        self.assertIsNotNone(scenario)
+        self.assertIn("account_id, f\"40071012100", scenario.group(1))
+        self.assertIn("range(15)", scenario.group(1))
+        self.assertIn("550.00", scenario.group(1))
 
     def test_loader_rejects_unsupported_or_malformed_sources(self):
         code = notebook_code("nb_normal_csv_load_source_to_ld_core")

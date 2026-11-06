@@ -19,6 +19,10 @@
               "value": "dbt_oyster_demo_test",
               "type": "string"
             },
+            "dbt_server": {
+              "value": "xe6b73af6wce5cpkwv3dpk3vzi-ufjmp33zdiqudnk6b6giyfzpxi.datawarehouse.fabric.microsoft.com",
+              "type": "string"
+            },
             "dbt_command": {
               "value": "build",
               "type": "string"

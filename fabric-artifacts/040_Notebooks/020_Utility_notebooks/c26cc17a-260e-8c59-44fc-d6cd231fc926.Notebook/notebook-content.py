@@ -115,8 +115,8 @@ for i in range(1, num_customers + 1):
     account_id = i * 10
     account_rows.append((account_id, i, f"OYS100{190000 + i}", 2 if i % 2 == 0 else 1, float(i * 111.11), (i % 3) + 1))
     
-    # 🛑 THE DETERMINISTIC SYSTEM ROUTING SCENARIOS (Modulo 6 Engine)
-    scenario = i % 6
+    # 🛑 THE DETERMINISTIC SYSTEM ROUTING SCENARIOS (Modulo 7 Engine)
+        scenario = i % 7
     
     if scenario == 1:
         # Scenario 1: Aligned Base Users (Standard Card, Low Spend)
@@ -159,6 +159,13 @@ for i in range(1, num_customers + 1):
         debit_card_rows.append((i * 100, account_id, f"40061012100{7000 + i}", 3, "Active", "2029-07-28"))
         for d in range(3):
             add_deterministic_tx(account_id, 225.00, day_offset=d*5, hour_offset=15, vendor="Konzum") # Total ~$675
+
+    elif scenario == 6:
+        # Scenario 7: Aligned Platinum Card (Platinum Card, Platinum-Level Spend)
+        # Target: Spend >= $5,000.00 (Calculated Platinum, on Platinum Card) -> Aligned
+        debit_card_rows.append((i * 100, account_id, f"40071012100{7000 + i}", 3, "Active", "2029-08-28"))
+        for d in range(15):
+            add_deterministic_tx(account_id, 550.00, day_offset=d, hour_offset=16, vendor="Tesco") # Total ~$8,250
 
 # =====================================================================
 # PHYSICAL NATIVE FILE SYSTEM WRITE OPERATION
