@@ -16,12 +16,6 @@
     }
 }
 
-# METADATA ********************
-# META {
-# META   "language": "python",
-# META   "language_group": "synapse_pyspark"
-# META }
-
 # PARAMETERS CELL ********************
 
 num_customers = 83
