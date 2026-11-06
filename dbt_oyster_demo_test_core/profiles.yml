@@ -4,9 +4,9 @@ dbt_oyster_demo_test:
     dev:
       type: fabric
       driver: 'ODBC Driver 18 for SQL Server'
-      server: 'xe6b73af6wce5cpkwv3dpk3vzi-ufjmp33zdiqudnk6b6giyfzpxi.datawarehouse.fabric.microsoft.com'
+      server: "{{ env_var('DBT_SERVER') }}"
       port: 1433
-      database: "{{ env_var('DBT_DATABASE', 'dw_oyster') }}"
+      database: "{{ env_var('DBT_DATABASE', 'dw_oyster_core') }}"
       schema: 'oystr'
       authentication: 'CLI'
       threads: 4

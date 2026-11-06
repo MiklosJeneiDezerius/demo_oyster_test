@@ -26,6 +26,10 @@ older transactions and making reruns idempotent. The incremental flag is kept
 in the configuration for compatibility with the full configuration shape; it
 does not enable a separate incremental/MERGE path in this simple loader.
 Missing files, missing business keys and malformed CSV fail the notebook.
+The core notebook tree also contains core-bound counterparts for the full
+project's DATEV raw loader, generic CSV-to-Delta loader and timestamped
+Parquet-to-Delta loader. These are optional utilities and are not called by
+`pl_Master_Core`; the core flow remains limited to its four configured sources.
 
 ## Deployment prerequisites
 
@@ -39,21 +43,20 @@ them.
 2. Upload [config/load_config.json](config/load_config.json) to
    **`lh_oysterlake_core/Files/config/load_config.json`**. A Git-side config file
    is not automatically copied into Lakehouse Files by Fabric Git integration.
-3. Use the existing `dw_oyster` Warehouse. dbt creates isolated
+3. Import the dedicated [dw_oyster_core Warehouse](dw_oyster_core.Warehouse). dbt creates
    `oystr_core_bronze`, `oystr_core_silver`, `oystr_core_gold` and `oystr_core_dq`
-   schemas; there is no second Warehouse copy. Confirm the SQL server in
-   [the core profile](../dbt_oyster_demo_test_core/profiles.yml) matches the
-   Warehouse, and grant the runner identity Warehouse DDL/DML and Lakehouse
-   source SELECT permissions.
+   schemas in that Warehouse. Set the core workspace SQL endpoint hostname in the
+   `dbt_server` parameter of `pl_Create_DW_Core`; the profile passes it as
+   `DBT_SERVER` and targets `dw_oyster_core`. Grant the runner identity Warehouse
+   DDL/DML and Lakehouse source SELECT permissions.
 4. Bind pipeline user connections to the intended execution identity. Verify
    Git-remapped notebook, Lakehouse and child-pipeline references. In the
    semantic refresh activity, select the actual workspace and `sm_oyster_core`
-   model: its exported zero workspace ID and Git logical model ID are binding
-   placeholders, not a live refresh target.
+   model. Bind its SQL connection to the core workspace endpoint and
+   `dw_oyster_core`; exported IDs and the server placeholder are not live targets.
 5. Build the dbt tables before refreshing/opening the core semantic model.
-   Its shared Warehouse connection matches the default core profile. Rebind
-   the model connection when deploying to a different server/database and
-   configure its credentials in Fabric.
+   Its dedicated Warehouse connection matches the core profile. Configure
+   credentials in Fabric and rebind the server when deploying to another workspace.
 
 ## Reporting
 

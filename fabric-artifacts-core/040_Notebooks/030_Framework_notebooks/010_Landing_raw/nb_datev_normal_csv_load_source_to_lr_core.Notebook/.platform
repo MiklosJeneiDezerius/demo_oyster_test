@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_datev_normal_csv_load_source_to_lr_core",
+    "description": "Core-workspace counterpart for optional DATEV raw-to-Lakehouse loads."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "f0cbf7ec-9db0-4b44-8da5-8e0b286a42e1"
+  }
+}

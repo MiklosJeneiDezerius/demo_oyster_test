@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Warehouse",
+    "displayName": "dw_oyster_core",
+    "description": "Dedicated Warehouse for the Oyster core data model."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "ba65a1ea-0ab3-4f4e-9f2d-2f98cf1d5e12"
+  }
+}

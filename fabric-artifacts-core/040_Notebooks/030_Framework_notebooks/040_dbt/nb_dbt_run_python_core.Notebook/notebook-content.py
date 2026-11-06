@@ -41,6 +41,10 @@ branch = 'main'
 dbt_subfolder = 'dbt_oyster_demo_test_core'
 dbt_command = 'build'
 dbt_args = ''  # pl. '--select b_oys_customer'
+dbt_server = ''  # Core workspace SQL endpoint hostname.
+
+if not dbt_server:
+    raise ValueError('Set dbt_server to the SQL endpoint hostname for dw_oyster_core.')
 
 # METADATA ********************
 
@@ -174,6 +178,7 @@ print(f'Runtime profile created: {runtime_profiles_file}')
 # 7. Pass token and custom module only to dbt subprocess.
 dbt_environment = os.environ.copy()
 dbt_environment['FABRIC_SQL_ACCESS_TOKEN'] = sql_token
+dbt_environment['DBT_SERVER'] = dbt_server
 existing_pythonpath = dbt_environment.get('PYTHONPATH', '')
 dbt_environment['PYTHONPATH'] = dbt_dir if not existing_pythonpath else dbt_dir + os.pathsep + existing_pythonpath
 

@@ -19,6 +19,10 @@
               "value": "dbt_oyster_demo_test_core",
               "type": "string"
             },
+            "dbt_server": {
+              "value": "",
+              "type": "string"
+            },
             "dbt_command": {
               "value": "build",
               "type": "string"

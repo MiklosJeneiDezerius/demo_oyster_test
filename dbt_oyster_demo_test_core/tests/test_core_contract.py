@@ -37,6 +37,9 @@ class CoreContractTests(unittest.TestCase):
         ]
         logical_ids = {item["config"]["logicalId"] for item in platforms}
         self.assertEqual(len(platforms), len(logical_ids))
+        for path, item in zip(ARTIFACTS.rglob(".platform"), platforms):
+            if item["metadata"]["type"] == "Notebook":
+                self.assertTrue((path.parent / "notebook-content.py").is_file(), path.parent)
         full_ids = {
             json.loads(path.read_text())["config"]["logicalId"]
             for path in (ROOT / "fabric-artifacts").rglob(".platform")
@@ -68,6 +71,9 @@ class CoreContractTests(unittest.TestCase):
     def test_notebook_syntax_and_runner_parity(self):
         for name in (
             "Oyster_Deterministic_Data_Generator_Core",
+            "nb_datev_normal_csv_load_source_to_lr_core",
+            "nb_create_delta_from_raw_core",
+            "nb_bc_create_delta_from_parquet_timestamp_core",
             "nb_normal_csv_load_source_to_ld_core",
             "nb_dbt_run_python_core",
         ):
@@ -82,8 +88,37 @@ class CoreContractTests(unittest.TestCase):
             reference.replace(
                 "dbt_subfolder = 'dbt_oyster_demo_test'",
                 "dbt_subfolder = 'dbt_oyster_demo_test_core'",
+            ).replace(
+                "dbt_args = ''  # pl. '--select b_oys_customer'",
+                "dbt_args = ''  # pl. '--select b_oys_customer'\ndbt_server = ''  # Core workspace SQL endpoint hostname.\n\nif not dbt_server:\n    raise ValueError('Set dbt_server to the SQL endpoint hostname for dw_oyster_core.')",
+            ).replace(
+                "dbt_environment['FABRIC_SQL_ACCESS_TOKEN'] = sql_token",
+                "dbt_environment['FABRIC_SQL_ACCESS_TOKEN'] = sql_token\ndbt_environment['DBT_SERVER'] = dbt_server",
             ),
         )
+
+    def test_core_warehouse_is_independent(self):
+        warehouse = ARTIFACTS / "dw_oyster_core.Warehouse"
+        platform = json.loads((warehouse / ".platform").read_text())
+        project = (warehouse / "dw_oyster_core.sqlproj").read_text()
+        profile = (PROJECT / "profiles.yml").read_text()
+        model_expression = (
+            ARTIFACTS / "sm_oyster_core.SemanticModel" / "definition" / "expressions.tmdl"
+        ).read_text()
+        pipeline = json.loads(
+            (
+                ARTIFACTS / "030_Pipelines" / "040_Jobs" / "030_dbt"
+                / "pl_Create_DW_Core.DataPipeline" / "pipeline-content.json"
+            ).read_text()
+        )
+        self.assertEqual(platform["metadata"]["displayName"], "dw_oyster_core")
+        self.assertIn("<Name>dw_oyster_core</Name>", project)
+        self.assertIn("env_var('DBT_SERVER')", profile)
+        self.assertIn("env_var('DBT_DATABASE', 'dw_oyster_core')", profile)
+        self.assertIn('"dw_oyster_core"', model_expression)
+        self.assertIn("REPLACE_WITH_CORE_WAREHOUSE_SQL_ENDPOINT", model_expression)
+        notebook_parameters = pipeline["properties"]["activities"][0]["typeProperties"]["parameters"]
+        self.assertIn("dbt_server", notebook_parameters)
 
     def test_generator_has_four_entities_and_same_spend_scenarios(self):
         code = notebook_code("Oyster_Deterministic_Data_Generator_Core")

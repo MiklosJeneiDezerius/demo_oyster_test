@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_create_delta_from_raw_core",
+    "description": "Core-workspace counterpart for optional raw CSV-to-Delta loads."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "67d8dd89-3544-4104-a292-a8a3c50d6eb9"
+  }
+}
