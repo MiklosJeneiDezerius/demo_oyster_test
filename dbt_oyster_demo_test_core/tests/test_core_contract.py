@@ -75,10 +75,12 @@ class CoreContractTests(unittest.TestCase):
     def test_notebook_syntax_and_runner_parity(self):
         for name in (
             "Oyster_Deterministic_Data_Generator_Core",
+            "Oyster_Json_Transaction_Generator_Core",
             "nb_datev_normal_csv_load_source_to_lr_core",
             "nb_create_delta_from_raw_core",
             "nb_bc_create_delta_from_parquet_timestamp_core",
             "nb_normal_csv_load_source_to_ld_core",
+            "nb_json_load_source_to_ld_core",
             "nb_dbt_run_python_core",
         ):
             ast.parse(notebook_code(name))
@@ -187,6 +189,90 @@ class CoreContractTests(unittest.TestCase):
             for path in files:
                 with real_open(path, newline="", encoding="utf-8") as stream:
                     self.assertTrue(list(csv.DictReader(stream)))
+
+    def test_core_json_generator_emits_nested_transaction_batches(self):
+        code = notebook_code("Oyster_Json_Transaction_Generator_Core")
+        code = code.replace("num_customers = 83", "num_customers = 7")
+        real_open = open
+        with tempfile.TemporaryDirectory() as directory:
+            def local_open(path, *args, **kwargs):
+                return real_open(Path(directory) / Path(path).name, *args, **kwargs)
+
+            with patch("os.makedirs"), patch("builtins.open", side_effect=local_open):
+                namespace = {}
+                exec(compile(code, "<core JSON transaction generator>", "exec"), namespace)
+            files = list(Path(directory).iterdir())
+            self.assertEqual(len(files), 1)
+            self.assertEqual(files[0].suffix, ".json")
+            with real_open(files[0], encoding="utf-8") as stream:
+                document = json.load(stream)
+        batches = document["transaction_batches"]
+        transactions = [entry["transaction"] for batch in batches for entry in batch]
+        self.assertEqual(len(transactions), 78)
+        self.assertEqual(list(transactions[0]), [
+            "TransactionID", "AccountID", "Amount", "Timestamp",
+        ])
+        self.assertEqual(transactions[0]["TransactionID"], 1)
+        self.assertEqual(transactions[0]["AccountID"], 10)
+        self.assertEqual(transactions[0]["Amount"], 60)
+
+    def test_core_json_loader_uses_flatten_and_explode(self):
+        notebook = next(NOTEBOOKS.rglob("nb_json_load_source_to_ld_core.Notebook"))
+        platform = json.loads((notebook / ".platform").read_text())
+        code = notebook_code("nb_json_load_source_to_ld_core")
+        ast.parse(code)
+        self.assertEqual(platform["metadata"]["displayName"], "nb_json_load_source_to_ld_core")
+        self.assertIn('explode(flatten(col("transaction_batches")))', code)
+        self.assertIn('table_name = "ld_oys_transaction_ledger"', code)
+
+    def test_full_json_generator_preserves_full_ledger_data(self):
+        csv_generator = (
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "020_Utility_notebooks"
+            / "c26cc17a-260e-8c59-44fc-d6cd231fc926.Notebook" / "notebook-content.py"
+        ).read_text(encoding="utf-8")
+        ast.parse(csv_generator)
+        self.assertNotIn("json.dump(", csv_generator)
+        code = (
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "020_Utility_notebooks"
+            / "Oyster_Json_Transaction_Generator.Notebook" / "notebook-content.py"
+        ).read_text(encoding="utf-8")
+        ast.parse(code)
+        code = code.replace("num_customers = 83", "num_customers = 7")
+        real_open = open
+        with tempfile.TemporaryDirectory() as directory:
+            def local_open(path, *args, **kwargs):
+                return real_open(Path(directory) / Path(path).name, *args, **kwargs)
+
+            with patch("os.makedirs"), patch("builtins.open", side_effect=local_open):
+                namespace = {}
+                exec(compile(code, "<full JSON transaction generator>", "exec"), namespace)
+            files = list(Path(directory).iterdir())
+            self.assertEqual(len(files), 1)
+            self.assertEqual(files[0].suffix, ".json")
+            with real_open(files[0], encoding="utf-8") as stream:
+                document = json.load(stream)
+        transactions = [entry["transaction"] for batch in document["transaction_batches"] for entry in batch]
+        self.assertEqual(len(transactions), 78)
+        self.assertEqual(list(transactions[0]), [
+            "TransactionID", "AccountID", "Amount", "Timestamp",
+            "Counterparty", "TransactionStatusID",
+        ])
+        self.assertEqual(transactions[0]["Counterparty"], "Kaufland")
+        self.assertEqual(transactions[0]["TransactionStatusID"], 1)
+
+    def test_full_json_loader_uses_flatten_and_explode(self):
+        notebook = (
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "030_Framework_notebooks"
+            / "020_Landing_delta" / "nb_json_load_source_to_ld.Notebook"
+        )
+        platform = json.loads((notebook / ".platform").read_text())
+        code = (notebook / "notebook-content.py").read_text(encoding="utf-8")
+        ast.parse(code)
+        self.assertEqual(platform["metadata"]["displayName"], "nb_json_load_source_to_ld")
+        self.assertIn('explode(flatten(col("transaction_batches")))', code)
+        self.assertIn('"Counterparty"', code)
+        self.assertIn('"TransactionStatusID"', code)
+        self.assertIn('table_name = "ld_oys_transaction_ledger"', code)
 
     def test_full_generator_has_matching_aligned_platinum_scenario(self):
         generator = (

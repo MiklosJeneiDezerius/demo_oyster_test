@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "Oyster_Json_Transaction_Generator_Core",
+    "description": "Writes the deterministic core ledger as nested JSON for explode-based Delta loading."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9723f71d-c07b-47fe-bbe1-f32997b9ab55"
+  }
+}

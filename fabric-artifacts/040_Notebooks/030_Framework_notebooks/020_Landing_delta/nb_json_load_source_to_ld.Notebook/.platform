@@ -1,0 +1,12 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "nb_json_load_source_to_ld",
+    "description": "Flattens and explodes nested full-demo ledger JSON into a Delta table."
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "9268edd1-be42-4947-babb-85dca99f196a"
+  }
+}

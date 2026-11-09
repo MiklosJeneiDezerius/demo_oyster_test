@@ -27,6 +27,11 @@ older transactions and making reruns idempotent. The incremental flag is kept
 in the configuration for compatibility with the full configuration shape; it
 does not enable a separate incremental/MERGE path in this simple loader.
 Missing files, missing business keys and malformed CSV fail the notebook.
+The primary `Oyster_Deterministic_Data_Generator_Core` remains CSV-only. For a
+separate JSON exercise, `Oyster_Json_Transaction_Generator_Core` writes nested
+`transaction_batches`; `nb_json_load_source_to_ld_core` applies
+`explode(flatten(...))` to build the same ledger Delta table. This optional pair
+is not wired into `pl_Landing_Delta_Core`.
 The core notebook tree also contains core-bound counterparts for the full
 project's DATEV raw loader, generic CSV-to-Delta loader and timestamped
 Parquet-to-Delta loader. These are optional utilities and are not called by

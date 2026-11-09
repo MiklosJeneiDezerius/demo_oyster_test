@@ -116,7 +116,7 @@ for i in range(1, num_customers + 1):
     account_rows.append((account_id, i, f"OYS100{190000 + i}", 2 if i % 2 == 0 else 1, float(i * 111.11), (i % 3) + 1))
     
     # 🛑 THE DETERMINISTIC SYSTEM ROUTING SCENARIOS (Modulo 7 Engine)
-        scenario = i % 7
+    scenario = i % 7
     
     if scenario == 1:
         # Scenario 1: Aligned Base Users (Standard Card, Low Spend)
