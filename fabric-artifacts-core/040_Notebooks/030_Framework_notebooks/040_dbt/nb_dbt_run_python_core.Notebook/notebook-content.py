@@ -43,9 +43,6 @@ dbt_command = globals().get('dbt_command', 'build')
 dbt_args = globals().get('dbt_args', '')  # pl. '--select b_oys_customer'
 dbt_server = globals().get('dbt_server', '')  # Warehouse SQL endpoint hostname.
 
-if not dbt_server:
-    raise ValueError('Set dbt_server to the Warehouse SQL endpoint hostname.')
-
 # METADATA ********************
 
 # META {
@@ -75,6 +72,9 @@ import subprocess
 import textwrap
 import time
 from notebookutils import credentials
+
+if not dbt_server:
+    raise ValueError('Set dbt_server to the Warehouse SQL endpoint hostname.')
 
 # 1. Isolated dbt environment. No notebook-kernel restart.
 venv_dir = '/tmp/dbt_venv'

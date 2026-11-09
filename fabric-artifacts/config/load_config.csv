@@ -1,0 +1,11 @@
+source_object_name,is_active,is_active_delta,is_active_delta_incremental
+Customer,1,1,0
+CustomerType,1,1,0
+CustomerAddress,1,1,0
+Account,1,1,0
+AccountType,1,1,0
+Currency,1,1,0
+DebitCard,1,1,0
+CardTier,1,1,0
+Transaction_Ledger,1,1,1
+TransactionStatus,1,1,0
