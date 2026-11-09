@@ -1,6 +1,7 @@
 # Fabric notebook source
 
 # METADATA ********************
+
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
@@ -9,12 +10,19 @@
 
 # CELL ********************
 
-%%configure
-{
-    "defaultLakehouse": {
-        "name": "lh_oysterlake_core"
-    }
-}
+# MAGIC %%configure
+# MAGIC {
+# MAGIC     "defaultLakehouse": {
+# MAGIC         "name": "lh_oysterlake_core"
+# MAGIC     }
+# MAGIC }
+
+# METADATA ********************
+
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
 
 # PARAMETERS CELL ********************
 
@@ -24,6 +32,13 @@ p_in_table_name = "Account"
 p_debug = 0
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
@@ -122,6 +137,13 @@ output.write.format("delta").option("overwriteSchema", "true").mode("overwrite")
 print(f"Loaded {p_in_table_name} into {table_name}")
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"

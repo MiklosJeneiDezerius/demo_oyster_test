@@ -20,7 +20,7 @@
               "type": "string"
             },
             "dbt_server": {
-              "value": "",
+              "value": "xe6b73af6wce5cpkwv3dpk3vzi-htsck64qztlehhjsieqb3d7vzi.datawarehouse.fabric.microsoft.com",
               "type": "string"
             },
             "dbt_command": {

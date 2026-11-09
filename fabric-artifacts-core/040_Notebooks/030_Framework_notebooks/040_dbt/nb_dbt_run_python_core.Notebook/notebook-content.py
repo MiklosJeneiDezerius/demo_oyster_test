@@ -8,7 +8,7 @@
 # META   }
 # META }
 
-# PARAMETERS CELL ********************
+# CELL ********************
 
 # Fabric notebook source
 

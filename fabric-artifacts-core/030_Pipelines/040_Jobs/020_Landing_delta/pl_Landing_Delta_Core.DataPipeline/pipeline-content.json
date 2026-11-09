@@ -5,9 +5,9 @@
         "type": "Lookup",
         "typeProperties": {
           "source": {
-            "type": "JsonSource",
+            "type": "DelimitedTextSource",
             "formatSettings": {
-              "type": "JsonReadSettings"
+              "type": "DelimitedTextReadSettings"
             },
             "storeSettings": {
               "type": "LakehouseReadSettings",
@@ -16,15 +16,19 @@
             }
           },
           "datasetSettings": {
-            "type": "Json",
+            "type": "DelimitedText",
             "typeProperties": {
               "location": {
                 "type": "LakehouseLocation",
                 "folderPath": "config",
-                "fileName": "load_config.json"
-              }
+                "fileName": "load_config.csv"
+              },
+              "columnDelimiter": ",",
+              "quoteChar": "\"",
+              "escapeChar": "\\",
+              "firstRowAsHeader": true
             },
-            "schema": {},
+            "schema": [],
             "linkedService": {
               "name": "lh_oysterlake_core",
               "properties": {
@@ -61,7 +65,8 @@
       {
         "type": "ForEach",
         "typeProperties": {
-          "isSequential": true,
+          "isSequential": false,
+          "batchCount": 2,
           "items": {
             "value": "@activity('Filter - active tables').output.Value",
             "type": "Expression"
