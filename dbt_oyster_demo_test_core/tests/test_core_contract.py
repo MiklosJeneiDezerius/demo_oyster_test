@@ -344,9 +344,17 @@ class CoreContractTests(unittest.TestCase):
         with sqlite3.connect(":memory:") as connection:
             connection.executescript("""
                 CREATE TABLE s_dim_date(s_dim_date_sk INTEGER, full_dt TEXT);
-                CREATE TABLE s_dim_account(s_dim_account_sk TEXT, s_dim_customer_sk TEXT, account_id INTEGER);
+                CREATE TABLE s_dim_account(
+                    s_dim_account_sk TEXT,
+                    s_dim_customer_sk TEXT,
+                    account_id INTEGER,
+                    card_id INTEGER,
+                    card_tier_nm TEXT
+                );
                 CREATE TABLE s_fct_transaction(s_dim_account_sk TEXT, transaction_dttm TEXT, transaction_amt NUMERIC);
-                INSERT INTO s_dim_account VALUES ('a1', 'c1', 1), ('a2', 'c2', 2);
+                INSERT INTO s_dim_account VALUES
+                    ('a1', 'c1', 1, 101, 'Standard'),
+                    ('a2', 'c2', 2, NULL, NULL);
                 INSERT INTO s_fct_transaction VALUES
                     ('a1', '2024-12-02 12:00:00', 10000),
                     ('a1', '2024-12-03 00:00:00', 2000),
@@ -403,6 +411,18 @@ class CoreContractTests(unittest.TestCase):
         })
         measures = (definition / "tables" / "g_fct_periodic_spend_snapshot.tmdl").read_text()
         self.assertIn("REMOVEFILTERS('g_fct_periodic_spend_snapshot'[CalculatedSpendingTier])", measures)
+        for measure in (
+            "Total No. of Cards", "Upgrade Candidate Cards", "Downgrade Candidate Cards",
+            "Aligned Cards", "Misaligned Cards", "Tier Mismatch Rate",
+        ):
+            self.assertIn(f"measure '{measure}'", measures)
+        snapshot_sql = models["g_fct_periodic_spend_snapshot"]
+        snapshot_output = snapshot_sql.split("\n)\nSELECT\n    CONVERT", 1)[1]
+        for column in (
+            "card_id", "actual_card_tier_nm", "is_upgrade_candidate_flag",
+            "is_low_spend_premium_anomaly_flag", "alignment_status_cd",
+        ):
+            self.assertIn(f"[{column}]", snapshot_output)
         report = ARTIFACTS / "050_Reports" / "rpt_oyster_core.Report"
         reference = json.loads((report / "definition.pbir").read_text())
         self.assertEqual(

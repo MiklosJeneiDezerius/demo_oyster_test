@@ -151,6 +151,26 @@ models:
               arguments:
                 to: ref('ga_dim_customer')
                 field: ga_dim_customer_sk
+      - name: actual_card_tier_nm
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Standard', 'Gold', 'Platinum']
+      - name: is_upgrade_candidate_flag
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      - name: is_low_spend_premium_anomaly_flag
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+      - name: alignment_status_cd
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Aligned', 'Misaligned']
       - name: calculated_spending_tier_nm
         data_tests:
           - accepted_values:
