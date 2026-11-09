@@ -10,12 +10,12 @@
 
 # CELL ********************
 
-%%configure
-{
-    "defaultLakehouse": {
-        "name": "lh_oysterlake_core"
-    }
-}
+# MAGIC %%configure
+# MAGIC {
+# MAGIC     "defaultLakehouse": {
+# MAGIC         "name": "lh_oysterlake_core"
+# MAGIC     }
+# MAGIC }
 
 # CELL ********************
 
