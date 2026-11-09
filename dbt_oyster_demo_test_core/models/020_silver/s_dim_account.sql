@@ -9,5 +9,7 @@ SELECT
 FROM {{ ref('b_oys_account') }} a
 LEFT JOIN {{ ref('s_dim_customer') }} c
     ON a.[customer_id] = c.[customer_id]
-LEFT JOIN {{ ref('b_oys_debit_card') }} dc
+    AND c.[is_current_version_flag] = 1
+LEFT JOIN {{ ref('s_dim_card') }} dc
     ON a.[account_id] = dc.[account_id]
+    AND dc.[is_current_version_flag] = 1

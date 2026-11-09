@@ -34,7 +34,7 @@ table g_fct_periodic_spend_snapshot
 
 	measure 'Total No. of Cards' =
 			COALESCE (
-				DISTINCTCOUNTNOBLANK ( 'g_fct_periodic_spend_snapshot'[CardID] ),
+				DISTINCTCOUNTNOBLANK ( 'g_fct_periodic_spend_snapshot'[CardSK] ),
 				0
 			)
 		formatString: 0
@@ -140,6 +140,17 @@ table g_fct_periodic_spend_snapshot
 		sourceLineageTag: account_id
 		summarizeBy: none
 		sourceColumn: account_id
+
+		annotation SummarizationSetBy = Automatic
+
+	column CardSK
+		dataType: string
+		isHidden
+		sourceProviderType: varchar(64)
+		lineageTag: c657e58e-f678-4e4f-8f01-8597f4ce4486
+		sourceLineageTag: s_dim_card_sk
+		summarizeBy: none
+		sourceColumn: s_dim_card_sk
 
 		annotation SummarizationSetBy = Automatic
 

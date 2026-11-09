@@ -56,12 +56,49 @@ models:
       - name: transaction_dttm
         data_tests: [not_null]
   - name: s_dim_customer
-    description: "Current customers, with stable business-key hashes; no SCD2 in the simplified core."
+    description: "Customer history using SCD2 versions from the dbt snapshot."
     columns:
       - name: s_dim_customer_sk
         data_tests: [not_null, unique]
       - name: customer_id
+        data_tests: [not_null]
+      - name: valid_from_dttm
+        data_tests: [not_null]
+      - name: valid_to_dttm
+        data_tests: [not_null]
+      - name: is_current_version_flag
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
+  - name: s_dim_card
+    description: "Debit-card history using SCD2 versions from the dbt snapshot."
+    columns:
+      - name: s_dim_card_sk
         data_tests: [not_null, unique]
+      - name: card_id
+        data_tests: [not_null]
+      - name: s_dim_account_sk
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('s_dim_account')
+                field: s_dim_account_sk
+      - name: card_tier_nm
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Standard', 'Gold', 'Platinum']
+      - name: valid_from_dttm
+        data_tests: [not_null]
+      - name: valid_to_dttm
+        data_tests: [not_null]
+      - name: is_current_version_flag
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: [0, 1]
   - name: s_dim_account
     description: "One row per account with optional debit-card attributes; cardless accounts are retained."
     columns:
@@ -118,7 +155,7 @@ models:
       - name: ga_dim_customer_sk
         data_tests: [not_null, unique]
       - name: customer_id
-        data_tests: [not_null, unique]
+        data_tests: [not_null]
   - name: g_dim_date
     columns:
       - name: g_dim_date_sk
@@ -151,6 +188,12 @@ models:
               arguments:
                 to: ref('ga_dim_customer')
                 field: ga_dim_customer_sk
+      - name: s_dim_card_sk
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('s_dim_card')
+                field: s_dim_card_sk
       - name: actual_card_tier_nm
         data_tests:
           - accepted_values:

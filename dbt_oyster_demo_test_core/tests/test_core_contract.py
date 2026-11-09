@@ -340,6 +340,10 @@ class CoreContractTests(unittest.TestCase):
             "DATEADD(day, -29, CAST('2025-01-01' AS DATE))",
             "date('2025-01-01', '-29 days')",
         ).replace("CAST(GETDATE() AS DATE)", "'2025-02-01'")
+        ctes = ctes.replace(
+            "DATEADD(day, 1, CAST(d.[FullDate] AS DATETIME2(6)))",
+            "datetime(d.[FullDate], '+1 day')",
+        )
         ctes = ctes.replace("CAST([transaction_dttm] AS DATE)", "date([transaction_dttm])")
         with sqlite3.connect(":memory:") as connection:
             connection.executescript("""
@@ -348,13 +352,33 @@ class CoreContractTests(unittest.TestCase):
                     s_dim_account_sk TEXT,
                     s_dim_customer_sk TEXT,
                     account_id INTEGER,
+                    customer_id INTEGER,
                     card_id INTEGER,
                     card_tier_nm TEXT
                 );
+                CREATE TABLE s_dim_customer(
+                    s_dim_customer_sk TEXT,
+                    customer_id INTEGER,
+                    valid_from_dttm TEXT,
+                    valid_to_dttm TEXT
+                );
+                CREATE TABLE s_dim_card(
+                    s_dim_card_sk TEXT,
+                    s_dim_account_sk TEXT,
+                    card_id INTEGER,
+                    card_tier_nm TEXT,
+                    valid_from_dttm TEXT,
+                    valid_to_dttm TEXT
+                );
                 CREATE TABLE s_fct_transaction(s_dim_account_sk TEXT, transaction_dttm TEXT, transaction_amt NUMERIC);
                 INSERT INTO s_dim_account VALUES
-                    ('a1', 'c1', 1, 101, 'Standard'),
-                    ('a2', 'c2', 2, NULL, NULL);
+                    ('a1', 'c1', 1, 1, 101, 'Standard'),
+                    ('a2', 'c2', 2, 2, NULL, NULL);
+                INSERT INTO s_dim_customer VALUES
+                    ('c1-v1', 1, '1900-01-01 00:00:00', '9999-12-31 00:00:00'),
+                    ('c2-v1', 2, '1900-01-01 00:00:00', '9999-12-31 00:00:00');
+                INSERT INTO s_dim_card VALUES
+                    ('card-1-v1', 'a1', 101, 'Standard', '1900-01-01 00:00:00', '9999-12-31 00:00:00');
                 INSERT INTO s_fct_transaction VALUES
                     ('a1', '2024-12-02 12:00:00', 10000),
                     ('a1', '2024-12-03 00:00:00', 2000),
@@ -366,14 +390,16 @@ class CoreContractTests(unittest.TestCase):
                 [(int((start + timedelta(days=n)).strftime("%Y%m%d")),
                   (start + timedelta(days=n)).isoformat()) for n in range(62)],
             )
-            query = ctes + "\nSELECT full_dt, account_id, rolling_30_day_spend_amt FROM rolling_spend"
+            query = ctes + "\nSELECT FullDate, AccountID, Rolling30DaySpend FROM rolling_spend"
             values = {(day, account): amount for day, account, amount in connection.execute(query)}
             self.assertEqual(values[("2025-01-01", 1)], 5000)
             self.assertEqual(values[("2025-01-02", 1)], 3000)
             self.assertEqual(values[("2025-01-30", 1)], 3000)
             self.assertEqual(values[("2025-01-31", 1)], 0)
             self.assertTrue(all(amount == 0 for (day, account), amount in values.items() if account == 2))
-            tier_case = re.search(r"    CASE\n.*?    END AS \[calculated_spending_tier_nm\]", sql, re.S).group()
+            tier_case = re.search(
+                r"    CASE\n.*?    END AS \[calculated_spending_tier_nm\]", sql, re.S,
+            ).group().replace("[Rolling30DaySpend]", "[rolling_30_day_spend_amt]")
             tiers = dict(connection.execute(
                 "SELECT rolling_30_day_spend_amt, " + tier_case +
                 " FROM (SELECT 1999.99 AS rolling_30_day_spend_amt UNION ALL SELECT 2000 "
@@ -385,13 +411,14 @@ class CoreContractTests(unittest.TestCase):
         models = {path.stem: path.read_text() for path in (PROJECT / "models").rglob("*.sql")}
         self.assertEqual(set(models), {
             "b_oys_customer", "b_oys_account", "b_oys_debit_card", "b_oys_transaction",
-            "s_dim_customer", "s_dim_account", "s_dim_date", "s_fct_transaction",
+            "s_dim_customer", "s_dim_card", "s_dim_account", "s_dim_date", "s_fct_transaction",
             "ga_dim_customer", "ga_dim_account", "g_dim_date",
             "g_fct_periodic_spend_snapshot", "fail_transactions_without_accountid",
         })
+        snapshot_names = {path.stem for path in (PROJECT / "snapshots").glob("*.sql")}
         for sql in models.values():
             for reference in re.findall(r"\{\{ ref\('(\w+)'\) \}\}", sql):
-                self.assertIn(reference, models)
+                self.assertIn(reference, set(models) | snapshot_names)
             self.assertNotIn("{{ config", sql)
 
         definition = ARTIFACTS / "sm_oyster_core.SemanticModel" / "definition"
@@ -462,10 +489,12 @@ class CoreContractTests(unittest.TestCase):
             )
             connection.executescript("""
                 CREATE TABLE b_oys_account(account_id INTEGER, customer_id INTEGER, balance_amt NUMERIC);
-                CREATE TABLE s_dim_customer(customer_id INTEGER, s_dim_customer_sk TEXT);
+                CREATE TABLE s_dim_customer(customer_id INTEGER, s_dim_customer_sk TEXT, is_current_version_flag INTEGER);
+                CREATE TABLE s_dim_card(card_id INTEGER, account_id INTEGER, card_tier_nm TEXT, is_current_version_flag INTEGER);
                 CREATE TABLE b_oys_debit_card(card_id INTEGER, account_id INTEGER, card_tier_nm TEXT);
                 INSERT INTO b_oys_account VALUES (10, 1, 100), (20, 2, 200);
-                INSERT INTO s_dim_customer VALUES (1, 'c1'), (2, 'c2');
+                INSERT INTO s_dim_customer VALUES (1, 'c1', 1), (2, 'c2', 1);
+                INSERT INTO s_dim_card VALUES (100, 10, 'Gold', 1);
                 INSERT INTO b_oys_debit_card VALUES (100, 10, 'Gold');
             """)
             rows = connection.execute(sql).fetchall()

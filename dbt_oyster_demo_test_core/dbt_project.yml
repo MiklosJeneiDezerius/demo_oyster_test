@@ -18,6 +18,10 @@ seed-paths: ["seeds"]
 macro-paths: ["macros"]
 snapshot-paths: ["snapshots"]
 
+vars:
+  target_snapshot_db: "{{ env_var('DBT_DATABASE', 'dw_oyster_core') }}"
+  target_snapshot_schema: 'snapshots'
+
 clean-targets:         # directories to be removed by `dbt clean`
   - "target"
   - "dbt_packages"

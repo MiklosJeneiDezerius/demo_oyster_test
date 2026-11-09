@@ -68,12 +68,12 @@ them.
 
 [sm_oyster_core.SemanticModel](sm_oyster_core.SemanticModel) preserves the
 full model's report-facing column names over snake_case physical fields. It
-contains current account/customer/date dimensions and the periodic spend fact,
-with many-to-one, single-direction relationships.
-DebitCard is denormalized into the Silver account dimension and passed through
-to Gold and the semantic account table as `CardID` and `CardTier`. There is at
-most one card per account (validated by dbt); cardless accounts remain with
-null card attributes. There is no separate Silver/Gold card dimension.
+contains current account/date dimensions, the SCD2 customer dimension, and the
+periodic spend fact with many-to-one, single-direction relationships.
+DebitCard is retained as an SCD2 Silver dimension and the current `CardID` and
+`CardTier` are also denormalized into the Silver/Gold account dimension for the
+report. The spend snapshot resolves customer and card versions as of each date.
+Cardless accounts remain with null current-card attributes.
 
 [rpt_oyster_core.Report](050_Reports/rpt_oyster_core.Report) shows total accounts,
 Platinum accounts, 30-day spend and the calculated spending-tier distribution.
@@ -86,6 +86,6 @@ The generator defaults to the full demo's 2026-09-01 anchor date. Historical
 spend naturally drops out of the latest 30-day window; set its `anchor_date`
 notebook parameter to a recent date when demonstrating current spend.
 
-After replacing an older core deployment, remove obsolete separate Silver/Gold
-card tables/items manually only after confirming they are no longer needed.
-Keep the DebitCard Delta and Bronze tables.
+After replacing an older core deployment, keep the SCD2 Silver card table and
+the DebitCard Delta and Bronze tables. Remove obsolete separate Gold card
+tables/items only after confirming they are no longer needed.
