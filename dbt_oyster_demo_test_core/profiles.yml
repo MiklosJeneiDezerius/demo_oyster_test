@@ -4,7 +4,7 @@ dbt_oyster_demo_test:
     dev:
       type: fabric
       driver: 'ODBC Driver 18 for SQL Server'
-      server: "{{ env_var('DBT_SERVER') }}"
+      server: "{{ env_var('DBT_SERVER', 'xe6b73af6wce5cpkwv3dpk3vzi-htsck64qztlehhjsieqb3d7vzi.datawarehouse.fabric.microsoft.com') }}"
       port: 1433
       database: "{{ env_var('DBT_DATABASE', 'dw_oyster_core') }}"
       schema: 'oystr'

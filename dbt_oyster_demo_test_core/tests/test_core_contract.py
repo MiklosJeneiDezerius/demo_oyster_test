@@ -111,7 +111,11 @@ class CoreContractTests(unittest.TestCase):
         )
         self.assertEqual(platform["metadata"]["displayName"], "dw_oyster_core")
         self.assertIn("<Name>dw_oyster_core</Name>", project)
-        self.assertIn("env_var('DBT_SERVER')", profile)
+        core_server = (
+            "xe6b73af6wce5cpkwv3dpk3vzi-htsck64qztlehhjsieqb3d7vzi"
+            ".datawarehouse.fabric.microsoft.com"
+        )
+        self.assertIn(f"env_var('DBT_SERVER', '{core_server}')", profile)
         self.assertIn("env_var('DBT_DATABASE', 'dw_oyster_core')", profile)
         self.assertIn('"dw_oyster_core"', model_expression)
         self.assertIn("REPLACE_WITH_CORE_WAREHOUSE_SQL_ENDPOINT", model_expression)
@@ -137,6 +141,18 @@ class CoreContractTests(unittest.TestCase):
             notebook_parameters["dbt_server"]["value"],
             "xe6b73af6wce5cpkwv3dpk3vzi-ufjmp33zdiqudnk6b6giyfzpxi.datawarehouse.fabric.microsoft.com",
         )
+
+    def test_dbt_runner_pins_compatible_adapter_and_core(self):
+        runner_paths = (
+            ARTIFACTS / "040_Notebooks" / "030_Framework_notebooks" / "040_dbt"
+            / "nb_dbt_run_python_core.Notebook" / "notebook-content.py",
+            ROOT / "fabric-artifacts" / "040_Notebooks" / "030_Framework_notebooks"
+            / "040_dbt" / "nb_dbt_run_python.Notebook" / "notebook-content.py",
+        )
+        for path in runner_paths:
+            code = path.read_text(encoding="utf-8")
+            self.assertIn("'dbt-fabric==1.11.1'", code)
+            self.assertIn("'dbt-core<1.12'", code)
 
     def test_generator_has_four_entities_and_aligned_platinum_scenario(self):
         code = notebook_code("Oyster_Deterministic_Data_Generator_Core")

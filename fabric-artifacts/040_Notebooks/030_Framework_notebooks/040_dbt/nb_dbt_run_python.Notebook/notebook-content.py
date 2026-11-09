@@ -85,7 +85,10 @@ subprocess.run([sys.executable, '-m', 'venv', venv_dir], check=True)
 venv_python = os.path.join(venv_dir, 'bin', 'python')
 dbt_exe = os.path.join(venv_dir, 'bin', 'dbt')
 print('Installing dbt-fabric...')
-subprocess.run([venv_python, '-m', 'pip', 'install', '--quiet', 'dbt-fabric>=1.11.1'], check=True)
+subprocess.run([
+    venv_python, '-m', 'pip', 'install', '--quiet',
+    'dbt-fabric==1.11.1', 'dbt-core<1.12',
+], check=True)
 
 # 2. Clone GitHub repository.
 repo_name = repo_url.rstrip('/').split('/')[-1].removesuffix('.git')
