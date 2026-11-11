@@ -30,6 +30,7 @@ anchor_date = "2026-09-01"
 # CELL ********************
 
 import csv
+import json
 import os
 from datetime import datetime, timedelta
 
@@ -94,6 +95,33 @@ for table_name, (header, rows) in files_config.items():
         writer.writerow(header)
         writer.writerows(rows)
     print(f"{table_name}: {len(rows)} rows written to {path}")
+
+    if table_name == "Transaction_Ledger":
+        transactions_by_account = {}
+        for transaction_id, account_id, amount, transaction_timestamp in rows:
+            transactions_by_account.setdefault(account_id, []).append({
+                "TransactionID": transaction_id,
+                "AccountID": account_id,
+                "Amount": amount,
+                "Timestamp": transaction_timestamp,
+            })
+
+        json_path = os.path.splitext(path)[0] + ".json"
+        with open(json_path, "w", encoding="utf-8") as json_file:
+            for account_id, account_transactions in transactions_by_account.items():
+                transaction_batches = [
+                    account_transactions[index:index + 5]
+                    for index in range(0, len(account_transactions), 5)
+                ]
+                document = {
+                    "SourceSystem": "oyster",
+                    "Data": {
+                        "AccountID": account_id,
+                        "TransactionBatches": transaction_batches,
+                    },
+                }
+                json_file.write(json.dumps(document, ensure_ascii=False) + "\n")
+        print(f"Transaction_Ledger JSON written to {json_path}")
 
 # METADATA ********************
 # META {
