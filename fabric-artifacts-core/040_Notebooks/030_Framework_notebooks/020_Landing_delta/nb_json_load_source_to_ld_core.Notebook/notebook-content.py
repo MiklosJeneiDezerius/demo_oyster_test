@@ -1,19 +1,12 @@
 # Fabric notebook source
 
 # METADATA ********************
+
 # META {
 # META   "kernel_info": {
 # META     "name": "synapse_pyspark"
 # META   }
 # META }
-
-# CELL ********************
-# MAGIC %%configure
-# MAGIC {
-# MAGIC     "defaultLakehouse": {
-# MAGIC         "name": "lh_oysterlake_core"
-# MAGIC     }
-# MAGIC }
 
 # PARAMETERS CELL ********************
 
@@ -23,6 +16,13 @@ p_in_table_name = "Transaction_Ledger"
 p_debug = 0
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META }
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"
@@ -144,6 +144,13 @@ output.write.format("delta").option("overwriteSchema", "true").mode("overwrite")
 print(f"Loaded {p_in_table_name} from nested JSON into {table_name}")
 
 # METADATA ********************
+# META {
+# META   "language": "python",
+# META   "language_group": "synapse_pyspark"
+# META 
+
+# METADATA ********************
+
 # META {
 # META   "language": "python",
 # META   "language_group": "synapse_pyspark"

@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "5cae5958e3d32a5ae1fc",
   "position": {
-    "x": 987.9545454545454,
+    "x": 987.95454545454538,
     "y": 351.30681818181813,
     "z": 4,
-    "height": 428.0113636363636,
-    "width": 879.0340909090909,
+    "height": 428.01136363636363,
+    "width": 879.03409090909088,
     "tabOrder": 2
   },
   "visual": {
@@ -20,14 +20,14 @@
                 "Column": {
                   "Expression": {
                     "SourceRef": {
-                      "Entity": "g_fct_periodic_spend_snapshot"
+                      "Entity": "ga_dim_account"
                     }
                   },
-                  "Property": "CalculatedSpendingTier"
+                  "Property": "CardTier"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.CalculatedSpendingTier",
-              "nativeQueryRef": "CalculatedSpendingTier",
+              "queryRef": "ga_dim_account.CardTier",
+              "nativeQueryRef": "CardTier",
               "active": true
             }
           ]
@@ -42,11 +42,11 @@
                       "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
-                  "Property": "Total Accounts"
+                  "Property": "Misaligned Cards"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.Total Accounts",
-              "nativeQueryRef": "Total Accounts"
+              "queryRef": "g_fct_periodic_spend_snapshot.Misaligned Cards",
+              "nativeQueryRef": "Misaligned Cards"
             }
           ]
         }
@@ -61,7 +61,7 @@
                     "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
-                "Property": "Total Accounts"
+                "Property": "Misaligned Cards"
               }
             },
             "direction": "Descending"
@@ -71,23 +71,5 @@
       }
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "20971c6d510bbf4ef5ea",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "g_fct_periodic_spend_snapshot"
-              }
-            },
-            "Property": "Total Accounts"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

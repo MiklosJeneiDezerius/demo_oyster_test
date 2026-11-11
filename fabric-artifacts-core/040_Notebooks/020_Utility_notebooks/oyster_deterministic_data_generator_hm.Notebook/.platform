@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Notebook",
+    "displayName": "oyster_deterministic_data_generator_hm"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "7292a1db-6585-b7d5-4b4d-72914f61fe78"
+  }
+}

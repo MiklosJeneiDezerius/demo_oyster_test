@@ -23,11 +23,11 @@
                       "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
-                  "Property": "Total Accounts"
+                  "Property": "Total No. of Cards"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.Total Accounts",
-              "nativeQueryRef": "Total Accounts"
+              "queryRef": "g_fct_periodic_spend_snapshot.Total No. of Cards",
+              "nativeQueryRef": "Total No. of Cards"
             }
           ]
         }
@@ -42,7 +42,7 @@
                     "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
-                "Property": "Total Accounts"
+                "Property": "Total No. of Cards"
               }
             },
             "direction": "Descending"
@@ -180,23 +180,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "f7aaadcf3c9a31bb4eae",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "g_fct_periodic_spend_snapshot"
-              }
-            },
-            "Property": "Total Accounts"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

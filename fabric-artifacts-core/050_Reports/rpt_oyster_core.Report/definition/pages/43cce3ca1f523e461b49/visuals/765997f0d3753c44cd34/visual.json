@@ -2,11 +2,11 @@
   "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/visualContainer/2.14.0/schema.json",
   "name": "765997f0d3753c44cd34",
   "position": {
-    "x": 643.2080200501254,
+    "x": 643.20802005012536,
     "y": 139.54887218045113,
     "z": 1,
     "height": 126.71679197994987,
-    "width": 599.8997493734336
+    "width": 599.89974937343356
   },
   "visual": {
     "visualType": "cardVisual",
@@ -22,11 +22,12 @@
                       "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
-                  "Property": "Platinum Accounts"
+                  "Property": "Tier Mismatch Rate"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.Platinum Accounts",
-              "nativeQueryRef": "Platinum Accounts"
+              "queryRef": "g_fct_periodic_spend_snapshot.Tier Mismatch Rate",
+              "nativeQueryRef": "Tier Mismatch Rate",
+              "format": "0.00 %;-0.00 %;0.00 %"
             }
           ]
         }
@@ -41,7 +42,7 @@
                     "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
-                "Property": "Platinum Accounts"
+                "Property": "Tier Mismatch Rate"
               }
             },
             "direction": "Descending"
@@ -415,23 +416,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "c510ce138fcd78b7418a",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "g_fct_periodic_spend_snapshot"
-              }
-            },
-            "Property": "Platinum Accounts"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }

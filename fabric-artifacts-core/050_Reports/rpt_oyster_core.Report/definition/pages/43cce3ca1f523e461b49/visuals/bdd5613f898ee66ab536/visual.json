@@ -6,7 +6,7 @@
     "y": 139.54887218045113,
     "z": 2,
     "height": 126.71679197994987,
-    "width": 599.8997493734336
+    "width": 599.89974937343356
   },
   "visual": {
     "visualType": "cardVisual",
@@ -22,11 +22,11 @@
                       "Entity": "g_fct_periodic_spend_snapshot"
                     }
                   },
-                  "Property": "Total Spend"
+                  "Property": "Upgrade Candidate Cards"
                 }
               },
-              "queryRef": "g_fct_periodic_spend_snapshot.Total Spend",
-              "nativeQueryRef": "Total Spend"
+              "queryRef": "g_fct_periodic_spend_snapshot.Upgrade Candidate Cards",
+              "nativeQueryRef": "Upgrade Candidate Cards"
             }
           ]
         }
@@ -41,7 +41,7 @@
                     "Entity": "g_fct_periodic_spend_snapshot"
                   }
                 },
-                "Property": "Total Spend"
+                "Property": "Upgrade Candidate Cards"
               }
             },
             "direction": "Descending"
@@ -415,23 +415,5 @@
       ]
     },
     "drillFilterOtherVisuals": true
-  },
-  "filterConfig": {
-    "filters": [
-      {
-        "name": "a5b98d8e416cbf26cb58",
-        "field": {
-          "Measure": {
-            "Expression": {
-              "SourceRef": {
-                "Entity": "g_fct_periodic_spend_snapshot"
-              }
-            },
-            "Property": "Total Spend"
-          }
-        },
-        "type": "Advanced"
-      }
-    ]
   }
 }
