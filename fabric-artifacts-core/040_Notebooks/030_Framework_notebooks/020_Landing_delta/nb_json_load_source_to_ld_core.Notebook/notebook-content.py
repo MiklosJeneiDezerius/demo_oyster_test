@@ -1,5 +1,14 @@
 # Fabric notebook source
 
+# CELL ********************
+
+# MAGIC %%configure
+# MAGIC {
+# MAGIC     "defaultLakehouse": {
+# MAGIC         "name": "lh_oysterlake_core"
+# MAGIC     }
+# MAGIC }
+
 # METADATA ********************
 
 # META {
@@ -98,12 +107,12 @@ for path in source_files:
                             f"line {line_number}, batch {batch_number}"
                         )
                     normalized_batch = []
-                    for row_number, entry in enumerate(batch, start=1):
+                    for row_idx, entry in enumerate(batch, start=1):
                         record = entry.get("transaction", entry) if isinstance(entry, dict) else None
                         if not isinstance(record, dict):
                             raise ValueError(
                                 f"Expected transaction object in {path}, line {line_number}, "
-                                f"batch {batch_number}, row {row_number}"
+                                f"batch {batch_number}, row {row_idx}"
                             )
                         missing_columns = set(required_columns) - set(record)
                         if missing_columns:
@@ -115,7 +124,7 @@ for path in source_files:
                         if any(value is None or isinstance(value, (dict, list)) for value in values.values()):
                             raise ValueError(
                                 f"Invalid transaction field in {path}, line {line_number}, "
-                                f"batch {batch_number}, row {row_number}"
+                                f"batch {batch_number}, row {row_idx}"
                             )
                         normalized_batch.append({
                             "transaction": {name: str(value) for name, value in values.items()}
