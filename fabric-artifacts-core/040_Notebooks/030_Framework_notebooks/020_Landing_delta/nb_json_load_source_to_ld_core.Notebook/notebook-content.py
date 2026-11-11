@@ -36,7 +36,9 @@ p_debug = 0
 
 # CELL ********************
 
+import glob
 import json
+import os
 import re
 from datetime import datetime
 
@@ -51,13 +53,16 @@ if not p_root_path:
     raise ValueError("p_root_path is required.")
 
 valid_date = datetime.strptime(p_load_date, "%Y%m%d") if p_load_date else datetime.now()
-pattern = f"{p_root_path.rstrip('/')}/**/Transaction_Ledger_*_core.json"
-source_files = spark.sparkContext.binaryFiles(pattern).collect()
+root_path = p_root_path.rstrip("/")
+if root_path == "Files" or root_path.startswith("Files/"):
+    root_path = os.path.join("/lakehouse/default", root_path)
+pattern = os.path.join(root_path, "**", "Transaction_Ledger_*_core.json")
+source_files = glob.glob(pattern, recursive=True)
 if not source_files:
     raise FileNotFoundError(f"No JSON files match {pattern}")
 
 envelopes = []
-for path, content in source_files:
+for path in source_files:
     match = re.search(r"/(\d{8}_\d{6}|\d{14}|\d{8})/[^/]+$", path)
     if not match:
         raise ValueError(f"Missing source batch timestamp in {path}")
@@ -68,33 +73,59 @@ for path, content in source_files:
         else "%Y%m%d"
     )
     source_timestamp = datetime.strptime(timestamp_text, timestamp_format).isoformat(sep=" ")
-    try:
-        document = json.loads(content.decode("utf-8-sig"))
-    except (UnicodeDecodeError, json.JSONDecodeError) as error:
-        raise ValueError(f"Invalid JSON in {path}") from error
-
-    batches = document.get("transaction_batches") if isinstance(document, dict) else None
-    if not isinstance(batches, list) or not batches:
-        raise ValueError(f"Expected non-empty transaction_batches in {path}")
     normalized_batches = []
-    for batch_number, batch in enumerate(batches, start=1):
-        if not isinstance(batch, list) or not batch:
-            raise ValueError(f"Expected a non-empty transaction batch in {path}, batch {batch_number}")
-        normalized_batch = []
-        for row_number, entry in enumerate(batch, start=1):
-            record = entry.get("transaction") if isinstance(entry, dict) else None
-            if not isinstance(record, dict):
-                raise ValueError(f"Expected nested transaction object in {path}, batch {batch_number}, row {row_number}")
-            missing_columns = set(required_columns) - set(record)
-            if missing_columns:
-                raise ValueError(f"Missing required columns {sorted(missing_columns)} in {path}")
-            values = {name: record[name] for name in required_columns}
-            if any(value is None or isinstance(value, (dict, list)) for value in values.values()):
-                raise ValueError(f"Invalid transaction field in {path}, batch {batch_number}, row {row_number}")
-            normalized_batch.append({
-                "transaction": {name: str(value) for name, value in values.items()}
-            })
-        normalized_batches.append(normalized_batch)
+    try:
+        with open(path, "r", encoding="utf-8-sig") as json_file:
+            for line_number, line in enumerate(json_file, start=1):
+                if not line.strip():
+                    continue
+                try:
+                    document = json.loads(line)
+                except json.JSONDecodeError as error:
+                    raise ValueError(f"Invalid JSON in {path}, line {line_number}") from error
+
+                data = document.get("Data") if isinstance(document, dict) else None
+                batches = data.get("TransactionBatches") if isinstance(data, dict) else None
+                if not isinstance(batches, list) or not batches:
+                    raise ValueError(
+                        f"Expected non-empty Data.TransactionBatches in {path}, line {line_number}"
+                    )
+
+                for batch_number, batch in enumerate(batches, start=1):
+                    if not isinstance(batch, list) or not batch:
+                        raise ValueError(
+                            f"Expected a non-empty transaction batch in {path}, "
+                            f"line {line_number}, batch {batch_number}"
+                        )
+                    normalized_batch = []
+                    for row_number, entry in enumerate(batch, start=1):
+                        record = entry.get("transaction", entry) if isinstance(entry, dict) else None
+                        if not isinstance(record, dict):
+                            raise ValueError(
+                                f"Expected transaction object in {path}, line {line_number}, "
+                                f"batch {batch_number}, row {row_number}"
+                            )
+                        missing_columns = set(required_columns) - set(record)
+                        if missing_columns:
+                            raise ValueError(
+                                f"Missing required columns {sorted(missing_columns)} in {path}, "
+                                f"line {line_number}"
+                            )
+                        values = {name: record[name] for name in required_columns}
+                        if any(value is None or isinstance(value, (dict, list)) for value in values.values()):
+                            raise ValueError(
+                                f"Invalid transaction field in {path}, line {line_number}, "
+                                f"batch {batch_number}, row {row_number}"
+                            )
+                        normalized_batch.append({
+                            "transaction": {name: str(value) for name, value in values.items()}
+                        })
+                    normalized_batches.append(normalized_batch)
+    except UnicodeDecodeError as error:
+        raise ValueError(f"Invalid text encoding in {path}") from error
+
+    if not normalized_batches:
+        raise ValueError(f"No transaction batches found in {path}")
     envelopes.append((normalized_batches, source_timestamp, path))
 
 transaction_schema = StructType([
