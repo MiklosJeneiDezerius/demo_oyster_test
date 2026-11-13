@@ -1,0 +1,5 @@
+source_object_name,is_active,is_active_delta,type
+Account,1,1,csv
+Customer,1,1,csv
+DebitCard,1,1,csv
+Transaction_Ledger,1,1,csv
