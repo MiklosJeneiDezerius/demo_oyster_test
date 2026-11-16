@@ -1,5 +1,6 @@
 # Fabric notebook source
 
+
 # CELL ********************
 
 # MAGIC %%configure
@@ -8,14 +9,6 @@
 # MAGIC         "name": "lh_oysterlake_core"
 # MAGIC     }
 # MAGIC }
-
-# METADATA ********************
-
-# META {
-# META   "kernel_info": {
-# META     "name": "synapse_pyspark"
-# META   }
-# META }
 
 # PARAMETERS CELL ********************
 
