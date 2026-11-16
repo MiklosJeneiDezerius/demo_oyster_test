@@ -1,3 +1,5 @@
+{{ config(materialized='incremental', incremental_strategy='append', full_refresh=false) }}
+
 SELECT
     CAST([AccountID] AS INT) AS [account_id],
     CAST([CustomerID] AS INT) AS [customer_id],
