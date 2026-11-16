@@ -277,3 +277,18 @@ Runtime Error
 [0m15:54:26.399515 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023B44236510>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023B44237050>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x0000023B44235790>]}
 [0m15:54:26.399515 [debug] [MainThread]: Flushing usage events
 [0m15:54:27.224199 [debug] [MainThread]: An error was encountered while trying to flush usage events
+[0m07:51:17.966365 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'start', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C5459187D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C54A1108D0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C54A0518D0>]}
+
+
+============================== 07:51:17.995673 | b56cb5b3-0d38-4280-a19e-ad4820510f1c ==============================
+[0m07:51:17.995673 [info ] [MainThread]: Running with dbt=1.12.6
+[0m07:51:17.995673 [debug] [MainThread]: running dbt with arguments {'version_check': 'True', 'no_print': 'None', 'maximum_seed_size_mib': '1', 'target_path': 'None', 'warn_error_options': 'WarnErrorOptionsV2(error=[], warn=[], silence=[])', 'static_parser': 'True', 'printer_width': '80', 'write_json': 'True', 'introspect': 'True', 'log_cache_events': 'False', 'empty': 'False', 'cache_selected_only': 'False', 'fail_fast': 'False', 'debug': 'False', 'log_format': 'default', 'profiles_dir': '.', 'send_anonymous_usage_stats': 'True', 'quiet': 'False', 'warn_error': 'None', 'partial_parse': 'True', 'use_colors': 'True', 'hints_enabled': 'True', 'indirect_selection': 'eager', 'use_experimental_parser': 'False', 'invocation_command': 'dbt build --profiles-dir .', 'log_path': 'logs'}
+[0m07:51:18.000574 [error] [MainThread]: [[31mERROR[0m]: Encountered an error:
+Runtime Error
+  No dbt_project.yml found at expected path C:\munka\VSCode\Projects\demo_oyster_test\demo_oyster_test\dbt_project.yml
+  Verify that each entry within packages.yml (and their transitive dependencies) contains a file named dbt_project.yml
+  
+[0m07:51:18.000574 [debug] [MainThread]: Command `dbt build` failed at 07:51:18.000574 after 0.17 seconds
+[0m07:51:18.000574 [debug] [MainThread]: Sending event: {'category': 'dbt', 'action': 'invocation', 'label': 'end', 'context': [<snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C54A03ABD0>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C54A113D90>, <snowplow_tracker.self_describing_json.SelfDescribingJson object at 0x000001C54A113FD0>]}
+[0m07:51:18.000574 [debug] [MainThread]: Flushing usage events
+[0m07:51:20.052584 [debug] [MainThread]: An error was encountered while trying to flush usage events

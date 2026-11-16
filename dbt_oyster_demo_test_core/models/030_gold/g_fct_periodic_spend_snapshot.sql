@@ -69,10 +69,13 @@ rolling_spend AS (
     FROM daily_account_spine s
     INNER JOIN accounts da
         ON s.[AccountID] = da.[AccountID]
-    LEFT JOIN customer_history cu
-        ON da.[CustomerID] = cu.[CustomerID]
-       AND cu.[ValidFromTS] < s.[NextDayStartTS]
-       AND cu.[ValidToTS] >= s.[NextDayStartTS]
+        OUTER APPLY (
+                SELECT TOP (1) ch.[CustomerSK]
+                FROM customer_history ch
+                WHERE da.[CustomerID] = ch.[CustomerID]
+                    AND ch.[ValidFromTS] < s.[NextDayStartTS]
+                ORDER BY ch.[ValidFromTS] DESC, ch.[CustomerSK]
+        ) cu
     LEFT JOIN daily_transactions t
         ON da.[AccountSK] = t.[AccountSK]
        AND s.[FullDate] = t.[TransactionDate]

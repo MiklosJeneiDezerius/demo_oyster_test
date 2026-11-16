@@ -21,6 +21,18 @@ SELECT
     first_nm,
     last_nm,
     ingested_dttm
-FROM {{ ref('b_oys_customer') }}
+FROM (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY customer_id ORDER BY first_nm, last_nm
+    ) AS customer_rank
+    FROM (
+        SELECT *, DENSE_RANK() OVER (
+            ORDER BY ingested_dttm DESC, batch_id DESC
+        ) AS batch_rank
+        FROM {{ ref('b_oys_customer') }}
+    ) AS latest_batch
+    WHERE batch_rank = 1
+) AS current_customers
+WHERE customer_rank = 1
 
 {% endsnapshot %}

@@ -1,4 +1,12 @@
-WITH snapshot_source AS (
+WITH distinct_versions AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY card_id, m_valid_from_dttm
+        ORDER BY COALESCE(m_valid_to_dttm, CAST('9999-12-31 00:00:00' AS DATETIME2(6))) DESC,
+            m_update_at_dttm DESC, m_scd_id DESC, account_id, card_tier_nm
+    ) AS duplicate_rank
+    FROM {{ ref('ldh_oys_debitcard') }}
+),
+snapshot_source AS (
     SELECT
         c.card_id,
         c.account_id,
@@ -12,7 +20,8 @@ WITH snapshot_source AS (
             PARTITION BY c.card_id
             ORDER BY c.m_valid_from_dttm ASC
         ) AS version_number
-    FROM {{ ref('ldh_oys_debitcard') }} c
+    FROM distinct_versions c
+    WHERE c.duplicate_rank = 1
 ),
 card_versions AS (
     SELECT

@@ -3,14 +3,26 @@ version: 2
 models:
   - name: b_oys_customer
     description: "Core source customers with snake_case physical columns."
+    data_tests:
+      - unique:
+          arguments:
+            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [customer_id])"
     columns:
+      - name: batch_id
+        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
       - name: customer_id
-        data_tests: [not_null, unique]
+        data_tests: [not_null]
   - name: b_oys_account
     description: "Core source accounts; invalid numeric values fail conversion."
+    data_tests:
+      - unique:
+          arguments:
+            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [account_id])"
     columns:
+      - name: batch_id
+        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
       - name: account_id
-        data_tests: [not_null, unique]
+        data_tests: [not_null]
       - name: customer_id
         data_tests:
           - not_null
@@ -22,13 +34,21 @@ models:
         data_tests: [not_null]
   - name: b_oys_debit_card
     description: "Core debit cards; at most one card per account, denormalized into the account dimension."
+    data_tests:
+      - unique:
+          arguments:
+            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [card_id])"
+      - unique:
+          arguments:
+            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [account_id])"
     columns:
+      - name: batch_id
+        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
       - name: card_id
-        data_tests: [not_null, unique]
+        data_tests: [not_null]
       - name: account_id
         data_tests:
           - not_null
-          - unique
           - relationships:
               arguments:
                 to: ref('b_oys_account')
@@ -41,9 +61,15 @@ models:
                 values: ['Standard', 'Gold', 'Platinum']
   - name: b_oys_transaction
     description: "Core ledger; all transactions contribute to spend because no status source exists."
+    data_tests:
+      - unique:
+          arguments:
+            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [transaction_id])"
     columns:
+      - name: batch_id
+        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
       - name: transaction_id
-        data_tests: [not_null, unique]
+        data_tests: [not_null]
       - name: account_id
         data_tests:
           - not_null

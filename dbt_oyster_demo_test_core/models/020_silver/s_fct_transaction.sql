@@ -1,10 +1,18 @@
-WITH source_transactions AS (
+WITH latest_transactions AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY transaction_id
+        ORDER BY ingested_dttm DESC, batch_id DESC, transaction_dttm DESC, account_id, transaction_amt DESC
+    ) AS transaction_rank
+    FROM {{ ref('b_oys_transaction') }}
+),
+source_transactions AS (
     SELECT
         t.[transaction_id],
         t.[account_id],
         t.[transaction_amt],
         t.[transaction_dttm]
-    FROM {{ ref('b_oys_transaction') }} t
+    FROM latest_transactions t
+    WHERE t.transaction_rank = 1
 ),
 accounts AS (
     SELECT

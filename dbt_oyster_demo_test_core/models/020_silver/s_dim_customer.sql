@@ -1,4 +1,12 @@
-WITH snapshot_records AS (
+WITH distinct_versions AS (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY customer_id, m_valid_from_dttm
+        ORDER BY COALESCE(m_valid_to_dttm, CAST('9999-12-31 00:00:00' AS DATETIME2(6))) DESC,
+            m_update_at_dttm DESC, m_scd_id DESC, first_nm, last_nm
+    ) AS duplicate_rank
+    FROM {{ ref('ldh_oys_customer') }}
+),
+snapshot_records AS (
     SELECT
         customer_id,
         TRIM(first_nm) AS first_nm,
@@ -12,7 +20,8 @@ WITH snapshot_records AS (
             PARTITION BY customer_id
             ORDER BY m_valid_from_dttm ASC
         ) AS version_number
-    FROM {{ ref('ldh_oys_customer') }}
+    FROM distinct_versions
+    WHERE duplicate_rank = 1
 ),
 customer_versions AS (
     SELECT

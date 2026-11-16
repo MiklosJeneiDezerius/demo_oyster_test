@@ -23,6 +23,18 @@ SELECT
     card_id,
     account_id,
     card_tier_nm
-FROM {{ ref('b_oys_debit_card') }}
+FROM (
+    SELECT *, ROW_NUMBER() OVER (
+        PARTITION BY card_id ORDER BY account_id, card_tier_nm
+    ) AS card_rank
+    FROM (
+        SELECT *, DENSE_RANK() OVER (
+            ORDER BY ingested_dttm DESC, batch_id DESC
+        ) AS batch_rank
+        FROM {{ ref('b_oys_debit_card') }}
+    ) AS latest_batch
+    WHERE batch_rank = 1
+) AS current_cards
+WHERE card_rank = 1
 
 {% endsnapshot %}
