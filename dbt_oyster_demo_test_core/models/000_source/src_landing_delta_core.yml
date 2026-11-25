@@ -7,6 +7,10 @@ sources:
     tables:
       - name: customer
         identifier: ld_oys_customer
+      - name: customeraddress
+        identifier: "{{ env_var('DBT_ADDRESS_TABLE', 'ld_oys_customeraddress') }}"
+        config:
+          enabled: "{{ var('include_address', false) }}"
       - name: account
         identifier: ld_oys_account
       - name: debitcard

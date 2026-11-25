@@ -1,4 +1,4 @@
-{{ config(materialized='incremental', incremental_strategy='append', full_refresh=false, on_schema_change='append_new_columns') }}
+{{ config(materialized='table') }}
 
 SELECT
     CAST([TransactionID] AS INT) AS [transaction_id],

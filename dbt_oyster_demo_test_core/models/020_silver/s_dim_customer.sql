@@ -11,6 +11,9 @@ snapshot_records AS (
         customer_id,
         TRIM(first_nm) AS first_nm,
         TRIM(last_nm) AS last_nm,
+        permanent_address,
+        mailing_address,
+        billing_address,
         CAST(m_valid_from_dttm AS DATETIME2(6)) AS snapshot_valid_from_ts,
         COALESCE(
             CAST(m_valid_to_dttm AS DATETIME2(6)),
@@ -28,6 +31,9 @@ customer_versions AS (
         customer_id,
         first_nm,
         last_nm,
+        permanent_address,
+        mailing_address,
+        billing_address,
         CASE
             WHEN version_number = 1 THEN CAST('1900-01-01 00:00:00.000000' AS DATETIME2(6))
             ELSE snapshot_valid_from_ts
@@ -52,6 +58,9 @@ SELECT
     first_nm,
     last_nm,
     CONCAT(first_nm, ' ', last_nm) AS full_nm,
+    permanent_address,
+    mailing_address,
+    billing_address,
     valid_from_dttm,
     valid_to_dttm,
     CASE

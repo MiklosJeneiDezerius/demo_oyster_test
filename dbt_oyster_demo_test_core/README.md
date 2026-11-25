@@ -1,72 +1,205 @@
 # Oyster Core dbt project
 
-The full project's naming, Bronze/Silver/Gold layering, SHA-256 keys, calendar,
-30-day spend thresholds, stored test failures and notebook user-token runner
-are retained, with four Lakehouse sources:
+## Chapter 4: Bronze snapshot historization
 
-| Source | Required columns |
-| --- | --- |
-| `dbo.ld_oys_customer` | `CustomerID`, `FirstName`, `LastName` |
-| `dbo.ld_oys_account` | `AccountID`, `CustomerID`, `Balance` |
-| `dbo.ld_oys_debitcard` | `CardID`, `AccountID`, `CardTier` |
-| `dbo.ld_oys_transaction_ledger` | `TransactionID`, `AccountID`, `Amount`, `Timestamp` |
+This walkthrough uses current-state Bronze tables and dbt snapshots to retain
+source history. It does not modify the Word document. The available local
+Chapter 4 copy was older than the attached document; verify its section wording
+when transferring these instructions.
 
-Physical dbt columns use snake_case and dimension-qualified keys such as
-`s_dim_customer_sk` and `ga_dim_account_sk`. Bronze performs explicit casts;
-invalid source values fail rather than silently becoming null.
+Bronze tables are rebuilt from the complete currently exposed source on each run.
+Snapshots in the Bronze schema retain changed versions by business key; unchanged
+rows do not create new versions. This is snapshot-based historization, not CDC.
 
-## Simple execution
+### 4.1 Prepare the environment
 
-Run from this directory:
+From the repository root, create a virtual environment only if one does not
+already exist. Otherwise activate the existing environment and skip installation
+when its dependencies already work.
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install "dbt-fabric==1.11.1" "dbt-core>=1.11,<1.12"
+Set-Location dbt_oyster_demo_test_core
+dbt --version
+```
+
+The dependency range matches the Fabric notebook runner. Do not run `dbt init`
+over this existing project or replace its configuration with the older chapter's
+project names. Ensure the organizational identity is signed into Azure CLI;
+the profile uses CLI authentication. Use the organization's approved sign-in
+process and grant that identity source SELECT and Warehouse DDL/DML permissions.
+
+### 4.2 Configure the connection and target
+
+Use [profiles.yml](profiles.yml) and [dbt_project.yml](dbt_project.yml):
+
+- Project: `dbt_oyster_demo_test_core`; profile: `dbt_oyster_demo_test`.
+- Source Lakehouse: `lh_oysterlake_core`, schema `dbo`.
+- Target Warehouse: `dw_oyster_core`, not the Lakehouse SQL analytics endpoint.
+- Bronze output: `oystr_core_bronze`; test failures: `oystr_core_dq`.
+- Set `DBT_SERVER`, `DBT_DATABASE` or `DBT_SOURCE_DATABASE` only when the
+  corresponding deployment differs from those defaults.
 
 ```powershell
 dbt debug --profiles-dir .
-dbt build --profiles-dir .
 ```
 
-[profiles.yml](profiles.yml) uses the same Warehouse server, CLI authentication
-and `DBT_DATABASE` / `DBT_TARGET` overrides as the full project. Its default
-Warehouse is `dw_oyster`. The default source is `lh_oysterlake_core`;
-`DBT_SOURCE_DATABASE` can override it for an existing core source Lakehouse.
-The notebook runner finds this project's own profile; no sibling-directory
-profile lookup is needed.
+Stop and resolve connection, identity or permissions errors before loading.
+The Lakehouse SQL endpoint is a read source here; dbt writes Warehouse tables.
 
-Outputs are isolated in `oystr_core_bronze`, `oystr_core_silver`,
-`oystr_core_gold` and `oystr_core_dq`. Materialization and schemas are configured
-once in [dbt_project.yml](dbt_project.yml), not repeated in individual models.
+### 4.3 Verify the five landing sources
 
-## Deliberate simplifications
+The four original sources must already exist and be visible through the core
+Lakehouse SQL endpoint. Address is optional until its landing pipeline exists.
 
-- Dimensions contain current values with stable business-key hashes. No SCD2
-  snapshots, lookup-table joins, packages or custom macros are required.
-- Debit cards remain a separate Bronze source. Silver `s_dim_account` joins
-  `card_id` and `card_tier_nm` by `account_id`, with at most one card per account.
-  A unique test on the card's `account_id` rejects multiple cards. The LEFT JOIN
-  retains cardless accounts with null card attributes, without inventing a tier.
-  Gold `ga_dim_account` and its semantic table expose the same attributes.
-  No separate Silver/Gold card dimension, history or card mismatch/upgrade
-  metrics are needed for this simplified model.
-- All ledger rows contribute to spend; no transaction-status table exists.
-- Gold exposes account, customer and date dimensions and a daily spend snapshot.
-  Each account has one snapshot per day from 2025-01-01 through today, including
-  zero-spend days. The calculation includes 29 warm-up days before the first
-  output date. Spend of at least 2000 is Gold; at least 5000 is Platinum.
-- Customer names/balances are current attributes, not historical point-in-time
-  values. Rerunning `build` recomputes the tables; changes require no migration
-  macros.
+| Source in `dbo` | Required columns |
+| --- | --- |
+| `ld_oys_customer` | `CustomerID`, `FirstName`, `LastName` |
+| `ld_oys_customeraddress` | `AddressID`, `CustomerID`, `AddressType`, `Country`, `PostalCode`, `City`, `Street`, `HouseNumber` |
+| `ld_oys_account` | `AccountID`, `CustomerID`, `Balance` |
+| `ld_oys_debitcard` | `CardID`, `AccountID`, `CardTier` |
+| `ld_oys_transaction_ledger` | `TransactionID`, `AccountID`, `Amount`, `Timestamp` |
 
-Generic tests validate keys, foreign keys and required values. SQL tests check
-that Silver account and ledger counts match Bronze and that each Gold rolling amount
-and tier match the exact 30-calendar-day ledger range. Failures are stored in
-the core DQ schema; a diagnostic view exposes missing account IDs.
+These are physical Delta table names, not the Python generator's list names.
+The supplied Address generator fields replace the older chapter's
+`AddressLine1` and `State/Region` schema. Postal codes and house numbers stay text.
 
-Local, cloud-independent contract checks:
+The core generator, load configuration and pipeline still deliver four sources;
+this change does not add Address extraction or create an Address Delta table.
+Before enabling it, land the fifth table with the columns above, wait for SQL
+endpoint visibility, and check its keys and row counts. If its physical name
+differs, configure the source without changing the model:
 
 ```powershell
-python -m unittest discover -s tests -p "test_core_contract.py"
+$env:DBT_ADDRESS_TABLE = 'ld_oys_customeraddress'
 ```
 
-For Fabric setup, see [the core artifacts guide](../fabric-artifacts-core/Readme.md).
-Commit and push the dbt changes before running the GitHub-cloning notebook.
-`dbt build` checks only models currently in this project; it does not delete old
-card tables or PascalCase exports left behind by an earlier core deployment.
+The definitions are in [models/000_source/src_landing_delta_core.yml](models/000_source/src_landing_delta_core.yml).
+Address source/model enablement uses the `include_address` dbt variable.
+
+### 4.4 Build current-state Bronze tables and snapshots
+
+The Bronze models are full tables with no custom macros:
+
+- [b_oys_customer.sql](models/010_bronze/b_oys_customer.sql)
+- [b_oys_customer_address.sql](models/010_bronze/b_oys_customer_address.sql)
+- [b_oys_account.sql](models/010_bronze/b_oys_account.sql)
+- [b_oys_debit_card.sql](models/010_bronze/b_oys_debit_card.sql)
+- [b_oys_transaction.sql](models/010_bronze/b_oys_transaction.sql)
+
+Each uses `materialized='table'`; the Address model additionally defaults to
+disabled. The five dbt snapshots are `b_oys_customer_history`,
+`b_oys_customer_address_history`, `b_oys_account_history`,
+`b_oys_debit_card_history` and `b_oys_transaction_history`. They are written to
+`oystr_core_bronze` and track business columns with `strategy='check'`.
+`batch_id` and `ingested_dttm` are observation metadata, not change-detection
+columns. The existing `ldh_oys_customer` and `ldh_oys_debitcard` snapshots still
+feed the SCD2 Silver dimensions and now read current versions from the Bronze
+snapshots.
+
+`batch_id` is the UUID generated for the latest dbt invocation, and
+`ingested_dttm` is Warehouse observation time, not source event time or original
+raw-file arrival. A snapshot version retains those values from when its tracked
+business data was observed. The first snapshot run establishes the baseline; it
+does not backfill historical versions from the old append-only Bronze tables.
+Before applying this materialization change to an existing Warehouse, back up
+or migrate the append-only Bronze tables: rebuilding them as full tables
+replaces their accumulated rows, and the initial snapshot only records the
+current source state.
+
+Tests in [models/core_schema.yml](models/core_schema.yml) enforce uniqueness by
+business key in each current-state table. Multiple address types per customer
+are allowed; `address_id`, not `customer_id`, is the snapshot key. The demo
+checks one card per account. Address IDs must remain stable across full extracts
+for snapshot updates to be interpreted as changes rather than deletes and new
+records.
+
+### 4.5 Execute and verify ingestion
+
+For all five sources, after Address is available:
+
+```powershell
+dbt parse --profiles-dir . --vars '{include_address: true}'
+dbt build --profiles-dir . --select path:models/010_bronze path:snapshots --vars '{include_address: true}'
+```
+
+Without Address, omit `--vars`; the other four source tables and their snapshots
+still build. Always run snapshots after a successful full table refresh.
+
+In the Warehouse SQL query editor, inspect a Bronze history table:
+
+```sql
+SELECT account_id, customer_id, balance_amt, m_valid_from_dttm,
+       m_valid_to_dttm, batch_id, ingested_dttm
+FROM oystr_core_bronze.b_oys_account_history
+ORDER BY account_id, m_valid_from_dttm;
+```
+
+With unchanged landing data, another snapshot run does not add versions. Change
+a tracked field upstream, refresh landing Delta, and build Bronze plus snapshots
+again; the old version should close and a new current version should appear.
+Snapshots use `hard_deletes='invalidate'`, so the landing extracts must be
+complete and successfully refreshed before snapshots run. A partial extract can
+make still-existing keys appear deleted.
+
+### Real-project decisions before adopting this pattern
+
+1. History before landing Delta: if replication overwrites the only copy before
+  dbt reads it, intermediate changes are lost. Preserve immutable raw deliveries
+  or capture supported source CDC/CDF before that overwrite when every change
+  matters. Bronze cannot recover changes it never observed. Delta time travel
+  and retention are not a substitute for an explicit history contract.
+2. Load volume: full observations are simple but grow with every execution.
+  For large sources choose CDC, reliable watermarks with lookback and
+  deduplication, or change detection. Deletes need explicit tombstones or
+  reconciliation against a complete successful full extraction.
+3. Time: decide between source-effective, raw-arrival, Delta-commit and Bronze
+  observation time. Persist each required time separately, with UTC/time-zone
+  rules. This demo currently captures only the latter in ingestion metadata.
+4. Replay: a new invocation ID is a new observation, even for the same delivery.
+  For idempotent retries use a stable upstream delivery/event ID, checkpoints
+  and a completion log. No batch audit table is implemented in this demo.
+5. Consistency: a shared dbt batch ID does not guarantee all source tables were
+  read at one consistent source point. Coordinate complete landing batches
+  before Bronze, especially for deletes, relationships and empty extracts.
+6. Keys: the supplied AddressID generator is index-based. Ensure its assignment
+  stays stable if customer ordering or address counts change. Define primary,
+  mailing and registered address rules in Silver, not by arbitrarily selecting
+  the highest AddressID. The current demo selects the highest AddressID per
+  customer/type from the active address snapshot rows; replace this rule if the
+  source exposes an explicit primary-address or effective-date rule.
+7. Governance: choose retention, deletion/erasure rules for personal and address
+  data, schema-change approval, access control and capacity budgets. Snapshot
+  historization does not remove legal obligations to purge sensitive history.
+
+## Existing Silver and Gold
+
+The project has Bronze source snapshots plus customer/card dbt snapshots and
+SCD2 dimensions. Bronze snapshots preserve source-field history; `ldh` snapshots
+combine current customer and address values for the customer dimension. The
+customer dimension includes formatted `permanent_address`, `mailing_address`
+and `billing_address` attributes. Changes or removals of these fields create a
+new customer SCD2 version. Missing address types remain null. Existing snapshot
+history is retained and is not retroactively populated with today's addresses.
+After the Address landing source exists, build the complete customer lineage:
+
+```powershell
+dbt build --profiles-dir . --select +s_dim_customer --vars '{include_address: true}'
+```
+
+When Address ingestion is disabled, snapshots retain previously observed address
+values instead of interpreting the disabled source as address removal. Gold
+customer exports are unchanged; these new attributes currently belong to Silver.
+Silver account/transaction models continue to use current-state Bronze tables;
+their complete version history is available in the corresponding Bronze
+snapshots.
+Gold calculates account/day rolling 30-day spend; 2000 qualifies for Gold and
+5000 for Platinum. Its customer lookup carries the last known version forward
+for retained historical accounts. These semantics are demo decisions, not a
+general replacement for source-effective history or account-closure rules.
+
+For orchestration/deployment see [the core artifacts guide](../fabric-artifacts-core/Readme.md).
+Pass `--vars '{include_address: true}'` on later full builds only after enabling
+Address end to end; the existing notebook runner does not set it automatically.

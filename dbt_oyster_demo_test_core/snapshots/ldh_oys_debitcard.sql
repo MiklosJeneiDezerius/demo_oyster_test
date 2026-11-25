@@ -27,13 +27,9 @@ FROM (
     SELECT *, ROW_NUMBER() OVER (
         PARTITION BY card_id ORDER BY account_id, card_tier_nm
     ) AS card_rank
-    FROM (
-        SELECT *, DENSE_RANK() OVER (
-            ORDER BY ingested_dttm DESC, batch_id DESC
-        ) AS batch_rank
-        FROM {{ ref('b_oys_debit_card') }}
-    ) AS latest_batch
-    WHERE batch_rank = 1
+    FROM {{ ref('b_oys_debit_card_history') }}
+    WHERE CAST(m_valid_to_dttm AS DATETIME2(6)) =
+        CAST('9999-12-31 00:00:00' AS DATETIME2(6))
 ) AS current_cards
 WHERE card_rank = 1
 

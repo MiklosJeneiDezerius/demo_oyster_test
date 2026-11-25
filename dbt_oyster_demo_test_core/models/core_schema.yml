@@ -1,26 +1,48 @@
 version: 2
 
 models:
-  - name: b_oys_customer
-    description: "Core source customers with snake_case physical columns."
+  - name: b_oys_customer_address
+    description: "Optional current address extract; history is retained in b_oys_customer_address_history."
     data_tests:
       - unique:
           arguments:
-            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [customer_id])"
+            column_name: "[address_id]"
     columns:
       - name: batch_id
-        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
+        data_tests: [not_null]
+      - name: address_id
+        data_tests: [not_null]
+      - name: customer_id
+        data_tests:
+          - not_null
+          - relationships:
+              arguments:
+                to: ref('b_oys_customer')
+                field: customer_id
+      - name: postal_code
+        description: "Text, not a number, to preserve leading zeroes."
+      - name: house_number
+        description: "Text to support values such as 12/A."
+  - name: b_oys_customer
+    description: "Current core customer extract; history is retained in b_oys_customer_history."
+    data_tests:
+      - unique:
+          arguments:
+            column_name: "[customer_id]"
+    columns:
+      - name: batch_id
+        description: "dbt invocation ID for the latest full source read."
       - name: customer_id
         data_tests: [not_null]
   - name: b_oys_account
-    description: "Core source accounts; invalid numeric values fail conversion."
+    description: "Current core account extract; history is retained in b_oys_account_history."
     data_tests:
       - unique:
           arguments:
-            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [account_id])"
+            column_name: "[account_id]"
     columns:
       - name: batch_id
-        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
+        description: "dbt invocation ID for the latest full source read."
       - name: account_id
         data_tests: [not_null]
       - name: customer_id
@@ -33,17 +55,17 @@ models:
       - name: balance_amt
         data_tests: [not_null]
   - name: b_oys_debit_card
-    description: "Core debit cards; at most one card per account, denormalized into the account dimension."
+    description: "Current core debit-card extract; history is retained in b_oys_debit_card_history."
     data_tests:
       - unique:
           arguments:
-            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [card_id])"
+            column_name: "[card_id]"
       - unique:
           arguments:
-            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [account_id])"
+            column_name: "[account_id]"
     columns:
       - name: batch_id
-        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
+        description: "dbt invocation ID for the latest full source read."
       - name: card_id
         data_tests: [not_null]
       - name: account_id
@@ -60,14 +82,14 @@ models:
               arguments:
                 values: ['Standard', 'Gold', 'Platinum']
   - name: b_oys_transaction
-    description: "Core ledger; all transactions contribute to spend because no status source exists."
+    description: "Current core transaction extract; history is retained in b_oys_transaction_history."
     data_tests:
       - unique:
           arguments:
-            column_name: "CONCAT(COALESCE([batch_id], CONVERT(VARCHAR(33), [ingested_dttm], 126)), '|', [transaction_id])"
+            column_name: "[transaction_id]"
     columns:
       - name: batch_id
-        description: "dbt invocation ID shared by all Bronze loads in a run; null for pre-batch history."
+        description: "dbt invocation ID for the latest full source read."
       - name: transaction_id
         data_tests: [not_null]
       - name: account_id
@@ -88,6 +110,12 @@ models:
         data_tests: [not_null, unique]
       - name: customer_id
         data_tests: [not_null]
+      - name: permanent_address
+        description: "Permanent street/house number, city, postal code and country observed for this customer version."
+      - name: mailing_address
+        description: "Mailing address observed for this customer version; null when not supplied."
+      - name: billing_address
+        description: "Billing address observed for this customer version; null when not supplied."
       - name: valid_from_dttm
         data_tests: [not_null]
       - name: valid_to_dttm

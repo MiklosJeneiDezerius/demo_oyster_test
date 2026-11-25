@@ -411,15 +411,34 @@ class CoreContractTests(unittest.TestCase):
         models = {path.stem: path.read_text() for path in (PROJECT / "models").rglob("*.sql")}
         self.assertEqual(set(models), {
             "b_oys_customer", "b_oys_account", "b_oys_debit_card", "b_oys_transaction",
+            "b_oys_customer_address",
             "s_dim_customer", "s_dim_card", "s_dim_account", "s_dim_date", "s_fct_transaction",
             "ga_dim_customer", "ga_dim_account", "g_dim_date",
             "g_fct_periodic_spend_snapshot", "fail_transactions_without_accountid",
         })
         snapshot_names = {path.stem for path in (PROJECT / "snapshots").glob("*.sql")}
-        for sql in models.values():
+        bronze_snapshot_names = {
+            "b_oys_customer_history",
+            "b_oys_customer_address_history",
+            "b_oys_account_history",
+            "b_oys_debit_card_history",
+            "b_oys_transaction_history",
+        }
+        self.assertTrue(bronze_snapshot_names.issubset(snapshot_names))
+        for snapshot_name in bronze_snapshot_names:
+            snapshot_sql = (PROJECT / "snapshots" / f"{snapshot_name}.sql").read_text()
+            self.assertIn(f"{{% snapshot {snapshot_name} %}}", snapshot_sql)
+            self.assertIn("target_schema='core_bronze'", snapshot_sql)
+            self.assertIn("strategy='check'", snapshot_sql)
+            self.assertIn("hard_deletes='invalidate'", snapshot_sql)
+        for model_name, sql in models.items():
             for reference in re.findall(r"\{\{ ref\('(\w+)'\) \}\}", sql):
                 self.assertIn(reference, set(models) | snapshot_names)
-            self.assertNotIn("{{ config", sql)
+            if model_name.startswith("b_oys_"):
+                self.assertIn("materialized='table'", sql)
+                self.assertNotIn("materialized='incremental'", sql)
+            else:
+                self.assertNotIn("{{ config", sql)
 
         definition = ARTIFACTS / "sm_oyster_core.SemanticModel" / "definition"
         fields = {}
