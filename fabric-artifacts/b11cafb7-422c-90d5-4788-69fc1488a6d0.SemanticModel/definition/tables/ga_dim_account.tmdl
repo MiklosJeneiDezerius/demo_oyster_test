@@ -1,3 +1,4 @@
+/// Account dimension for grouping and filtering snapshot measures by account attributes; its key relates accounts to the periodic spend fact.
 table ga_dim_account
 	lineageTag: 9ba41e23-3436-4322-8e9c-a5776efc9896
 	sourceLineageTag: [oystr_gold].[ga_dim_account]
@@ -42,8 +43,10 @@ table ga_dim_account
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Natural account label. Use account-dimension attributes to group or filter measures.
 	column account_number_txt
 		dataType: string
+		isDefaultLabel
 		sourceProviderType: varchar(8000)
 		lineageTag: 7552a523-013d-4731-9c82-e186159d6c4f
 		sourceLineageTag: account_number_txt
@@ -93,4 +96,3 @@ table ga_dim_account
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

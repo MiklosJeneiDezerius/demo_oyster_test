@@ -1,3 +1,4 @@
+/// Periodic account snapshots hold the metrics and snapshot-specific classifications. Use the date, account, customer, and card dimensions to group or filter measures.
 table g_fct_periodic_spend_snapshot
 	lineageTag: 7eca8dea-1257-4149-9330-a11501275bc7
 	sourceLineageTag: [oystr_gold].[g_fct_periodic_spend_snapshot]
@@ -231,4 +232,3 @@ table g_fct_periodic_spend_snapshot
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

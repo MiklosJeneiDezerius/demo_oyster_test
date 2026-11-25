@@ -1,3 +1,4 @@
+/// Calendar dimension for grouping and filtering snapshot measures by date, year, quarter, month, week, or day.
 table g_dim_date
 	lineageTag: 5569cbdc-14b9-412c-bd61-25bd915e3f2c
 	sourceLineageTag: [oystr_gold].[g_dim_date]
@@ -13,8 +14,10 @@ table g_dim_date
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Calendar date for snapshot analysis; use this dimension for time-based grouping and filtering.
 	column full_dt
 		dataType: dateTime
+		isDefaultLabel
 		formatString: General Date
 		sourceProviderType: date
 		lineageTag: e1d2142d-c458-4b39-9ff9-0df11e70cf0f
@@ -180,4 +183,3 @@ table g_dim_date
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

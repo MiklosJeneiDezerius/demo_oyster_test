@@ -124,6 +124,16 @@ class CoreContractTests(unittest.TestCase):
         notebook_parameters = pipeline["properties"]["activities"][0]["typeProperties"]["parameters"]
         self.assertIn("dbt_server", notebook_parameters)
 
+    def test_core_snapshot_warehouse_contains_card_surrogate_key(self):
+        table = (
+            ARTIFACTS
+            / "dw_oyster_core.Warehouse"
+            / "oystr_core_gold"
+            / "Tables"
+            / "g_fct_periodic_spend_snapshot.sql"
+        ).read_text()
+        self.assertRegex(table, r"\[s_dim_card_sk\]\s+VARCHAR\s*\(64\)\s+NULL")
+
     def test_full_warehouse_server_is_pipeline_parameterized(self):
         full_profile = (ROOT / "dbt_oyster_demo_test" / "profiles.yml").read_text()
         full_runner = (
@@ -491,6 +501,46 @@ class CoreContractTests(unittest.TestCase):
 
         for path in report.rglob("visual.json"):
             check_fields(json.loads(path.read_text()))
+
+    def test_semantic_model_ai_dimension_guidance_and_card_relationship(self):
+        full_definition = (
+            ROOT
+            / "fabric-artifacts"
+            / "b11cafb7-422c-90d5-4788-69fc1488a6d0.SemanticModel"
+            / "definition"
+        )
+        relationships = (full_definition / "relationships.tmdl").read_text()
+        self.assertIn(
+            "fromColumn: ga_dim_card.ga_dim_card_sk\n"
+            "\ttoColumn: g_fct_periodic_spend_snapshot.s_dim_card_sk",
+            relationships,
+        )
+        self.assertNotIn("fromColumn: ga_dim_card.s_dim_account_sk", relationships)
+
+        model_definitions = (
+            ARTIFACTS / "sm_oyster_core.SemanticModel",
+            full_definition.parent,
+        )
+        for model in model_definitions:
+            settings = json.loads((model / "definition.pbism").read_text())["settings"]
+            self.assertTrue(settings.get("qnaEnabled"))
+
+        for table_name, label in (
+            ("ga_dim_account", "AccountID"),
+            ("ga_dim_customer", "FullName"),
+            ("g_dim_date", "FullDate"),
+        ):
+            table = (
+                ARTIFACTS
+                / "sm_oyster_core.SemanticModel"
+                / "definition"
+                / "tables"
+                / f"{table_name}.tmdl"
+            ).read_text()
+            self.assertIn(f"column {label}\n\t\tdataType:", table)
+            self.assertIn("\t\tisDefaultLabel", table)
+            self.assertTrue(table.startswith("///"))
+            self.assertRegex(table, rf"\t///[^\r\n]*\n\tcolumn {label}\n")
 
     def test_account_denormalization_retains_cardless_accounts_and_grain(self):
         sql = (PROJECT / "models" / "020_silver" / "s_dim_account.sql").read_text()

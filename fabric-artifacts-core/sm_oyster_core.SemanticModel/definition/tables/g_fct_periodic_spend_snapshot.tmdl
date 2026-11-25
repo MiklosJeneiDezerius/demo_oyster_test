@@ -1,4 +1,4 @@
-/// Daily core account spend snapshots with 30-day rolling totals; all ledger rows included.
+/// One row per account and snapshot date. Use explicit measures for metrics and the related date, account, or customer dimension fields for grouping and filtering.
 table g_fct_periodic_spend_snapshot
 	lineageTag: 0cff53d2-37cb-4958-bc31-837b830cbf73
 
@@ -255,4 +255,3 @@ table g_fct_periodic_spend_snapshot
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

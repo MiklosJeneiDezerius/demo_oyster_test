@@ -1,4 +1,4 @@
-/// Current core customers without history or lookup-table attributes.
+/// Current customer dimension for grouping and filtering spend measures by customer. Use FullName or CustomerID as the customer label.
 table ga_dim_customer
 	lineageTag: e34a4228-c94e-4b08-a19e-0181028f917a
 
@@ -43,8 +43,10 @@ table ga_dim_customer
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Customer display name; prefer this customer-dimension field when grouping measures by customer.
 	column FullName
 		dataType: string
+		isDefaultLabel
 		sourceProviderType: varchar(8000)
 		lineageTag: ec14dd8e-7825-4084-a7a0-1f79980e05e4
 		sourceLineageTag: full_nm
@@ -61,4 +63,3 @@ table ga_dim_customer
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

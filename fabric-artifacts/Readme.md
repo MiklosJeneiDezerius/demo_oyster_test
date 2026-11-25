@@ -1,5 +1,12 @@
 This is the full-demo Fabric artifact tree.
 
+The semantic model's explicit measures are calculated from the periodic spend
+fact. Use the related date, account, customer and card dimensions for
+descriptive grouping and filtering; their relationships propagate those
+selections to the fact. Configure Copilot-specific instructions and AI Data
+Schema in Power BI's **Prep data for AI** experience rather than in these
+local model files.
+
 The primary deterministic generator remains CSV-based. The optional
 `Oyster_Json_Transaction_Generator` writes the same full ledger fields as nested
 JSON; `nb_json_load_source_to_ld` uses `explode(flatten(...))` to write the

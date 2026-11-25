@@ -1,3 +1,4 @@
+/// Customer dimension for grouping and filtering snapshot measures by customer attributes; use its descriptive fields rather than fact keys.
 table ga_dim_customer
 	lineageTag: 1dcbd815-f325-4831-b711-1e7155d3a2fd
 	sourceLineageTag: [oystr_gold].[ga_dim_customer]
@@ -42,8 +43,10 @@ table ga_dim_customer
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Customer display name; prefer this customer-dimension field when grouping measures by customer.
 	column full_nm
 		dataType: string
+		isDefaultLabel
 		sourceProviderType: varchar(8000)
 		lineageTag: e13561db-c9f9-4eb3-9064-24f90bbcc715
 		sourceLineageTag: full_nm
@@ -163,4 +166,3 @@ table ga_dim_customer
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-

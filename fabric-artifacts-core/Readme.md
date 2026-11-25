@@ -82,6 +82,13 @@ report; actual card tier is available on the account dimension. Measures evaluat
 current filter context so overlapping daily rolling totals are not added
 together.
 
+For natural-language queries, use the explicit measures on the snapshot fact
+for totals and counts, and use the related date, account and customer
+dimensions for descriptive grouping and filtering. The model relationships
+propagate those dimension selections to the fact. Configure Copilot-specific
+instructions and AI Data Schema in Power BI's **Prep data for AI** experience;
+those settings are not authored in these local model files.
+
 The generator defaults to the full demo's 2026-09-01 anchor date. Historical
 spend naturally drops out of the latest 30-day window; set its `anchor_date`
 notebook parameter to a recent date when demonstrating current spend.

@@ -4,6 +4,7 @@ CREATE TABLE [oystr_core_gold].[g_fct_periodic_spend_snapshot] (
     [snapshot_dt]                       DATE            NULL,
     [s_dim_account_sk]                  VARCHAR (64)    NULL,
     [s_dim_customer_sk]                 VARCHAR (64)    NULL,
+    [s_dim_card_sk]                     VARCHAR (64)    NULL,
     [account_id]                        INT             NULL,
     [card_id]                           INT             NULL,
     [actual_card_tier_nm]               VARCHAR (8000)  NULL,

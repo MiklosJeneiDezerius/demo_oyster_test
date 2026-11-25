@@ -1,3 +1,4 @@
+/// Current card dimension for grouping and filtering snapshot measures by card attributes, including card tier and status.
 table ga_dim_card
 	lineageTag: 3b71fefb-99e5-4486-99ed-9669362ded16
 	sourceLineageTag: [oystr_gold].[ga_dim_card]
@@ -22,8 +23,10 @@ table ga_dim_card
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Card identifier for displaying or grouping card-level results.
 	column card_id
 		dataType: string
+		isDefaultLabel
 		sourceProviderType: varchar(8000)
 		lineageTag: 0e36a8df-47d8-4195-8d9f-340ffed3fb2d
 		sourceLineageTag: card_id
@@ -52,6 +55,7 @@ table ga_dim_card
 
 		annotation SummarizationSetBy = Automatic
 
+	/// Actual card product tier; use this dimension field to group or filter snapshot measures by card tier.
 	column card_tier_nm
 		dataType: string
 		sourceProviderType: varchar(8000)
@@ -113,4 +117,3 @@ table ga_dim_card
 			expressionSource: DatabaseQuery
 
 	annotation PBI_ResultType = Table
-
